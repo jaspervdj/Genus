@@ -1,36 +1,90 @@
 package genus;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 
-public class SimpleVertex
+public class SimpleVertex implements Cloneable
 {
+    /** Label of this vertex. */
     private int label;
-    List<SimpleEdge> edges;
 
+    /** Edges arriving in this vertex. */
+    Set<SimpleEdge> inbound;
+
+    /** Edges starting from this vertex. */
+    Set<SimpleEdge> outbound;
+
+    /** Constructor.
+     *  @param label Label for the vertex.
+     */
     public SimpleVertex(int label)
     {
         this.label = label;
-        edges = new ArrayList<SimpleEdge>();
+        inbound = new HashSet<SimpleEdge>();
+        outbound = new HashSet<SimpleEdge>();
     }
 
+    /** Obtain the label for the vertex.
+     *  @return The label for this vertex.
+     */
     public int getLabel()
     {
         return label;
     }
 
-    public void addEdge(SimpleEdge edge)
+    /** Obtain the inbound edges.
+     *  @return The inbound edges.
+     */
+    public Set<SimpleEdge> getInbound()
     {
-        edges.add(edge);
+        return inbound;
     }
 
-    public void removeEdge(SimpleEdge edge)
+    /** Obtain the outbound edges.
+     *  @return The outbound edges.
+     */
+    public Set<SimpleEdge> getOutbound()
     {
-        edges.remove(edge);
+        return outbound;
     }
 
-    public int getNumberOfEdges()
+    /** Add an inbound edge.
+     *  @param edge Edge to add.
+     */
+    public void addInbound(SimpleEdge edge)
     {
-        return edges.size();
+        inbound.add(edge);
+    }
+
+    /** Add an outbound edge.
+     *  @param edge Edge to add.
+     */
+    public void addOutbound(SimpleEdge edge)
+    {
+        outbound.add(edge);
+    }
+
+    /** Remove an inbound edge.
+     *  @param edge Edge to remove.
+     */
+    public void removeInbound(SimpleEdge edge)
+    {
+        inbound.remove(edge);
+    }
+
+    /** Remove an outbound edge.
+     *  @param edge Edge to remove.
+     */
+    public void removeOutbound(SimpleEdge edge)
+    {
+        outbound.remove(edge);
+    }
+
+    /** Check if this vertex is isolated.
+     *  @return If this vertex is isolated.
+     */
+    public boolean isIsolated()
+    {
+        return inbound.isEmpty() && outbound.isEmpty();
     }
 
     @Override

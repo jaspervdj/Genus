@@ -2,13 +2,13 @@ package genus;
 
 public class SimpleEdge
 {
-    private SimpleVertex first, second;
+    private int source, destination;
     private int label;
 
-    public SimpleEdge(SimpleVertex first, SimpleVertex second)
+    public SimpleEdge(int source, int destination)
     {
-        this.first = first;
-        this.second = second;
+        this.source = source;
+        this.destination = destination;
         label = 0;
     }
 
@@ -22,22 +22,41 @@ public class SimpleEdge
         return label;
     }
 
-    public boolean connects(SimpleVertex vertex)
+    /** Check if this edge connects the given vertex with any other vertex.
+     *  @return If this edge connects the given vertex.
+     */
+    public boolean connects(int vertex)
     {
-        return first == vertex || second == vertex;
+        return source == vertex || destination == vertex;
+    }
+
+    /** Obtain the source point of the edge.
+     *  @return The source point of the edge.
+     */
+    public int getSource()
+    {
+        return source;
+    }
+
+    /** Obtain the destination point of the edge.
+     *  @return The destination point of the edge.
+     */
+    public int getDestination()
+    {
+        return destination;
     }
 
     @Override
     public int hashCode()
     {
-        return first.hashCode() + second.hashCode();
+        return source + destination;
     }
 
     @Override
     public boolean equals(Object other)
     {
         return (other instanceof SimpleEdge) && 
-                first.equals(((SimpleEdge) other).first) &&
-                second.equals(((SimpleEdge) other).second);
+                source == ((SimpleEdge) other).source &&
+                destination == ((SimpleEdge) other).destination;
     }
 }
