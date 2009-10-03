@@ -4,7 +4,7 @@
 # The name of this file.
 SELF="makefile"
 # Class path
-CP="src"
+CP="src:tests"
 
 default:
 	@# Find java files that have a newer timestamp
