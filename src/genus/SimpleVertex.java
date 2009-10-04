@@ -79,6 +79,20 @@ public class SimpleVertex implements Cloneable
         outbound.remove(edge);
     }
 
+    /** Checks if the vertex has an outbound edge with the given label.
+     *  TODO: fix this code
+     *  @param label Label to search for.
+     */
+    public boolean hasOutbound(int label)
+    {
+        for(SimpleEdge edge: outbound) {
+            if(edge.getLabel() == label)
+                return true;
+        }
+
+        return false;
+    }
+
     /** Check if this vertex is isolated.
      *  @return If this vertex is isolated.
      */

@@ -55,13 +55,21 @@ public class SimpleGraph implements Graph
         return vertices.get(label) != null;
     }
 
-    /** Get a random vertex that has at least one edge.
-     *  @return A random vertex that has at least one edge.
+    /** Get a random edge from this graph.
+     *  @return A random edge from this graph.
      */
-    public SimpleVertex getRandomEdgedVertex()
+    public SimpleEdge getRandomEdge()
     {
-        /* Assume there are no isolated vertices. */
-        return vertices.values().iterator().next();
+        return edges.iterator().next();
+    }
+
+    /** Get a given vertex from this graph.
+     *  @param label Label of the vertex to retrieve.
+     *  @return The vertex with the given label.
+     */
+    public SimpleVertex getVertex(int label)
+    {
+        return vertices.get(label);
     }
 
     /** This function assumes the two vertices are already present.
@@ -102,7 +110,7 @@ public class SimpleGraph implements Graph
     }
 
     /** This function leaves the vertices where they are. */
-    public boolean removeEdge(SimpleEdge edge)
+    public void removeEdge(SimpleEdge edge)
     {
         SimpleVertex sourceVertex = vertices.get(edge.getSource()),
                 destinationVertex = vertices.get(edge.getDestination());

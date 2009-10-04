@@ -5,8 +5,7 @@ import java.io.IOException;
 
 public class GraphLoader
 {
-    /** Graph to load.
-     */
+    /** Graph to load. */
     private Graph graph;
 
     /** Constructor.
