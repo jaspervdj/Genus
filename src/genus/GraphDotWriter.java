@@ -29,7 +29,8 @@ public class GraphDotWriter
                 writer.println("digraph g{");
                 for(SimpleEdge edge: graph.getEdges()) {
                     writer.println("    " + edge.getSource() + " -> " +
-                            edge.getDestination() + ";");
+                            edge.getDestination() + " [label=\"" +
+                            edge.getLabel() + "\"];");
                 }
                 writer.println("}");
             } finally {
