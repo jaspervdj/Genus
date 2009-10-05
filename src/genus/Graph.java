@@ -1,6 +1,8 @@
 // Do not alter this file in any way!
 package genus;
 
+import java.util.List;
+
 public interface Graph {
 
   public boolean addEdge(int v0, int v1);
@@ -21,6 +23,12 @@ public interface Graph {
      incident edges are removed as well. Returns
      true if the vertex was removed successfully
      and false if the vertex was not present. */
+
+  public List<Integer> getVertices();
+  /* Returns a list of all vertices in the graph */
+
+  public List<Integer> getNeighbours(int v);
+  /* Returns the adjacent vertices of vertex v */
 
 }
 
