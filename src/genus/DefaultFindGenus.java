@@ -17,64 +17,80 @@ public class DefaultFindGenus implements FindGenus
      */
     public int findGenus(DefaultGraph graph)
     {
-        return findFaces(graph, null, 0, 0, null);
+        return findFaces(graph, null, null, null, null, 0);
     }
 
-    public int findFaces(DefaultGraph graph, Vertex lastVertex,
-            int currentLabel, int currentFaces, Edge lastEdge)
+    public int findFaces(DefaultGraph graph, Vertex cycleStart,
+            Vertex cycleSecond,
+            Vertex lastVertex, Vertex currentVertex, int currentFaces)
     {
-        System.out.println(graph.getNumberOfUnlabeledEdges() + " edges left.");
-
-        if(lastVertex == null) {
+        if(currentVertex == null) {
             /* Get a random vertex with outbound edges left. */
-            Vertex vertex = graph.getOutboundVertex();
+            Vertex vertex = graph.getUnsaturatedVertex();
 
             /* End of recursion. */
-            if(vertex == null)
+            if(vertex == null) {
                 return currentFaces;
+            }
 
             /* Continue with the random vertex. */
-            return findFaces(graph, vertex, currentLabel + 1,
-                    currentFaces, null);
+            return findFaces(graph, vertex, null, null, vertex, currentFaces);
         }
 
-        List<Edge> candidates = lastVertex.getNextCandidates(
-                currentLabel, lastEdge);
-
-        /* No more candidates... */
-        if(candidates.isEmpty()) {
-            return findFaces(graph, null, currentLabel, currentFaces, null);
+        List<Vertex> candidates = currentVertex.getCandidates(lastVertex);
+        System.out.println();
+        System.out.println("Standing in " + currentVertex.getId());
+        if(lastVertex != null)
+            System.out.println("Coming from " + lastVertex.getId());
+        else
+            System.out.println("Coming from nil");
+        System.out.print("Candidates: ");
+        for(Vertex candidate: candidates) {
+            System.out.print(candidate.getId() + " ");
         }
+        System.out.println();
+            
 
-        int max = 0, result;
-        for(Edge candidate: candidates) {
+        int max = 0, result = 0;
+        for(Vertex candidate: candidates) {
 
-            /* The next vertex. */
-            Vertex vertex = candidate.getEnd();
+            System.out.println("Going to " + candidate.getId());
 
-            boolean addCycle = vertex.hasOutbound(currentLabel) &&
-                    !vertex.hasInbound(currentLabel);
-
-            /* Label the edge. */
-            candidate.setLabel(currentLabel);
+            /* Connect the edge. */
+            if(!currentVertex.connect(lastVertex, candidate)) {
+                System.out.println("Simple fault, backtracking.");
+                return 0;
+            }
 
             /* We created a cycle. */
-            if(addCycle) {
-                GraphDotWriter writer = new GraphDotWriter(graph);
-                writer.write(currentFaces + ".dot");
-                result = findFaces(graph, null, currentLabel,
-                        currentFaces + 1, candidate);
+            if(candidate == cycleStart) {
+                //GraphDotWriter writer = new GraphDotWriter(graph);
+                //writer.write(currentFaces + ".dot");
+                if(cycleStart.connect(currentVertex, cycleSecond)) {
+                    System.out.println("Status in " + cycleStart.getId() + ": " +
+                        cycleStart);
+                    result = findFaces(graph, null, null, null, null,
+                            currentFaces + 1);
+                    cycleStart.split(currentVertex, cycleSecond);
+                } else {
+                    System.out.println("Fault, backtracking.");
+                    result = 0;
+                }
             /* We just continue. */
             } else {
-                result = findFaces(graph, vertex, currentLabel,
-                        currentFaces, candidate);
+                if(cycleSecond == null)
+                    result = findFaces(graph, cycleStart, candidate,
+                            currentVertex, candidate, currentFaces);
+                else
+                    result = findFaces(graph, cycleStart, cycleSecond,
+                            currentVertex, candidate, currentFaces);
             }
 
             if(result > max)
                 max = result;
 
             /* Reset the edge. */
-            candidate.clearLabel();
+            currentVertex.split(lastVertex, candidate);
         }
 
         /* Return the solution with the most cycles. */

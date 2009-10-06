@@ -23,8 +23,12 @@ public class CycleTest
         v.setNeighbours(vertices);
         v.connect(vertices.get(1), vertices.get(3));
         v.connect(vertices.get(3), vertices.get(4));
+        v.connect(vertices.get(4), vertices.get(2));
+        v.connect(vertices.get(2), vertices.get(0));
+        v.connect(vertices.get(0), vertices.get(1));
         System.out.println(v);
-
-        printCandidates(v, vertices.get(2));
+        System.out.println("Saturated: " + v.isSaturated());
+        v.split(vertices.get(4), vertices.get(2));
+        System.out.println("Saturated: " + v.isSaturated());
     }
 }

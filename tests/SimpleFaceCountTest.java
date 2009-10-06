@@ -16,7 +16,7 @@ public class SimpleFaceCountTest
             GraphLoader loader = new GraphLoader(graph);
             loader.load(args[0]);
             System.out.println("Faces: " + finder.findFaces(
-                    new DefaultGraph(graph), null, 0, 0, null));
+                    new DefaultGraph(graph), null, null, null, null, 0));
         }
     }
 }

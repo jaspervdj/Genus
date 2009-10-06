@@ -70,6 +70,17 @@ public class DefaultGraph
         return null;
     }
 
+    public Vertex getUnsaturatedVertex()
+    {
+        for(int id: vertices.keySet()) {
+            Vertex vertex = vertices.get(id);
+            if(!vertex.isSaturated())
+                return vertex;
+        }
+
+        return null;
+    }
+
     public int getNumberOfUnlabeledEdges()
     {
         int total = 0;

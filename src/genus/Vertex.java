@@ -27,6 +27,9 @@ public class Vertex
     /** The permutation cycles per vertex. */
     private Map<Vertex, LinkedList<Vertex>> cycleMap;
 
+    /** If this vertex is saturated */
+    private boolean saturated;
+
     /** Constructor.
      *  @param id Id for this vertex.
      */
@@ -51,6 +54,8 @@ public class Vertex
             cycles.add(cycle);
             cycleMap.put(neighbour, cycle);
         }
+
+        saturated = false;
     }
 
     /** Get the vertex id.
@@ -168,23 +173,45 @@ public class Vertex
         return list;
     }
 
+    /** Check if this vertex is saturated.
+     *  @return If this vertex is saturated.
+     */
+    public boolean isSaturated()
+    {
+        return saturated;
+    }
+
     /** Tell the vertex that we took a path from a to b with this vertex in the
      *  middle.
      *  @param a Path start.
      *  @param b Path end.
      */
-    public void connect(Vertex a, Vertex b)
+    public boolean connect(Vertex a, Vertex b)
     {
-        LinkedList<Vertex> aCycle = cycleMap.get(a), bCycle = cycleMap.get(b);
-        cycles.remove(bCycle);
+        if(a == null)
+            return true;
 
-        /* Join the cycles. */
-        aCycle.addAll(bCycle);
+        if(cycles.size() > 1) {
+            LinkedList<Vertex> aCycle = cycleMap.get(a),
+                    bCycle = cycleMap.get(b);
 
-        /* Update all references. */
-        for(Vertex v: aCycle) {
-            cycleMap.put(v, aCycle);
+            if(aCycle == bCycle)
+                return false;
+
+            cycles.remove(bCycle);
+
+            /* Join the cycles. */
+            aCycle.addAll(bCycle);
+
+            /* Update all references. */
+            for(Vertex v: aCycle) {
+                cycleMap.put(v, aCycle);
+            }
+        } else {
+            saturated = true;
         }
+
+        return true;
     }
 
     /** Split the cycle between a and b.
@@ -193,26 +220,33 @@ public class Vertex
      */
     public void split(Vertex a, Vertex b)
     {
-        LinkedList<Vertex> aCycle = cycleMap.get(a),
-                bCycle = new LinkedList<Vertex>();
+        if(a == null)
+            return;
 
-        ListIterator<Vertex> iterator = aCycle.listIterator();
+        if(saturated) {
+            saturated = false;
+        } else {
+            LinkedList<Vertex> aCycle = cycleMap.get(a),
+                    bCycle = new LinkedList<Vertex>();
 
-        while(iterator.hasNext() && iterator.next() != a) {
-            /* Do nothing. */
+            ListIterator<Vertex> iterator = aCycle.listIterator();
+
+            while(iterator.hasNext() && iterator.next() != a) {
+                /* Do nothing. */
+            }
+
+            while(iterator.hasNext()) {
+                bCycle.add(iterator.next());
+                iterator.remove();
+            }
+
+            for(Vertex vertex: bCycle) {
+                cycleMap.put(vertex, bCycle);
+            }
+
+            /* Update references. */
+            cycles.add(bCycle);
         }
-
-        while(iterator.hasNext()) {
-            bCycle.add(iterator.next());
-            iterator.remove();
-        }
-
-        for(Vertex vertex: bCycle) {
-            cycleMap.put(vertex, bCycle);
-        }
-
-        /* Update references. */
-        cycles.add(bCycle);
     }
 
     public List<Vertex> getCandidates(Vertex from)
