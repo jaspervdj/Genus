@@ -1,6 +1,8 @@
-import genus.SimpleGraph;
-import genus.SimpleFindGenus;
+import genus.Graph;
+import genus.GraphImplementation;
+import genus.DefaultFindGenus;
 import genus.GraphLoader;
+import genus.DefaultGraph;
 
 public class SimpleFaceCountTest
 {
@@ -9,11 +11,12 @@ public class SimpleFaceCountTest
         if(args.length < 1) {
             System.out.println("Please specify a filename.");
         } else {
-            SimpleFindGenus finder = new SimpleFindGenus();
-            SimpleGraph graph = new SimpleGraph();
+            DefaultFindGenus finder = new DefaultFindGenus();
+            Graph graph = new GraphImplementation();
             GraphLoader loader = new GraphLoader(graph);
             loader.load(args[0]);
-            System.out.println("Faces: " + finder.findFaces(graph));
+            System.out.println("Faces: " + finder.findFaces(
+                    new DefaultGraph(graph), null, 0, 0, null));
         }
     }
 }

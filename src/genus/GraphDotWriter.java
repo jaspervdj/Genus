@@ -8,12 +8,12 @@ import java.io.PrintWriter;
 public class GraphDotWriter
 {
     /** Graph to write. */
-    private SimpleGraph graph;
+    private DefaultGraph graph;
 
     /** Constructor.
      *  @param graph Graph to write.
      */
-    public GraphDotWriter(SimpleGraph graph)
+    public GraphDotWriter(DefaultGraph graph)
     {
         this.graph = graph;
     }
@@ -24,12 +24,13 @@ public class GraphDotWriter
     public void write(String fileName)
     {
         try {
-            PrintWriter writer = new PrintWriter(new FileOutputStream(fileName));
+            PrintWriter writer = new PrintWriter(
+                    new FileOutputStream(fileName));
             try {
                 writer.println("digraph g{");
-                for(SimpleEdge edge: graph.getEdges()) {
-                    writer.println("    " + edge.getSource() + " -> " +
-                            edge.getDestination() + " [label=\"" +
+                for(Edge edge: graph.getEdges()) {
+                    writer.println("    " + edge.getStart().getId() + " -> " +
+                            edge.getEnd().getId() + " [label=\"" +
                             edge.getLabel() + "\"];");
                 }
                 writer.println("}");

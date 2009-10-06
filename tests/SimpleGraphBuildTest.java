@@ -1,11 +1,11 @@
 import genus.Graph;
-import genus.SimpleGraph;
+import genus.GraphImplementation;
 
 public class SimpleGraphBuildTest
 {
     public static void main(String[] args)
     {
-        Graph graph = new SimpleGraph();
+        Graph graph = new GraphImplementation();
         assert(graph.addEdge(1, 2));
         assert(graph.addEdge(2, 3));
         assert(graph.removeEdge(1, 2));
