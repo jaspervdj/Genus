@@ -1,5 +1,5 @@
 package genus;
-import java.util.List;
+import java.util.Set;
 
 /** The default implementation of the FindGenus interface.
  */
@@ -37,9 +37,10 @@ public class DefaultFindGenus implements FindGenus
             return findFaces(graph, vertex, null, null, vertex, currentFaces);
         }
 
-        List<Vertex> candidates = currentVertex.getCandidates(lastVertex);
+        Set<Vertex> candidates = currentVertex.getCandidates(lastVertex);
         System.out.println();
-        System.out.println("Standing in " + currentVertex.getId());
+        System.out.println("Standing in " + currentVertex.getId() +
+            " " + currentVertex);
         if(lastVertex != null)
             System.out.println("Coming from " + lastVertex.getId());
         else
@@ -67,8 +68,8 @@ public class DefaultFindGenus implements FindGenus
                 //GraphDotWriter writer = new GraphDotWriter(graph);
                 //writer.write(currentFaces + ".dot");
                 if(cycleStart.connect(currentVertex, cycleSecond)) {
-                    System.out.println("Status in " + cycleStart.getId() + ": " +
-                        cycleStart);
+                    System.out.println("Cycle closed." + cycleStart.getId() +
+                        ": " + cycleStart);
                     result = findFaces(graph, null, null, null, null,
                             currentFaces + 1);
                     cycleStart.split(currentVertex, cycleSecond);

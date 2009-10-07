@@ -21,11 +21,11 @@ public class Vertex
     /** Set of outbound edges. */
     private Set<Edge> outbound;
 
-    /** The permutation cycles. */
-    private Set<LinkedList<Vertex>> cycles;
-
     /** The permutation cycles per vertex. */
-    private Map<Vertex, LinkedList<Vertex>> cycleMap;
+    private Map<Vertex, ArrayList<Vertex>> cycleMap;
+
+    /** The number of unique cycles. */
+    private int numberOfCycles;
 
     /** If this vertex is saturated */
     private boolean saturated;
@@ -45,15 +45,15 @@ public class Vertex
      */
     public void setNeighbours(ArrayList<Vertex> neighbours)
     {
-        cycles = new HashSet<LinkedList<Vertex>>();
-        cycleMap = new HashMap<Vertex, LinkedList<Vertex>>();
+        cycleMap = new HashMap<Vertex, ArrayList<Vertex>>();
 
         for(Vertex neighbour: neighbours) {
-            LinkedList<Vertex> cycle = new LinkedList<Vertex>();
+            ArrayList<Vertex> cycle = new ArrayList<Vertex>();
             cycle.add(neighbour);
-            cycles.add(cycle);
             cycleMap.put(neighbour, cycle);
         }
+
+        numberOfCycles = neighbours.size();
 
         saturated = false;
     }
@@ -191,21 +191,22 @@ public class Vertex
         if(a == null)
             return true;
 
-        if(cycles.size() > 1) {
-            LinkedList<Vertex> aCycle = cycleMap.get(a),
+        if(numberOfCycles > 1) {
+            ArrayList<Vertex> aCycle = cycleMap.get(a),
                     bCycle = cycleMap.get(b);
 
-            if(aCycle == bCycle)
+            if(aCycle == bCycle) {
                 return false;
+            } else {
+                numberOfCycles--;
 
-            cycles.remove(bCycle);
+                /* Join the cycles. */
+                aCycle.addAll(bCycle);
 
-            /* Join the cycles. */
-            aCycle.addAll(bCycle);
-
-            /* Update all references. */
-            for(Vertex v: aCycle) {
-                cycleMap.put(v, aCycle);
+                /* Update all references. */
+                for(Vertex v: bCycle) {
+                    cycleMap.put(v, aCycle);
+                }
             }
         } else {
             saturated = true;
@@ -226,8 +227,8 @@ public class Vertex
         if(saturated) {
             saturated = false;
         } else {
-            LinkedList<Vertex> aCycle = cycleMap.get(a),
-                    bCycle = new LinkedList<Vertex>();
+            ArrayList<Vertex> aCycle = cycleMap.get(a),
+                    bCycle = new ArrayList<Vertex>();
 
             ListIterator<Vertex> iterator = aCycle.listIterator();
 
@@ -244,24 +245,28 @@ public class Vertex
                 cycleMap.put(vertex, bCycle);
             }
 
-            /* Update references. */
-            cycles.add(bCycle);
+            numberOfCycles++;
         }
+
+        System.out.println(">> " + this);
     }
 
-    public List<Vertex> getCandidates(Vertex from)
+    public Set<Vertex> getCandidates(Vertex from)
     {
-        ArrayList<Vertex> candidates = new ArrayList<Vertex>();
-        LinkedList<Vertex> containingCycle = cycleMap.get(from);
+        Set<Vertex> candidates = new HashSet<Vertex>();
+        ArrayList<Vertex> containingCycle = cycleMap.get(from);
         
         /* Exception when only one cycle. */
-        if(cycles.size() == 1) {
+        if(numberOfCycles == 1) {
             /* First vertex from the cycle. */
-            candidates.add(containingCycle.getFirst());
+            if(from == null)
+                candidates.add(cycleMap.values().iterator().next().get(0));
+            else
+                candidates.add(cycleMap.get(from).get(0));
         } else {
-            for(LinkedList<Vertex> cycle: cycles) {
+            for(ArrayList<Vertex> cycle: cycleMap.values()) {
                 if(cycle != containingCycle) {
-                    candidates.add(cycle.getFirst());
+                    candidates.add(cycle.get(0));
                 }
             }
         }
@@ -272,14 +277,26 @@ public class Vertex
     @Override
     public String toString()
     {
-        String string = "";
-        for(LinkedList<Vertex> cycle: cycles) {
+        /*String string = "";
+        for(ArrayList<Vertex> cycle: cycles.keySet()) {
             string += "{ ";
             for(Vertex v: cycle) {
                 string += v.getId() + " ";
             }
             string += "} ";
-        }
-        return string;
+        } */
+        return "" + id;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        return (object instanceof Vertex) && ((Vertex) object).id == id;
     }
 }
