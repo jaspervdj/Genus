@@ -28,11 +28,11 @@ public class GraphDotWriter
                     new FileOutputStream(fileName));
             try {
                 writer.println("digraph g{");
-                for(Edge edge: graph.getEdges()) {
+                /*for(Edge edge: graph.getEdges()) {
                     writer.println("    " + edge.getStart().getId() + " -> " +
                             edge.getEnd().getId() + " [label=\"" +
                             edge.getLabel() + "\"];");
-                }
+                }*/
                 writer.println("}");
             } finally {
                 writer.close();

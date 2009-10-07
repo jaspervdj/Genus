@@ -60,23 +60,19 @@ public class DefaultFindGenus implements FindGenus
             /* Connect the edge. */
             if(!currentVertex.connect(lastVertex, candidate)) {
                 System.out.println("Simple fault, backtracking.");
-                return 0;
+                return currentFaces;
             }
 
             /* We created a cycle. */
-            if(candidate == cycleStart) {
+            if(candidate == cycleStart &&
+                    cycleStart.connect(currentVertex, cycleSecond)) {
                 //GraphDotWriter writer = new GraphDotWriter(graph);
                 //writer.write(currentFaces + ".dot");
-                if(cycleStart.connect(currentVertex, cycleSecond)) {
-                    System.out.println("Cycle closed." + cycleStart.getId() +
-                        ": " + cycleStart);
-                    result = findFaces(graph, null, null, null, null,
-                            currentFaces + 1);
-                    cycleStart.split(currentVertex, cycleSecond);
-                } else {
-                    System.out.println("Fault, backtracking.");
-                    result = 0;
-                }
+                System.out.println("Cycle closed." + cycleStart.getId() +
+                    ": " + cycleStart);
+                result = findFaces(graph, null, null, null, null,
+                        currentFaces + 1);
+                cycleStart.split(currentVertex, cycleSecond);
             /* We just continue. */
             } else {
                 if(cycleSecond == null)
