@@ -132,8 +132,6 @@ public class Vertex
 
             numberOfCycles++;
         }
-
-        System.out.println(">> " + this);
     }
 
     public Set<Vertex> getCandidates(Vertex from)
@@ -157,20 +155,6 @@ public class Vertex
         }
 
         return candidates;
-    }
-
-    @Override
-    public String toString()
-    {
-        /*String string = "";
-        for(ArrayList<Vertex> cycle: cycles.keySet()) {
-            string += "{ ";
-            for(Vertex v: cycle) {
-                string += v.getId() + " ";
-            }
-            string += "} ";
-        } */
-        return "" + id;
     }
 
     @Override

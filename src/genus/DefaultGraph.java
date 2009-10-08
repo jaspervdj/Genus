@@ -8,8 +8,8 @@ import java.util.HashMap;
  */
 public class DefaultGraph
 {
-    /** The vertices, stored by id. */
-    private Map<Integer, Vertex> vertices;
+    /** The vertices, stored by mapped id. */
+    private Vertex[] vertices;
 
     /** Constructor. Construct a graph from any class implementing the Graph
      *  interface.
@@ -17,18 +17,26 @@ public class DefaultGraph
      */
     public DefaultGraph(Graph graph)
     {
-        vertices = new HashMap<Integer, Vertex>();
+        /* A map to translate the labels given by the input to a 0..n numbering,
+         * so we can use it in an array more easily. */
+        Map<Integer, Integer> translation = new HashMap<Integer, Integer>();
+        vertices = new Vertex[graph.getVertices().size()];
 
-        for(Integer id: graph.getVertices())
-            vertices.put(id, new Vertex(id));    
-
+        /* Build the translation map and store the vertices.. */
+        int index = 0;
         for(int id: graph.getVertices()) {
-            Vertex vertex = vertices.get(id);
+            translation.put(id, index);
+            vertices[index] = new Vertex(index);
+            index++;
+        }
 
+        /* Set the neighbours. */
+        for(int id: graph.getVertices()) {
+            Vertex vertex = vertices[translation.get(id)];
             ArrayList<Vertex> neighbours = new ArrayList<Vertex>();
 
             for(int neighbourId: graph.getNeighbours(id)) {
-                Vertex neighbour = vertices.get(neighbourId);
+                Vertex neighbour = vertices[translation.get(neighbourId)];
                 neighbours.add(neighbour);
             }
 
@@ -38,8 +46,7 @@ public class DefaultGraph
 
     public Vertex getUnsaturatedVertex()
     {
-        for(int id: vertices.keySet()) {
-            Vertex vertex = vertices.get(id);
+        for(Vertex vertex: vertices) {
             if(!vertex.isSaturated())
                 return vertex;
         }

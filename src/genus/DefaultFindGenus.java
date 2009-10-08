@@ -38,38 +38,20 @@ public class DefaultFindGenus implements FindGenus
         }
 
         Set<Vertex> candidates = currentVertex.getCandidates(lastVertex);
-        System.out.println();
-        System.out.println("Standing in " + currentVertex.getId() +
-            " " + currentVertex);
-        if(lastVertex != null)
-            System.out.println("Coming from " + lastVertex.getId());
-        else
-            System.out.println("Coming from nil");
-        System.out.print("Candidates: ");
-        for(Vertex candidate: candidates) {
-            System.out.print(candidate.getId() + " ");
-        }
-        System.out.println();
-            
 
         int max = 0, result = 0;
         for(Vertex candidate: candidates) {
 
-            System.out.println("Going to " + candidate.getId());
+            //System.out.println("Going to " + candidate.getId());
 
             /* Connect the edge. */
             if(!currentVertex.connect(lastVertex, candidate)) {
-                System.out.println("Simple fault, backtracking.");
                 return currentFaces;
             }
 
             /* We created a cycle. */
             if(candidate == cycleStart &&
                     cycleStart.connect(currentVertex, cycleSecond)) {
-                //GraphDotWriter writer = new GraphDotWriter(graph);
-                //writer.write(currentFaces + ".dot");
-                System.out.println("Cycle closed." + cycleStart.getId() +
-                    ": " + cycleStart);
                 result = findFaces(graph, null, null, null, null,
                         currentFaces + 1);
                 cycleStart.split(currentVertex, cycleSecond);
