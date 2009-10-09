@@ -15,8 +15,12 @@ public class SimpleFaceCountTest
             Graph graph = new GraphImplementation();
             GraphLoader loader = new GraphLoader(graph);
             loader.load(args[0]);
-            System.out.println("Faces: " + finder.findFaces(
-                    new DefaultGraph(graph), null, null, null, null, 0));
+            long start = System.currentTimeMillis();
+            int faces = finder.findFaces(
+                    new DefaultGraph(graph), null, null, null, null, 0);
+            long stop = System.currentTimeMillis();
+            System.out.println("Faces: " + faces);
+            System.out.println("Time taken: " + (stop - start));
         }
     }
 }
