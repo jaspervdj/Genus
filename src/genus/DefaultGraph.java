@@ -53,4 +53,13 @@ public class DefaultGraph
 
         return null;
     }
+
+    /** Get a vertex by id.
+     *  @param id Id of the requested vertex.
+     *  @return The requested vertex.
+     */
+    public Vertex getVertex(int id)
+    {
+        return vertices[id];
+    }
 }

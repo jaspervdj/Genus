@@ -2,8 +2,8 @@ package genus;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
@@ -16,7 +16,7 @@ public class Vertex
     private int id;
 
     /** The permutation cycles per vertex. */
-    private Map<Vertex, ArrayList<Vertex>> cycleMap;
+    private Map<Vertex, CycleNode> cycleMap;
 
     /** The number of unique cycles. */
     private int numberOfCycles;
@@ -37,11 +37,10 @@ public class Vertex
      */
     public void setNeighbours(ArrayList<Vertex> neighbours)
     {
-        cycleMap = new HashMap<Vertex, ArrayList<Vertex>>();
+        cycleMap = new HashMap<Vertex, CycleNode>();
 
         for(Vertex neighbour: neighbours) {
-            ArrayList<Vertex> cycle = new ArrayList<Vertex>();
-            cycle.add(neighbour);
+            CycleNode cycle = new CycleNode(neighbour.getId());
             cycleMap.put(neighbour, cycle);
         }
 
@@ -77,21 +76,15 @@ public class Vertex
             return true;
 
         if(numberOfCycles > 1) {
-            ArrayList<Vertex> aCycle = cycleMap.get(a),
-                    bCycle = cycleMap.get(b);
+            CycleNode aCycle = cycleMap.get(a), bCycle = cycleMap.get(b);
 
-            if(aCycle == bCycle) {
+            if(aCycle.getFirst() == bCycle.getFirst()) {
                 return false;
             } else {
                 numberOfCycles--;
 
                 /* Join the cycles. */
-                aCycle.addAll(bCycle);
-
-                /* Update all references. */
-                for(Vertex v: bCycle) {
-                    cycleMap.put(v, aCycle);
-                }
+                aCycle.append(bCycle);
             }
         } else {
             saturated = true;
@@ -100,9 +93,8 @@ public class Vertex
         return true;
     }
 
-    /** Split the cycle between a and b.
+    /** Split the cycle after a.
      *  @param a Vertex a.
-     *  @param b Vertex b.
      */
     public void split(Vertex a, Vertex b)
     {
@@ -112,44 +104,31 @@ public class Vertex
         if(saturated) {
             saturated = false;
         } else {
-            ArrayList<Vertex> aCycle = cycleMap.get(a),
-                    bCycle = new ArrayList<Vertex>();
-
-            ListIterator<Vertex> iterator = aCycle.listIterator();
-
-            while(iterator.hasNext() && iterator.next() != a) {
-                /* Do nothing. */
-            }
-
-            while(iterator.hasNext()) {
-                bCycle.add(iterator.next());
-                iterator.remove();
-            }
-
-            for(Vertex vertex: bCycle) {
-                cycleMap.put(vertex, bCycle);
-            }
+            CycleNode aCycle = cycleMap.get(a);
+            aCycle.split();
 
             numberOfCycles++;
         }
     }
 
-    public Set<Vertex> getCandidates(Vertex from)
+    public Set<Integer> getCandidates(Vertex from)
     {
-        Set<Vertex> candidates = new HashSet<Vertex>();
-        ArrayList<Vertex> containingCycle = cycleMap.get(from);
+        Set<Integer> candidates = new HashSet<Integer>();
+        CycleNode containingCycle = cycleMap.get(from);
         
         /* Exception when only one cycle. */
         if(numberOfCycles == 1) {
             /* First vertex from the cycle. */
             if(from == null)
-                candidates.add(cycleMap.values().iterator().next().get(0));
+                candidates.add(cycleMap.values().
+                        iterator().next().getFirst().getValue());
             else
-                candidates.add(cycleMap.get(from).get(0));
+                candidates.add(cycleMap.get(from).getFirst().getValue());
         } else {
-            for(ArrayList<Vertex> cycle: cycleMap.values()) {
-                if(cycle != containingCycle) {
-                    candidates.add(cycle.get(0));
+            for(CycleNode cycle: cycleMap.values()) {
+                if(containingCycle == null ||
+                        cycle.getFirst() != containingCycle.getFirst()) {
+                    candidates.add(cycle.getFirst().getValue());
                 }
             }
         }

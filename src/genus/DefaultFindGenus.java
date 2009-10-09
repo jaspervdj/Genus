@@ -37,11 +37,12 @@ public class DefaultFindGenus implements FindGenus
             return findFaces(graph, vertex, null, null, vertex, currentFaces);
         }
 
-        Set<Vertex> candidates = currentVertex.getCandidates(lastVertex);
+        Set<Integer> candidates = currentVertex.getCandidates(lastVertex);
 
         int max = 0, result = 0;
-        for(Vertex candidate: candidates) {
+        for(int candidateId: candidates) {
 
+            Vertex candidate = graph.getVertex(candidateId);
             //System.out.println("Going to " + candidate.getId());
 
             /* Connect the edge. */
