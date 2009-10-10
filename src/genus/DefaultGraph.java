@@ -11,6 +11,9 @@ public class DefaultGraph
     /** The vertices, stored by mapped id. */
     private Vertex[] vertices;
 
+    /** Total number of edges. */
+    private int numberOfEdges;
+
     /** Constructor. Construct a graph from any class implementing the Graph
      *  interface.
      *  @param graph Graph to construct the DefaultGraph from.
@@ -38,6 +41,7 @@ public class DefaultGraph
             for(int neighbourId: graph.getNeighbours(id)) {
                 Vertex neighbour = vertices[translation.get(neighbourId)];
                 neighbours.add(neighbour);
+                numberOfEdges++;
             }
 
             vertex.setNeighbours(neighbours);
@@ -64,5 +68,13 @@ public class DefaultGraph
     public Vertex getVertex(int id)
     {
         return vertices[id];
+    }
+
+    /** Get the number of edges in the graph.
+     *  @return The number of edges in the graph.
+     */
+    public int getNumberOfEdges()
+    {
+        return numberOfEdges;
     }
 }
