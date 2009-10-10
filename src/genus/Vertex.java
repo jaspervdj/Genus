@@ -136,6 +136,11 @@ public class Vertex
         return candidates;
     }
 
+    public int getCandidate()
+    {
+        return cycleMap.values().iterator().next().getFirst().getValue();
+    }
+
     @Override
     public int hashCode()
     {

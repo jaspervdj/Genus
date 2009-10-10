@@ -6,7 +6,7 @@ import genus.DefaultGraph;
 
 public class SimpleFaceCountTest
 {
-    private final static int TESTS = 1;
+    private final static int TESTS = 100;
 
     public static void main(String[] args)
     {
@@ -25,11 +25,13 @@ public class SimpleFaceCountTest
                 faces = finder.findFaces(
                         new DefaultGraph(graph), null, null, null, null, 0);
                 long stop = System.currentTimeMillis();
+                System.out.println("Run " + (i + 1) + ": " +
+                        (stop - start) + "ms, " + faces + " faces.");
                 averageTime += ((double) (stop - start)) / (double) TESTS;
             }
 
-            System.out.println("Faces: " + faces);
-            System.out.println("Average time taken: " + averageTime);
+            System.out.println();
+            System.out.println("Average time: " + averageTime);
         }
     }
 }

@@ -5,6 +5,10 @@ import java.util.Set;
  */
 public class DefaultFindGenus implements FindGenus
 {
+    public DefaultFindGenus()
+    {
+    }
+
     @Override
     public int findGenus(Graph graph)
     {
@@ -35,7 +39,8 @@ public class DefaultFindGenus implements FindGenus
     {
         /* We need to start a new cycle. */
         if(currentVertex == null) {
-            /* Get a random vertex with outbound edges left. */
+            /* Get a random vertex with outbound edges left, and a next
+             * candidate. */
             Vertex vertex = graph.getUnsaturatedVertex();
 
             /* End of recursion. */
@@ -44,7 +49,9 @@ public class DefaultFindGenus implements FindGenus
             }
 
             /* Continue with the random vertex. */
-            return findFaces(graph, vertex, null, null, vertex, currentFaces);
+            Vertex candidate = graph.getVertex(vertex.getCandidate());
+            return findFaces(graph, vertex, candidate, vertex,
+                    candidate, currentFaces);
         }
 
         /* Ask our current vertex where we can go next. */
@@ -53,6 +60,7 @@ public class DefaultFindGenus implements FindGenus
         /* Create a branch for every candidate. */
         int max = 0, result = 0;
         for(int candidateId: candidates) {
+
             Vertex candidate = graph.getVertex(candidateId);
 
             /* Connect the edge. */
