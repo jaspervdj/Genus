@@ -6,6 +6,8 @@ import genus.DefaultGraph;
 
 public class SimpleFaceCountTest
 {
+    private final static int TESTS = 1;
+
     public static void main(String[] args)
     {
         if(args.length < 1) {
@@ -15,12 +17,19 @@ public class SimpleFaceCountTest
             Graph graph = new GraphImplementation();
             GraphLoader loader = new GraphLoader(graph);
             loader.load(args[0]);
-            long start = System.currentTimeMillis();
-            int faces = finder.findFaces(
-                    new DefaultGraph(graph), null, null, null, null, 0);
-            long stop = System.currentTimeMillis();
+
+            double averageTime = 0.0;
+            int faces = 0;
+            for(int i = 0; i < TESTS; i++) {
+                long start = System.currentTimeMillis();
+                faces = finder.findFaces(
+                        new DefaultGraph(graph), null, null, null, null, 0);
+                long stop = System.currentTimeMillis();
+                averageTime += ((double) (stop - start)) / (double) TESTS;
+            }
+
             System.out.println("Faces: " + faces);
-            System.out.println("Time taken: " + (stop - start));
+            System.out.println("Average time taken: " + averageTime);
         }
     }
 }

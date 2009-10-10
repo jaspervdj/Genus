@@ -44,6 +44,9 @@ public class DefaultGraph
         }
     }
 
+    /** Get a random unsaturated vertex.
+     *  @return A random unsaturated vertex.
+     */
     public Vertex getUnsaturatedVertex()
     {
         for(Vertex vertex: vertices) {

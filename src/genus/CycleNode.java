@@ -97,6 +97,8 @@ public class CycleNode
         next = null;
     }
 
+    /* Used for debugging. */
+    @Override
     public String toString()
     {
         String str = "";
