@@ -48,6 +48,14 @@ public class DefaultGraph
         }
     }
 
+    /** Get the number of vertices in the graph.
+     *  @return The number of vertices in the graph.
+     */
+    public int getNumberOfVertices()
+    {
+        return vertices.length;
+    }
+
     /** Get a random unsaturated vertex.
      *  @return A random unsaturated vertex.
      */

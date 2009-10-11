@@ -22,8 +22,7 @@ public class SimpleFaceCountTest
             int faces = 0;
             for(int i = 0; i < TESTS; i++) {
                 long start = System.currentTimeMillis();
-                faces = finder.findFaces(
-                        new DefaultGraph(graph), null, null, null, null, 0);
+                faces = finder.findFaces(new DefaultGraph(graph));
                 long stop = System.currentTimeMillis();
                 System.out.println("Run " + (i + 1) + ": " +
                         (stop - start) + "ms, " + faces + " faces.");

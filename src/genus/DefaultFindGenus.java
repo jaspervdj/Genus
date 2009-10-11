@@ -21,6 +21,17 @@ public class DefaultFindGenus implements FindGenus
      */
     public int findGenus(DefaultGraph graph)
     {
+        int faces = findFaces(graph);
+        return 1 - (graph.getNumberOfVertices() + faces -
+                graph.getNumberOfEdges() / 2 ) / 2;
+    }
+
+    /** Find the maximum number of faces in a graph.
+     *  @param graph Graph to determine the number of faces for.
+     *  @return The maximum number of faces in the graph.
+     */
+    public int findFaces(DefaultGraph graph)
+    {
         return findFaces(graph, null, null, null, null, 0);
     }
 
@@ -32,6 +43,7 @@ public class DefaultFindGenus implements FindGenus
      *  @param lastVertex Last vertex visited.
      *  @param currentVertex Current location in the graph.
      *  @param currentFaces Number of faces currently found.
+     *  @return the maximum number of faces in the graph.
      */
     public int findFaces(DefaultGraph graph, Vertex cycleStart,
             Vertex cycleSecond, Vertex lastVertex,
