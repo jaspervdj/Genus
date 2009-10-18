@@ -20,6 +20,10 @@ public class DefaultGraph
      */
     public DefaultGraph(Graph graph)
     {
+        /* Process the graph first. */
+        GraphProcessor processor = new SimplifyGraphProcessor();
+        processor.process(graph);
+
         /* A map to translate the labels given by the input to a 0..n numbering,
          * so we can use it in an array more easily. */
         Map<Integer, Integer> translation = new HashMap<Integer, Integer>();
