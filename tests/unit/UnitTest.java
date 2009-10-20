@@ -1,3 +1,5 @@
+package unit;
+
 /** A class from which all unit test classes should derive.
  */
 public abstract class UnitTest
