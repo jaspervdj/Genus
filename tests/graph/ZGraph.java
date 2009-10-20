@@ -1,24 +1,18 @@
-package genus;
+package graph;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
+import genus.Graph;
+import genus.GraphImplementation;
 
-public class GraphLoader
+/** Graph loaded from the zgraph format.
+ */
+public class ZGraph extends GraphImplementation
 {
-    /** Graph to load. */
-    private Graph graph;
-
-    /** Constructor.
-     */
-    public GraphLoader(Graph graph)
-    {
-        this.graph = graph;
-    }
-
-    /** Load a given file into the graph.
+    /** Constructor. Load the graph from a given file.
      *  @param fileName File name of the file to load.
      */
-    public void load(String fileName)
+    public ZGraph(String fileName)
     {
         try {
             BufferedReader reader =
@@ -34,7 +28,7 @@ public class GraphLoader
                     for(String fromVertex: from) {
                         for(String toVertex: to) {
                             if(!fromVertex.equals(toVertex)) {
-                                graph.addEdge(Integer.parseInt(fromVertex),
+                                addEdge(Integer.parseInt(fromVertex),
                                         Integer.parseInt(toVertex));
                             }
                         }

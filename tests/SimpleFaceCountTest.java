@@ -1,8 +1,7 @@
 import genus.Graph;
-import genus.GraphImplementation;
 import genus.DefaultFindGenus;
-import genus.GraphLoader;
 import genus.DefaultGraph;
+import graph.ZGraph;
 
 public class SimpleFaceCountTest
 {
@@ -14,9 +13,7 @@ public class SimpleFaceCountTest
             System.out.println("Please specify a filename.");
         } else {
             DefaultFindGenus finder = new DefaultFindGenus();
-            Graph graph = new GraphImplementation();
-            GraphLoader loader = new GraphLoader(graph);
-            loader.load(args[0]);
+            Graph graph = new ZGraph(args[0]);
 
             double averageTime = 0.0;
             int faces = 0;
