@@ -43,6 +43,7 @@ public class SimplifyGraphProcessorTest extends UnitTest
         processor.process(k5);
         test(k5.getVertices().size() == 5, "k5 simplify");
     }
+
     public static void main(String[] args)
     {
         SimplifyGraphProcessorTest test = new SimplifyGraphProcessorTest();

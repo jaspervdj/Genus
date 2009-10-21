@@ -111,6 +111,12 @@ public class Vertex
         }
     }
 
+    /** Get a next candidate in our current cycle. Suppose we are coming from
+     *  the vertex in the parameter from, and we ask this vertex where we can
+     *  travel next. This method returns those candidates.
+     *  @param from The vertex we are coming from.
+     *  @return Candidates for our next vertex.
+     */
     public Set<Integer> getCandidates(Vertex from)
     {
         Set<Integer> candidates = new HashSet<Integer>();
@@ -136,6 +142,11 @@ public class Vertex
         return candidates;
     }
 
+    /** Get a random candidate. Suppose we are standing in this vertex, and we
+     *  want to start a new cycle. This method then returns a vertex where we
+     *  can travel next.
+     *  @return A next candidate.
+     */
     public int getCandidate()
     {
         return cycleMap.values().iterator().next().getFirst().getValue();

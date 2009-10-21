@@ -6,6 +6,7 @@ import graph.RandomGraph;
 
 public class SimpleFaceCountTest
 {
+    /** Number of tests to run. */
     private final static int TESTS = 100;
 
     public static void main(String[] args)
