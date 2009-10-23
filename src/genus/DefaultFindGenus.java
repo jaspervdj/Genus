@@ -37,7 +37,8 @@ public class DefaultFindGenus implements FindGenus
     public int findFaces(DefaultGraph graph)
     {
         globalMax = 0;
-        return findFaces(graph, null, null, null, null, 0, 0);
+        return findFaces(graph, null, null, null, null,
+                0, graph.getNumberOfEdges(), 0);
     }
 
     /** The main recursing method used to find the number of faces in
@@ -48,17 +49,21 @@ public class DefaultFindGenus implements FindGenus
      *  @param lastVertex Last vertex visited.
      *  @param currentVertex Current location in the graph.
      *  @param currentFaces Number of faces currently found.
-     *  @param usedEdges The number of edges already used.
+     *  @param edgesLeft Edges left in the graph.
+     *  @param edgesInCurrentCycle Number of edges used in the cumber cycle.
      *  @return the maximum number of faces in the graph.
      */
     public int findFaces(DefaultGraph graph, Vertex cycleStart,
             Vertex cycleSecond, Vertex lastVertex,
             Vertex currentVertex, int currentFaces,
-            int usedEdges)
+            int edgesLeft, int edgesInCurrentCycle)
     {
         /* Simple bounding based on edges left/current number of faces. */
-        if(currentFaces + 1 + (graph.getNumberOfEdges() - usedEdges - 1) / 3
-                < globalMax) {
+        if(currentFaces + (edgesLeft +
+                (edgesInCurrentCycle > 2 ? 2 : edgesInCurrentCycle)) / 3
+                <= globalMax) {
+            /* Since we're not going to get any result larger than our maximum,
+             * it doesn't really matter what we return. */
             return 0;
         }
 
@@ -79,7 +84,7 @@ public class DefaultFindGenus implements FindGenus
             /* Continue with the random vertex. */
             Vertex candidate = graph.getVertex(vertex.getCandidate());
             return findFaces(graph, vertex, candidate, vertex,
-                    candidate, currentFaces, usedEdges + 1);
+                    candidate, currentFaces, edgesLeft - 1, 1);
         }
 
         /* Ask our current vertex where we can go next. */
@@ -103,21 +108,17 @@ public class DefaultFindGenus implements FindGenus
                     cycleStart.connect(currentVertex, cycleSecond)) {
                 /* Recurse with one more face found. */
                 result = findFaces(graph, null, null, null, null,
-                        currentFaces + 1, usedEdges + 1);
+                        currentFaces + 1, edgesLeft - 1, 0);
 
                 /* Disconnect the cycle again. */
                 cycleStart.split(currentVertex, cycleSecond);
 
             /* We did not create a cycle, so we just continue. */
             } else {
-                if(cycleSecond == null)
-                    result = findFaces(graph, cycleStart, candidate,
-                            currentVertex, candidate, currentFaces,
-                            usedEdges + 1);
-                else
-                    result = findFaces(graph, cycleStart, cycleSecond,
-                            currentVertex, candidate, currentFaces,
-                            usedEdges + 1);
+                result = findFaces(graph, cycleStart,
+                        cycleSecond == null ? candidate : cycleSecond,
+                        currentVertex, candidate, currentFaces,
+                        edgesLeft - 1, edgesInCurrentCycle + 1);
             }
 
             /* We're only interested in the maximum number of faces we can find
