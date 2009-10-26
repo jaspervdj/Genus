@@ -84,4 +84,94 @@ willeukeurige graaf met $e$ bogen en $v$ toppen (Voorbeeld: Figuur
 \end{center}
 \end{figure}
 
+\section{Het na\"ieve algoritme}
+
+\subsection{Lazy genereren van embeddingen}
+Ons na\"ieve algoritme overloopt alle embeddingen. Het is echter belangrijk dat
+we de embeddingen op een \emph{lazy} manier genereren. Indien we de permutaties
+\emph{strict} zouden genereren, zouden we een algoritme krijgen dat (weliswaar
+met branching) het volgende idee implementeerd:
+
+\lstset{language=Python}
+\begin{lstlisting}
+genus = +Infinity
+for e in getEmbeddings(graph):
+    eGenus = getGenus(e)
+    if eGenus < genus:
+        genus = eGenus
+\end{lstlisting}
+
+Hierbij is het probleem dat we pas informatie over het genus krijgen op het
+moment dat e gegenereerd is. Als we hierop bounding criteria willen toepassen,
+zouden we enkel de bladeren in onze zoekboom kunnen schrappen. Omdat we meer
+willen schrappen, zoeken we dus naar een beter algoritme, waarin we vroeger
+informatie over het genus verkrijgen.
+\newline
+
+\subsection{findGenus en findFaces}
+Het genus van een graaf en een embedding $i$ wordt gegeven door
+$v + f_i - e = 2 - 2g_i$. We weten $v$ en $e$ vast liggen, en enkel $f$ vari\"eert
+als voor een graaf de embeddingen aflopen. Het zoeken van $min(g)$ komt dus
+neer op het zoeken van $max(f)$, want
+\begin{equation*}
+min(g) = 1 - \frac{v + max(f) - e}{2}
+\end{equation*}
+
+\subsection{Algoritme: Het zoeken van het maximaal aantal vlakken}
+Eerst zetten we de graaf die we krijgen als input om in een gerichte graaf. We
+beginnen met een willekeurige (gerichte) boog $e_1$ die nog niet in een pad
+ligt.  Stel dat op het einde van deze boog de top $v$ ligt. We nemen nu de
+verzameling kandidaat bogen $E_v$ die op $e_i$ kunnen volgen. Deze stap is niet
+triviaal en wordt verder beschreven in referentie hier. Nu moeten we branchen
+voor elk element van $E_v$. We voegen de gekozen boog $e_{i+1}$ toe aan ons pad.
+Indien deze boog dezelfde boog is als de eerste boog in ons pad, $e_1$, Hebben
+we van ons pad een cykel gemaakt. Op dat moment kijken we of er nog bogen zijn
+die niet in een pad liggen. Als dit het geval is, beginnen we een nieuw pad met
+een willeukerige boog. Anders hebben we een volledige embedding gevonden, en
+bevinden we ons in een blad van de zoekboom.
+
+\subsection{Het nemen van kadidaatbogen volgend op een boog}
+Onze embedding defini\"eert voor elke top een bepaalde volgorde van de bogen in
+deze top. We slaan deze volgordes op in de klasse \verb#CycleNode#. Initieel kan
+elke boog volgen op elke andere boog. We stellen dit voor als $n$ deelvolgordes
+\begin{equation*}
+(e_1) (e_2) (e_3) \dots (e_n)
+\end{equation*}
+voor een top met $n$ bogen. Stel dat we op een bepaald moment in ons algoritme
+in de top toekomen via $e_i$ en weggaan via $e_j$. Vanaf dit moment moeten we
+hiermee rekening houden, mochten we nog eens in de top komen. We slaan dit op
+als
+\begin{equation*}
+(e_1) (e_2) (e_3) \dots (e_i e_j) \dots (e_n)
+\end{equation*}
+Hoe vinden we nu de kandidaatbogen? Stel dat we uit $e_i$ komen. We hebben in
+onze top de volgende volgordes opgeslaan:
+\begin{equation*}
+(e_{a1} e_{a2} \dots e_{ax}) (e_{b1} e_{b2} \dots e_{by}) \dots (e_{c1} e_{c2} \dots e_{cz})
+\end{equation*}
+We weten dat er nog geen boog volgt op $e_i$, dus zal $e_i$ het laatste element
+zijn in een deelvolgorde.
+\newline
+
+We kunnen bijvoorbeeld niet $e_{a2}$ als volgende boog kiezen, omdat we al
+gedefini\"eerd hebben dat deze op $e_{a1}$ volgt. Stel dat $e_i = e_{ax}$,
+dan kunnen we niet als volgende boog $e_{a1}$ kiezen, want op dat moment zouden
+we de deelvolgorde \emph{sluiten}. Dit mag niet, want, zoals in de opgave
+beschreven wordt, moeten we uiteindelijk een volgorde als $(e_1 e_2 \dots e_n)$
+uitkomen, zodat als we de volgorde doorlopen, elke $e$ tegenkomen.
+\newline
+
+Meer algemeen zijn de deelkandidaten die kunnen volgen op $e_i$ alle $e_j$ die
+voldoen aan twee voorwaarden:
+\begin{itemize}
+\item $e_j$ is het eerste element van een deelvolgorde
+$(e_j e_{j+1} ... e_{j+n})$.
+\item $e_j$ zit niet in dezelfde deelvolgorde als $e_i$.
+\end{itemize}
+
+Een uitzondering bestaat wanneer we slechts \'e\'en deelvolgorde 
+$(e_1 e_2 \dots e_i)$ ($e_i$ is dan het laatste element, aangezien het als
+enige $e$ nog geen opvolger heeft) meer hebben. Dit geval is echter triviaal,
+dan is de enige kandidaat $e_1$.
+
 \end{document}
