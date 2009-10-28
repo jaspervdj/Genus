@@ -122,15 +122,85 @@ Eerst zetten we de graaf die we krijgen als input om in een gerichte graaf. We
 beginnen met een willekeurige (gerichte) boog $e_1$ die nog niet in een pad
 ligt.  Stel dat op het einde van deze boog de top $v$ ligt. We nemen nu de
 verzameling kandidaat bogen $E_v$ die op $e_i$ kunnen volgen. Deze stap is niet
-triviaal en wordt verder beschreven in referentie hier. Nu moeten we branchen
+triviaal en wordt verder beschreven in \ref{kandidaatbogen}. Nu moeten we branchen
 voor elk element van $E_v$. We voegen de gekozen boog $e_{i+1}$ toe aan ons pad.
 Indien deze boog dezelfde boog is als de eerste boog in ons pad, $e_1$, Hebben
 we van ons pad een cykel gemaakt. Op dat moment kijken we of er nog bogen zijn
 die niet in een pad liggen. Als dit het geval is, beginnen we een nieuw pad met
 een willeukerige boog. Anders hebben we een volledige embedding gevonden, en
 bevinden we ons in een blad van de zoekboom.
+\newline
+
+In pseudocode:
+\lstset{language=Python}
+\begin{lstlisting}
+def findFaces(graph):
+    return findFaces(graph, None, 0)
+
+def findFaces(graph, currentPath, currentFaces):
+    # No current path. Either we are done, or we have to start a new path.
+    if currentPath is None:
+        # Get a random vertex with some candidates.
+        vertex = graph.getVertexWithCandidates()
+
+        # No vertex found, this means we are done.
+        if vertex is None:
+            return currentFaces
+
+        # Continue with a random edge.
+        candidate = vertex.getRandomCandidate()
+        edge = Edge(vertex, candidate)
+        return findFaces(graph, [edge], currentFaces)
+
+    # We need to branch for all candidates.
+    else:
+        # Retrieve the candidates.
+        candidates = edge.getCandidates(currentPath.lastEdge())
+        max = 0
+        for candidate in candidates:
+            if
+            /* Connect the edge. */
+            if(!currentVertex.connect(lastVertex, candidate)) {
+                return currentFaces;
+            }
+
+            /* Check if we created a circle, which is the case if we are back in
+             * our starting point and we can legally connect the cycle without
+             * breaking any previous permutations. */
+            if(candidate == cycleStart &&
+                    cycleStart.connect(currentVertex, cycleSecond)) {
+                /* Recurse with one more face found. */
+                result = findFaces(graph, null, null, null, null,
+                        currentFaces + 1, edgesLeft - 1, 0);
+
+                /* Disconnect the cycle again. */
+                cycleStart.split(currentVertex, cycleSecond);
+
+            /* We did not create a cycle, so we just continue. */
+            } else {
+                result = findFaces(graph, cycleStart,
+                        cycleSecond == null ? candidate : cycleSecond,
+                        currentVertex, candidate, currentFaces,
+                        edgesLeft - 1, edgesInCurrentCycle + 1);
+            }
+
+            /* We're only interested in the maximum number of faces we can find
+             * in the graph. */
+            if(result > max)
+                max = result;
+
+            /* Disconnect the cycle again. */
+            currentVertex.split(lastVertex, candidate);
+        }
+
+        /* Return the solution with the most cycles. */
+        return max;
+    }
+}
+\end{lstlisting}
 
 \subsection{Het nemen van kadidaatbogen volgend op een boog}
+\label{kandidaatbogen}
 Onze embedding defini\"eert voor elke top een bepaalde volgorde van de bogen in
 deze top. We slaan deze volgordes op in de klasse \verb#CycleNode#. Initieel kan
 elke boog volgen op elke andere boog. We stellen dit voor als $n$ deelvolgordes
