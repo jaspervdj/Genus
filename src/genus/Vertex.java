@@ -1,16 +1,18 @@
 package genus;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 /** A graph vertex.
  */
-public class Vertex
+public class Vertex implements Comparable
 {
     /** Id of the vertex. */
     private int id;
@@ -21,8 +23,8 @@ public class Vertex
     /** The number of unique cycles. */
     private int numberOfCycles;
 
-    /** If this vertex is saturated */
-    private boolean saturated;
+    /** If this vertex has any candidates left. */
+    private boolean candidates;
 
     /** Constructor.
      *  @param id Id for this vertex.
@@ -37,7 +39,7 @@ public class Vertex
      */
     public void setNeighbours(ArrayList<Vertex> neighbours)
     {
-        cycleMap = new HashMap<Vertex, CycleNode>();
+        cycleMap = new TreeMap<Vertex, CycleNode>();
 
         for(Vertex neighbour: neighbours) {
             CycleNode cycle = new CycleNode(neighbour.getId());
@@ -46,7 +48,7 @@ public class Vertex
 
         numberOfCycles = neighbours.size();
 
-        saturated = false;
+        candidates = true;
     }
 
     /** Get the vertex id.
@@ -57,12 +59,12 @@ public class Vertex
         return id;
     }
 
-    /** Check if this vertex is saturated.
-     *  @return If this vertex is saturated.
+    /** Check if this vertex has candidates left.
+     *  @return If this vertex has candidates left.
      */
-    public boolean isSaturated()
+    public boolean hasCandidates()
     {
-        return saturated;
+        return candidates;
     }
 
     /** Tell the vertex that we took a path from a to b with this vertex in the
@@ -87,7 +89,7 @@ public class Vertex
                 aCycle.append(bCycle);
             }
         } else {
-            saturated = true;
+            candidates = false;
         }
 
         return true;
@@ -101,8 +103,8 @@ public class Vertex
         if(a == null)
             return;
 
-        if(saturated) {
-            saturated = false;
+        if(candidates) {
+            candidates = true;
         } else {
             CycleNode aCycle = cycleMap.get(a);
             aCycle.split();
@@ -119,7 +121,7 @@ public class Vertex
      */
     public Set<Integer> getCandidates(Vertex from)
     {
-        Set<Integer> candidates = new HashSet<Integer>();
+        Set<Integer> candidates = new TreeSet<Integer>();
         CycleNode containingCycle = cycleMap.get(from);
         
         /* Exception when only one cycle. */
@@ -162,5 +164,11 @@ public class Vertex
     public boolean equals(Object object)
     {
         return (object instanceof Vertex) && ((Vertex) object).id == id;
+    }
+
+    @Override
+    public int compareTo(Object object)
+    {
+        return id - ((Vertex) object).id;
     }
 }

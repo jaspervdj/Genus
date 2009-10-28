@@ -71,7 +71,7 @@ public class DefaultFindGenus implements FindGenus
         if(currentVertex == null) {
             /* Get a random vertex with outbound edges left, and a next
              * candidate. */
-            Vertex vertex = graph.getUnsaturatedVertex();
+            Vertex vertex = graph.getVertexWithCandidates();
 
             /* End of recursion. */
             if(vertex == null) {
@@ -98,7 +98,7 @@ public class DefaultFindGenus implements FindGenus
 
             /* Connect the edge. */
             if(!currentVertex.connect(lastVertex, candidate)) {
-                return currentFaces;
+                return 0;
             }
 
             /* Check if we created a circle, which is the case if we are back in

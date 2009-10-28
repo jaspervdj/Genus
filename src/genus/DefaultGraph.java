@@ -60,13 +60,13 @@ public class DefaultGraph
         return vertices.length;
     }
 
-    /** Get a random unsaturated vertex.
-     *  @return A random unsaturated vertex.
+    /** Get a random vertex with candidates left.
+     *  @return A random vertex with candidates left.
      */
-    public Vertex getUnsaturatedVertex()
+    public Vertex getVertexWithCandidates()
     {
         for(Vertex vertex: vertices) {
-            if(!vertex.isSaturated())
+            if(vertex.hasCandidates())
                 return vertex;
         }
 
