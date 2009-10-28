@@ -103,7 +103,7 @@ public class Vertex implements Comparable
         if(a == null)
             return;
 
-        if(candidates) {
+        if(!candidates) {
             candidates = true;
         } else {
             CycleNode aCycle = cycleMap.get(a);
