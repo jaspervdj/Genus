@@ -34,7 +34,21 @@ constructor van deze klasse neemt een bestandsnaam, en laad deze graaf.
 Een specifieke subklasse van de grafen zijn de complete grafen. Deze zijn zeer
 makkelijk te genereren. Dit is ge\"implementeerd in de klasse
 \verb#CompleteGraph#. De constructor van deze klasse neemt een getal $n$ en
-maakt vervolgens de graaf $K_n$ aan.
+maakt vervolgens de graaf $K_n$ aan. Deze grafen kunnen we ook zeer goed
+gebruiken voor correctheidstesten, aangezien we weten dat
+\begin{equation*}
+g_{min}(K_n) = \lceil \frac{(n - 3) (n - 4)}{12} \rceil
+\end{equation*}
+
+\subsection{CompleteBipartiteGraph}
+Naast de complete grafen zijn ook de bipartite complete grafen makkelijk te
+genereren en te testen. De constructor van de klasse
+\verb#CompleteBipartiteGraph# neemt als argumenten $n$, $m$ en maakt de dan de
+graaf $K_{n,m}$ aan. Ook voor deze grafen kunnen we het genus op voorhand
+bepalen met de formule
+\begin{equation*}
+g_{min}(K_{n,m}) = \lceil \frac{(n - 2) (m - 2)}{4} \rceil
+\end{equation*}
 
 \subsection{RandomGraph}
 Voor het testen van de performantie is veel data nodig - en dus veel input. Het
