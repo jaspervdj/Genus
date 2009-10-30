@@ -75,8 +75,9 @@ public class DefaultFindGenus implements FindGenus
 
             /* End of recursion. */
             if(vertex == null) {
-                if(currentFaces > globalMax)
-                    globalMax = currentFaces;
+                /* Update our maximum. */
+                if(currentFaces + 1 > globalMax)
+                    globalMax = currentFaces + 1;
 
                 return currentFaces;
             }
@@ -96,8 +97,11 @@ public class DefaultFindGenus implements FindGenus
 
             Vertex candidate = graph.getVertex(candidateId);
 
-            /* Connect the edge. */
+            /* Connect the edge if this fails, we made an illegal move somewhere
+             * in our algorithm, so we backtrack. To check: we can assume it
+             * will always connect, so we can safely skip this check. */
             if(!currentVertex.connect(lastVertex, candidate)) {
+                System.out.println("Illegal move.");
                 return 0;
             }
 
@@ -106,6 +110,7 @@ public class DefaultFindGenus implements FindGenus
              * breaking any previous permutations. */
             if(candidate == cycleStart &&
                     cycleStart.connect(currentVertex, cycleSecond)) {
+
                 /* Recurse with one more face found. */
                 result = findFaces(graph, null, null, null, null,
                         currentFaces + 1, edgesLeft - 1, 0);
