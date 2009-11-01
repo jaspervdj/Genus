@@ -145,74 +145,6 @@ een willeukerige boog. Anders hebben we een volledige embedding gevonden, en
 bevinden we ons in een blad van de zoekboom.
 \newline
 
-In pseudocode:
-\lstset{language=Python}
-\begin{lstlisting}
-def findFaces(graph):
-    return findFaces(graph, None, 0)
-
-def findFaces(graph, currentPath, currentFaces):
-    # No current path. Either we are done, or we have to start a new path.
-    if currentPath is None:
-        # Get a random vertex with some candidates.
-        vertex = graph.getVertexWithCandidates()
-
-        # No vertex found, this means we are done.
-        if vertex is None:
-            return currentFaces
-
-        # Continue with a random edge.
-        candidate = vertex.getRandomCandidate()
-        edge = Edge(vertex, candidate)
-        return findFaces(graph, [edge], currentFaces)
-
-    # We need to branch for all candidates.
-    else:
-        # Retrieve the candidates.
-        candidates = edge.getCandidates(currentPath.lastEdge())
-        max = 0
-        for candidate in candidates:
-            if
-            /* Connect the edge. */
-            if(!currentVertex.connect(lastVertex, candidate)) {
-                return currentFaces;
-            }
-
-            /* Check if we created a circle, which is the case if we are back in
-             * our starting point and we can legally connect the cycle without
-             * breaking any previous permutations. */
-            if(candidate == cycleStart &&
-                    cycleStart.connect(currentVertex, cycleSecond)) {
-                /* Recurse with one more face found. */
-                result = findFaces(graph, null, null, null, null,
-                        currentFaces + 1, edgesLeft - 1, 0);
-
-                /* Disconnect the cycle again. */
-                cycleStart.split(currentVertex, cycleSecond);
-
-            /* We did not create a cycle, so we just continue. */
-            } else {
-                result = findFaces(graph, cycleStart,
-                        cycleSecond == null ? candidate : cycleSecond,
-                        currentVertex, candidate, currentFaces,
-                        edgesLeft - 1, edgesInCurrentCycle + 1);
-            }
-
-            /* We're only interested in the maximum number of faces we can find
-             * in the graph. */
-            if(result > max)
-                max = result;
-
-            /* Disconnect the cycle again. */
-            currentVertex.split(lastVertex, candidate);
-        }
-
-        /* Return the solution with the most cycles. */
-        return max;
-    }
-}
-\end{lstlisting}
-
 \subsection{Het nemen van kadidaatbogen volgend op een boog}
 \label{kandidaatbogen}
 Onze embedding defini\"eert voor elke top een bepaalde volgorde van de bogen in
@@ -257,5 +189,48 @@ Een uitzondering bestaat wanneer we slechts \'e\'en deelvolgorde
 $(e_1 e_2 \dots e_i)$ ($e_i$ is dan het laatste element, aangezien het als
 enige $e$ nog geen opvolger heeft) meer hebben. Dit geval is echter triviaal,
 dan is de enige kandidaat $e_1$.
+
+\section{Bounding Criteria}
+
+\subsection{Een ondergrens voor het maximaal aantal vlakken}
+We kunnen bounden als we een ondergrens $m$ hebben voor het maximaal aantal
+vlakken $F$. We zoeken immers $F$. Stel dat we in het algoritme zitten en we
+hebben momenteel $f$ vlakken. We hebben eerder al een embedding gevonden met
+$m$ vlakken. Stel dat we weten dat we $x$ vlakken kunnen maken met de bogen die
+we op dat moment nog niet gebruikt hebben. Dat betekent dat we kunnen stoppen
+met ons algoritme zodra
+\begin{equation*}
+f + x < m
+\end{equation*}
+want we weten dat
+\begin{equation*}
+m \leq F
+\end{equation*}
+en dus
+\begin{equation*}
+f + x \leq F
+\end{equation*}
+Dit laatste impliceert dat we toch geen embedding met meer vlakken zullen vinden
+in de huidige branch van de zoekruimte, en dus kunnen we maar beter stoppen.
+\newline
+
+Het is nu de vraag hoe we $x$ kiezen. Om ons algoritme performant te maken,
+willen we veel bounden, en dus willen we dat $f + x < m$ zoveel mogelijk
+voorkomt. We willen $x$ dus zo klein mogelijk, maar natuurlijk nog altijd
+correct, omdat we niet te vroeg willen bounden. We willen natuurlijk ook niet
+te veel tijd besteden aan $x$ te berekenen, omdat zo het voordeel dat we krijgen
+door bounding weer zal wegvallen.
+
+\subsection{Een eerste poging}
+We weten dat we voor een vlak te maken tenminste $3$ bogen nodig hebben. We
+houden dus het aantal bogen dat we nog niet gebruikt hebben bij in $l$. We vinden
+dan dat
+\begin{equation*}
+x = \lfloor \frac{max(2, c) + l}{3} \rfloor
+\end{equation*}
+met $c$ het aantal bogen in de huidige cykel. We tellen $max(2, c)$ op bij $l$
+omdat we zo $x$ preciezer maken. Als we al meer dan $2$ bogen in de huidige
+cykel hebben, kunnen we met $1$ boog uit $l$ een extra cykel maken. Anders
+hebben we er $3 - c$ nodig. Dit zit op deze manier ook in onze berekening.
 
 \end{document}
