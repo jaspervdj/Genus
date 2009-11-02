@@ -233,4 +233,49 @@ omdat we zo $x$ preciezer maken. Als we al meer dan $2$ bogen in de huidige
 cykel hebben, kunnen we met $1$ boog uit $l$ een extra cykel maken. Anders
 hebben we er $3 - c$ nodig. Dit zit op deze manier ook in onze berekening.
 
+\section{Heuristieken}
+
+\subsection{Een smalle stam voor de zoekboom}
+We willen een zoekboom die een smalle stam heeft en een brede kruin (zoals in
+Figuur \ref{fig:good-tree}), in plaats van een zoekboom met een brede stam en
+een smalle kruin (zoals in Figuur \ref{fig:bad-tree}). Met andere woorden, we
+willen dat ons algoritme in het begin zo weinig mogelijk moet branchen, en
+naarmate we dieper in de zoekboom afdalen, mag het meer branchen.
+\newline
+
+Het voordeel hiervan is dat wanneer we delen van de zoekboom mogen uitschakelen,
+meestal grotere delen kunnen uitschakelen.
+\newline
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.6\textwidth]{images/good-tree.png}
+\caption{Een boom met een smalle stam en een brede kruin}
+\label{fig:good-tree}
+\includegraphics[width=0.6\textwidth]{images/bad-tree.png}
+\caption{Een boom met een brede stam en een smalle kruin}
+\label{fig:bad-tree}
+\end{center}
+\end{figure}
+
+De vraag is natuurlijk hoe we onze zoekboom een zodanige vorm kunnen geven. Dit
+is echter vrij eenvoudig. We weten dat ons algoritme zal branchen als we in een
+top staan, en er zijn meerdere kandidaatbogen. Het aantal branches wordt
+natuurlijk bepaald door het aantal kandidaatbogen. Het aantal kandidaatbogen is
+dan weer grotendeels afhankelijk van het aantal bogen in die top.
+\newline
+
+We willen dus dat ons algoritme eerst de toppen bezoekt met veel bogen, en
+vervolgens de toppen met minder bogen. Dit implementeren we door de toppen van
+de graaf te sorteren op het aantal bogen.
+\newline
+
+Dit versneld ons algoritme voor bepaalde grafen. Het zal uiteraard niets
+uitmaken bij zeer regelmatige grafen zoals de complete grafen, aangezien er daar
+in elke top ongeveer evenveel bogen zijn. Maar aangezien het sorteren relatief
+snel kan gebeuren, is het toch de moeite waard om deze heuristiek te gebruiken.
+\newline
+
+Voor willeukeurig gevormde grafen scheelt het immers wel.
+
 \end{document}
