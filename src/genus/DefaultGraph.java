@@ -3,6 +3,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Collections;
+import java.util.Comparator;
 
 /** A default graph, to be used with DefaultFindGenus.
  */
@@ -18,7 +20,7 @@ public class DefaultGraph
      *  interface.
      *  @param graph Graph to construct the DefaultGraph from.
      */
-    public DefaultGraph(Graph graph)
+    public DefaultGraph(final Graph graph)
     {
         /* Process the graph first. */
         GraphProcessor processor = new SimplifyGraphProcessor();
@@ -29,9 +31,20 @@ public class DefaultGraph
         Map<Integer, Integer> translation = new HashMap<Integer, Integer>();
         vertices = new Vertex[graph.getVertices().size()];
 
+        /* Sort the vertices to have less top-level branches. */
+        List<Integer> sortedVertices = graph.getVertices();
+        Collections.sort(sortedVertices,
+            new Comparator() {
+                public int compare(Object o0, Object o1) {
+                    return graph.getNeighbours((Integer) o0).size() -
+                            graph.getNeighbours((Integer) o1).size();
+                }
+            }
+        );
+
         /* Build the translation map and store the vertices.. */
         int index = 0;
-        for(int id: graph.getVertices()) {
+        for(int id: sortedVertices) {
             translation.put(id, index);
             vertices[index] = new Vertex(index);
             index++;

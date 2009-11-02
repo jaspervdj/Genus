@@ -15,7 +15,7 @@ public class SimpleFaceCountTest
         Graph graph;
 
         if(args.length < 1) {
-            graph = new RandomGraph(5, 7);
+            graph = new RandomGraph(10, 30);
         } else {
             graph = new ZGraph(args[0]);
         }
