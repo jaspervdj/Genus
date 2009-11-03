@@ -7,7 +7,7 @@ import graph.RandomGraph;
 public class SimpleFaceCountTest
 {
     /** Number of tests to run. */
-    private final static int TESTS = 100;
+    private final static int TESTS = 10;
 
     public static void main(String[] args)
     {
@@ -20,6 +20,7 @@ public class SimpleFaceCountTest
             graph = new ZGraph(args[0]);
         }
 
+
         GraphDotWriter writer = new GraphDotWriter(graph);
         writer.write("out.dot");
 
@@ -27,7 +28,9 @@ public class SimpleFaceCountTest
         int faces = 0;
         for(int i = 0; i < TESTS; i++) {
             long start = System.currentTimeMillis();
-            faces = finder.findFaces(new DefaultGraph(graph));
+            DefaultGraph defaultGraph = new DefaultGraph(graph);
+            faces = finder.findFaces(defaultGraph);
+            System.out.println("Estimate: " + defaultGraph.estimate());
             long stop = System.currentTimeMillis();
             System.out.println("Run " + (i + 1) + ": " +
                     (stop - start) + "ms, " + faces + " faces.");

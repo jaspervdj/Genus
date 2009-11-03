@@ -67,6 +67,14 @@ public class DefaultFindGenus implements FindGenus
             return 0;
         }
 
+        float depth = (float) edgesLeft / (float) graph.getNumberOfEdges();
+        if(globalMax >= 0 && currentVertex == null && depth > 0.7f) {
+            int estimate = graph.estimate();
+            if(estimate <= globalMax) {
+                return 0;
+            }
+        }
+
         /* We need to start a new cycle. */
         if(currentVertex == null) {
             /* Get a random vertex with outbound edges left, and a next

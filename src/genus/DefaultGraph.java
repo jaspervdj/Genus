@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Arrays;
 
 /** A default graph, to be used with DefaultFindGenus.
  */
@@ -15,6 +16,9 @@ public class DefaultGraph
 
     /** Total number of edges. */
     private int numberOfEdges;
+
+    int[] labels;
+    boolean[][] matrix;
 
     /** Constructor. Construct a graph from any class implementing the Graph
      *  interface.
@@ -63,6 +67,9 @@ public class DefaultGraph
 
             vertex.setNeighbours(neighbours);
         }
+
+        labels = new int[vertices.length];
+        matrix = new boolean[vertices.length][vertices.length];
     }
 
     /** Get the number of vertices in the graph.
@@ -101,5 +108,46 @@ public class DefaultGraph
     public int getNumberOfEdges()
     {
         return numberOfEdges;
+    }
+
+    public int estimate()
+    {
+        int[] labels = new int[vertices.length];
+        for(int i = 0; i < labels.length; i++)
+            labels[i] = i;
+
+        for(int i = 0; i + 1 < vertices.length; i++)
+            for(int j = i + 1; j < vertices.length; j++)
+                matrix[i][j] = false;
+
+        int faces = 0;
+
+        for(int v0 = 0; v0 < vertices.length; v0++) {
+            for(int v1: vertices[v0].getCandidates(null)) {
+                int minV = v0 < v1 ? v0 : v1;
+                int maxV = v0 < v1 ? v1 : v0;
+                if(!matrix[minV][maxV]) {
+                    if(labels[v0] == labels[v1]) {
+                        faces++;
+                    } else {
+                        int label = labels[v0] < labels[v1] ?
+                                labels[v0] : labels[v1];
+                        labels[v0] = label;
+                        labels[v1] = label;
+                    }
+
+                    matrix[minV][maxV] = true;
+                }
+            }
+        }
+
+        int components = 1;
+        Arrays.sort(labels);
+        for(int i = 1; i < labels.length; i++) {
+            if(labels[i - 1] != labels[i])
+                components++;
+        }
+
+        return faces + components;
     }
 }

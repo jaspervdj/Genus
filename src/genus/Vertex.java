@@ -39,7 +39,7 @@ public class Vertex implements Comparable
      */
     public void setNeighbours(ArrayList<Vertex> neighbours)
     {
-        cycleMap = new TreeMap<Vertex, CycleNode>();
+        cycleMap = new HashMap<Vertex, CycleNode>();
 
         for(Vertex neighbour: neighbours) {
             CycleNode cycle = new CycleNode(neighbour.getId());
@@ -142,6 +142,11 @@ public class Vertex implements Comparable
         }
 
         return candidates;
+    }
+
+    public boolean isAvailable(int edge)
+    {
+        return cycleMap.get(edge).getFirst().getValue() == edge;
     }
 
     /** Get a random candidate. Suppose we are standing in this vertex, and we
