@@ -59,18 +59,19 @@ public class DefaultFindGenus implements FindGenus
             int edgesLeft, int edgesInCurrentCycle)
     {
         /* Simple bounding based on edges left/current number of faces. */
-        if(currentFaces + (edgesLeft +
-                (edgesInCurrentCycle > 2 ? 2 : edgesInCurrentCycle)) / 3
-                <= globalMax) {
+        int estimate = currentFaces + (edgesLeft +
+                (edgesInCurrentCycle > 2 ? 2 : edgesInCurrentCycle)) / 3;
+
+        if(estimate <= globalMax) {
             /* Since we're not going to get any result larger than our maximum,
              * it doesn't really matter what we return. */
             return 0;
         }
 
         float depth = (float) edgesLeft / (float) graph.getNumberOfEdges();
-        if(globalMax >= 0 && currentVertex == null && depth > 0.7f) {
-            int estimate = graph.estimate();
-            if(estimate <= globalMax) {
+        if(globalMax >= 0 && currentVertex == null &&
+                estimate * 0.9 <= globalMax && depth > 0.7f) {
+            if(graph.estimate() <= globalMax) {
                 return 0;
             }
         }

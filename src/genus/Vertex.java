@@ -39,7 +39,7 @@ public class Vertex implements Comparable
      */
     public void setNeighbours(ArrayList<Vertex> neighbours)
     {
-        cycleMap = new HashMap<Vertex, CycleNode>();
+        cycleMap = new TreeMap<Vertex, CycleNode>();
 
         for(Vertex neighbour: neighbours) {
             CycleNode cycle = new CycleNode(neighbour.getId());
@@ -122,7 +122,7 @@ public class Vertex implements Comparable
     public Set<Integer> getCandidates(Vertex from)
     {
         Set<Integer> candidates = new TreeSet<Integer>();
-        CycleNode containingCycle = cycleMap.get(from);
+        CycleNode containingCycle = from == null ? null : cycleMap.get(from);
         
         /* Exception when only one cycle. */
         if(numberOfCycles == 1) {
