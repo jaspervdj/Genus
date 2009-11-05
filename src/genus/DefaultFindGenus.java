@@ -70,7 +70,7 @@ public class DefaultFindGenus implements FindGenus
 
         float depth = (float) edgesLeft / (float) graph.getNumberOfEdges();
         if(globalMax >= 0 && currentVertex == null &&
-                estimate * 0.9 <= globalMax && depth > 0.7f) {
+                estimate * 0.9f <= globalMax && depth >= 0.7f) {
             if(graph.estimate() <= globalMax) {
                 return 0;
             }

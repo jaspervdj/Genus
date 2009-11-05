@@ -112,7 +112,6 @@ public class DefaultGraph
 
     public int estimate()
     {
-        int[] labels = new int[vertices.length];
         for(int i = 0; i < labels.length; i++)
             labels[i] = i;
 
@@ -130,10 +129,13 @@ public class DefaultGraph
                     if(labels[v0] == labels[v1]) {
                         faces++;
                     } else {
-                        int label = labels[v0] < labels[v1] ?
+                        int minLabel = labels[v0] < labels[v1] ?
                                 labels[v0] : labels[v1];
-                        labels[v0] = label;
-                        labels[v1] = label;
+                        int maxLabel = labels[v0] < labels[v1] ?
+                                labels[v1] : labels[v0];
+                        for(int i = 0; i < labels.length; i++)
+                            if(labels[i] == maxLabel)
+                                labels[i] = minLabel;
                     }
 
                     matrix[minV][maxV] = true;
@@ -149,5 +151,11 @@ public class DefaultGraph
         }
 
         return faces + components;
+    }
+
+    public double completeness()
+    {
+        int completeEdges = (vertices.length - 1) * vertices.length / 2;
+        return 0.5 * (double) numberOfEdges / (double) completeEdges;
     }
 }

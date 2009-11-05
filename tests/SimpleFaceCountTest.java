@@ -31,6 +31,7 @@ public class SimpleFaceCountTest
             DefaultGraph defaultGraph = new DefaultGraph(graph);
             faces = finder.findFaces(defaultGraph);
             System.out.println("Estimate: " + defaultGraph.estimate());
+            System.out.println("Completeness: " + defaultGraph.completeness());
             long stop = System.currentTimeMillis();
             System.out.println("Run " + (i + 1) + ": " +
                     (stop - start) + "ms, " + faces + " faces.");
