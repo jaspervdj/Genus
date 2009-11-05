@@ -6,7 +6,7 @@ import graph.RandomGraph;
 public class TimeTest
 {
     /** Number of tests to run. */
-    private final static int TESTS = 100;
+    private final static int TESTS = 200;
 
     public static void main(String[] args)
     {

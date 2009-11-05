@@ -68,13 +68,13 @@ public class DefaultFindGenus implements FindGenus
             return 0;
         }
 
-        float depth = (float) edgesLeft / (float) graph.getNumberOfEdges();
+        /* float depth = (float) edgesLeft / (float) graph.getNumberOfEdges();
         if(globalMax >= 0 && currentVertex == null &&
                 estimate * 0.9f <= globalMax && depth >= 0.7f) {
             if(graph.estimate() <= globalMax) {
                 return 0;
             }
-        }
+        } */
 
         /* We need to start a new cycle. */
         if(currentVertex == null) {

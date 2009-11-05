@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.TreeMap;
+import java.util.HashMap;
 
 /** A graph vertex.
  */

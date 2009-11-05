@@ -56,17 +56,11 @@ public class CycleNode
      */
     public void append(CycleNode cycle)
     {
-        CycleNode tmp = first;
-
         /* Set last reference for this cycle. */
-        while(tmp != this) {
-            tmp.last = cycle.last;
-            tmp = tmp.next;
-        }
-
+        first.last = cycle.last;
         next = cycle;
-        last = cycle.last;
 
+        CycleNode tmp = cycle.first;
         /* Set the first reference for the appended cycle. */
         while(tmp != null) {
             tmp.first = first;
@@ -78,17 +72,12 @@ public class CycleNode
      */
     public void split()
     {
-        CycleNode tmp = first;
 
         /* Set last reference for this cycle. */
-        while(tmp != this) {
-            tmp.last = this;
-            tmp = tmp.next;
-        }
-
-        tmp = next;
+        first.last = this;
 
         /* Set the first reference for the split cycle. */
+        CycleNode tmp = next;
         while(tmp != null) {
             tmp.first = next;
             tmp = tmp.next;
