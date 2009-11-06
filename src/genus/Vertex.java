@@ -17,6 +17,9 @@ public class Vertex implements Comparable
     /** Id of the vertex. */
     private int id;
 
+    /** List of neighbours. */
+    private Vertex[] neighbours;
+
     /** The permutation cycles per vertex. */
     private Map<Vertex, CycleNode> cycleMap;
 
@@ -34,11 +37,21 @@ public class Vertex implements Comparable
         this.id = id;
     }
 
+    /** Get the neighbours of this Vertex.
+     *  @return  The neighbours of this Vertex.
+     */
+    public Vertex[] getNeighbours()
+    {
+        return neighbours;
+    }
+
     /** Set the vertex neighbours.
      *  @param neighbours The vertex neighbours.
      */
     public void setNeighbours(ArrayList<Vertex> neighbours)
     {
+        this.neighbours =
+                (Vertex[]) neighbours.toArray(new Vertex[neighbours.size()]);
         cycleMap = new HashMap<Vertex, CycleNode>();
 
         for(Vertex neighbour: neighbours) {
@@ -121,7 +134,7 @@ public class Vertex implements Comparable
      */
     public Set<Integer> getCandidates(Vertex from)
     {
-        Set<Integer> candidates = new HashSet<Integer>();
+        Set<Integer> candidates = new TreeSet<Integer>();
         CycleNode containingCycle = from == null ? null : cycleMap.get(from);
         
         /* Exception when only one cycle. */
@@ -142,6 +155,21 @@ public class Vertex implements Comparable
         }
 
         return candidates;
+    }
+
+    public boolean isCandidate(Vertex from, Vertex candidate)
+    {
+        if(from == null || numberOfCycles == 1) {
+            /* First node in a cycle. */
+            return cycleMap.get(candidate).getFirst().getValue() ==
+                    candidate.getId();
+        } else {
+            /* First node in a cycle, and not in the same cycle. */
+            return cycleMap.get(candidate).getFirst().getValue() ==
+                    candidate.getId() &&
+                    cycleMap.get(candidate).getFirst().getValue() !=
+                    cycleMap.get(from).getFirst().getValue();
+        }
     }
 
     public boolean isAvailable(int edge)

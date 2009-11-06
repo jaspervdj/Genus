@@ -15,7 +15,7 @@ public class SimpleFaceCountTest
         Graph graph;
 
         if(args.length < 1) {
-            graph = new RandomGraph(10, 30);
+            graph = new RandomGraph(7, 18);
         } else {
             graph = new ZGraph(args[0]);
         }
@@ -30,11 +30,14 @@ public class SimpleFaceCountTest
             long start = System.currentTimeMillis();
             DefaultGraph defaultGraph = new DefaultGraph(graph);
             faces = finder.findFaces(defaultGraph);
-            System.out.println("Estimate: " + defaultGraph.estimate());
-            System.out.println("Completeness: " + defaultGraph.completeness());
             long stop = System.currentTimeMillis();
-            System.out.println("Run " + (i + 1) + ": " +
-                    (stop - start) + "ms, " + faces + " faces.");
+            System.out.println("Completeness: " + defaultGraph.completeness());
+            System.out.println("Estimate faces: " + defaultGraph.estimate());
+            System.out.println("Faces: " + faces);
+            System.out.println("Genus: " +
+                    finder.findGenus(defaultGraph, faces));
+            System.out.println("Time " + (i + 1) + ": " +
+                    (stop - start) + "ms.");
             averageTime += ((double) (stop - start)) / (double) TESTS;
         }
 

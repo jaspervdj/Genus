@@ -25,7 +25,16 @@ public class DefaultFindGenus implements FindGenus
      */
     public int findGenus(DefaultGraph graph)
     {
-        int faces = findFaces(graph);
+        return findGenus(graph, findFaces(graph));
+    }
+
+    /** Find the genus of a DefaultGraph.
+     *  @param graph Graph to find the genus for.
+     *  @param faces Maximum number of faces.
+     *  @return The graph genus.
+     */
+    public int findGenus(DefaultGraph graph, int faces)
+    {
         return 1 - (graph.getNumberOfVertices() + faces -
                 graph.getNumberOfEdges() / 2 ) / 2;
     }
@@ -97,51 +106,49 @@ public class DefaultFindGenus implements FindGenus
                     candidate, currentFaces, edgesLeft - 1, 1);
         }
 
-        /* Ask our current vertex where we can go next. */
-        Set<Integer> candidates = currentVertex.getCandidates(lastVertex);
-
         /* Create a branch for every candidate. */
         int max = 0, result = 0;
-        for(int candidateId: candidates) {
+        for(Vertex candidate: currentVertex.getNeighbours()) {
 
-            Vertex candidate = graph.getVertex(candidateId);
+            if(currentVertex.isCandidate(lastVertex, candidate)) {
 
-            /* Connect the edge if this fails, we made an illegal move somewhere
-             * in our algorithm, so we backtrack. To check: we can assume it
-             * will always connect, so we can safely skip this check. */
-            if(!currentVertex.connect(lastVertex, candidate)) {
-                System.out.println("Illegal move.");
-                return 0;
-            }
+                /* Connect the edge if this fails, we made an illegal move somewhere
+                 * in our algorithm, so we backtrack. To check: we can assume it
+                 * will always connect, so we can safely skip this check. */
+                if(!currentVertex.connect(lastVertex, candidate)) {
+                    System.out.println("Illegal move.");
+                    return 0;
+                }
 
-            /* Check if we created a circle, which is the case if we are back in
-             * our starting point and we can legally connect the cycle without
-             * breaking any previous permutations. */
-            if(candidate == cycleStart &&
-                    cycleStart.connect(currentVertex, cycleSecond)) {
+                /* Check if we created a circle, which is the case if we are back in
+                 * our starting point and we can legally connect the cycle without
+                 * breaking any previous permutations. */
+                if(candidate == cycleStart &&
+                        cycleStart.connect(currentVertex, cycleSecond)) {
 
-                /* Recurse with one more face found. */
-                result = findFaces(graph, null, null, null, null,
-                        currentFaces + 1, edgesLeft - 1, 0);
+                    /* Recurse with one more face found. */
+                    result = findFaces(graph, null, null, null, null,
+                            currentFaces + 1, edgesLeft - 1, 0);
+
+                    /* Disconnect the cycle again. */
+                    cycleStart.split(currentVertex, cycleSecond);
+
+                /* We did not create a cycle, so we just continue. */
+                } else {
+                    result = findFaces(graph, cycleStart,
+                            cycleSecond == null ? candidate : cycleSecond,
+                            currentVertex, candidate, currentFaces,
+                            edgesLeft - 1, edgesInCurrentCycle + 1);
+                }
+
+                /* We're only interested in the maximum number of faces we can find
+                 * in the graph. */
+                if(result > max)
+                    max = result;
 
                 /* Disconnect the cycle again. */
-                cycleStart.split(currentVertex, cycleSecond);
-
-            /* We did not create a cycle, so we just continue. */
-            } else {
-                result = findFaces(graph, cycleStart,
-                        cycleSecond == null ? candidate : cycleSecond,
-                        currentVertex, candidate, currentFaces,
-                        edgesLeft - 1, edgesInCurrentCycle + 1);
+                currentVertex.split(lastVertex, candidate);
             }
-
-            /* We're only interested in the maximum number of faces we can find
-             * in the graph. */
-            if(result > max)
-                max = result;
-
-            /* Disconnect the cycle again. */
-            currentVertex.split(lastVertex, candidate);
         }
 
         /* Return the solution with the most cycles. */
