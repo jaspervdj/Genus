@@ -167,7 +167,7 @@ public class Vertex implements Comparable
             /* First node in a cycle, and not in the same cycle. */
             return cycleMap.get(candidate).getFirst().getValue() ==
                     candidate.getId() &&
-                    cycleMap.get(candidate).getFirst().getValue() !=
+                    candidate.getId() !=
                     cycleMap.get(from).getFirst().getValue();
         }
     }
