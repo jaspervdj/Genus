@@ -20,8 +20,8 @@ public class Vertex implements Comparable
     /** List of neighbours. */
     private Vertex[] neighbours;
 
-    /** The permutation cycles per vertex. */
-    private Map<Vertex, CycleNode> cycleMap;
+    /** Cyclenodes matrix. */
+    private CycleNode[][] cycleNodes;
 
     /** The number of unique cycles. */
     private int numberOfCycles;
@@ -32,9 +32,10 @@ public class Vertex implements Comparable
     /** Constructor.
      *  @param id Id for this vertex.
      */
-    public Vertex(int id)
+    public Vertex(int id, CycleNode[][] cycleNodes)
     {
         this.id = id;
+        this.cycleNodes = cycleNodes;
     }
 
     /** Get the neighbours of this Vertex.
@@ -52,11 +53,10 @@ public class Vertex implements Comparable
     {
         this.neighbours =
                 (Vertex[]) neighbours.toArray(new Vertex[neighbours.size()]);
-        cycleMap = new HashMap<Vertex, CycleNode>();
 
         for(Vertex neighbour: neighbours) {
             CycleNode cycle = new CycleNode(neighbour.getId());
-            cycleMap.put(neighbour, cycle);
+            cycleNodes[id][neighbour.getId()] = cycle;
         }
 
         numberOfCycles = neighbours.size();
@@ -91,7 +91,8 @@ public class Vertex implements Comparable
             return true;
 
         if(numberOfCycles > 1) {
-            CycleNode aCycle = cycleMap.get(a), bCycle = cycleMap.get(b);
+            CycleNode aCycle = cycleNodes[id][a.getId()],
+                    bCycle = cycleNodes[id][b.getId()];
 
             if(aCycle.getFirst() == bCycle.getFirst()) {
                 return false;
@@ -119,62 +120,26 @@ public class Vertex implements Comparable
         if(!candidates) {
             candidates = true;
         } else {
-            CycleNode aCycle = cycleMap.get(a);
+            CycleNode aCycle = cycleNodes[id][a.getId()];
             aCycle.split();
 
             numberOfCycles++;
         }
     }
 
-    /** Get a next candidate in our current cycle. Suppose we are coming from
-     *  the vertex in the parameter from, and we ask this vertex where we can
-     *  travel next. This method returns those candidates.
-     *  @param from The vertex we are coming from.
-     *  @return Candidates for our next vertex.
-     */
-    public Set<Integer> getCandidates(Vertex from)
-    {
-        Set<Integer> candidates = new TreeSet<Integer>();
-        CycleNode containingCycle = from == null ? null : cycleMap.get(from);
-        
-        /* Exception when only one cycle. */
-        if(numberOfCycles == 1) {
-            /* First vertex from the cycle. */
-            if(from == null)
-                candidates.add(cycleMap.values().
-                        iterator().next().getFirst().getValue());
-            else
-                candidates.add(cycleMap.get(from).getFirst().getValue());
-        } else {
-            for(CycleNode cycle: cycleMap.values()) {
-                if(containingCycle == null ||
-                        cycle.getFirst() != containingCycle.getFirst()) {
-                    candidates.add(cycle.getFirst().getValue());
-                }
-            }
-        }
-
-        return candidates;
-    }
-
     public boolean isCandidate(Vertex from, Vertex candidate)
     {
         if(from == null || numberOfCycles == 1) {
             /* First node in a cycle. */
-            return cycleMap.get(candidate).getFirst().getValue() ==
+            return cycleNodes[id][candidate.getId()].getFirst().getValue() ==
                     candidate.getId();
         } else {
             /* First node in a cycle, and not in the same cycle. */
-            return cycleMap.get(candidate).getFirst().getValue() ==
+            return cycleNodes[id][candidate.getId()].getFirst().getValue() ==
                     candidate.getId() &&
                     candidate.getId() !=
-                    cycleMap.get(from).getFirst().getValue();
+                    cycleNodes[id][from.getId()].getFirst().getValue();
         }
-    }
-
-    public boolean isAvailable(int edge)
-    {
-        return cycleMap.get(edge).getFirst().getValue() == edge;
     }
 
     /** Get a random candidate. Suppose we are standing in this vertex, and we
@@ -184,7 +149,7 @@ public class Vertex implements Comparable
      */
     public int getCandidate()
     {
-        return cycleMap.values().iterator().next().getFirst().getValue();
+        return cycleNodes[id][neighbours[0].getId()].getFirst().getValue();
     }
 
     @Override

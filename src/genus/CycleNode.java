@@ -72,7 +72,6 @@ public class CycleNode
      */
     public void split()
     {
-
         /* Set last reference for this cycle. */
         first.last = this;
 

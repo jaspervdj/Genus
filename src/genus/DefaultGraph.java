@@ -17,8 +17,11 @@ public class DefaultGraph
     /** Total number of edges. */
     private int numberOfEdges;
 
-    int[] labels;
-    boolean[][] matrix;
+    /** Cyclenodes for the edges. */
+    private CycleNode[][] cycleNodes;
+
+    private int[] labels;
+    private boolean[][] matrix;
 
     /** Constructor. Construct a graph from any class implementing the Graph
      *  interface.
@@ -35,6 +38,8 @@ public class DefaultGraph
         Map<Integer, Integer> translation = new HashMap<Integer, Integer>();
         vertices = new Vertex[graph.getVertices().size()];
 
+        cycleNodes = new CycleNode[vertices.length][vertices.length];
+
         /* Sort the vertices to have less top-level branches. */
         List<Integer> sortedVertices = graph.getVertices();
         Collections.sort(sortedVertices,
@@ -50,7 +55,7 @@ public class DefaultGraph
         int index = 0;
         for(int id: sortedVertices) {
             translation.put(id, index);
-            vertices[index] = new Vertex(index);
+            vertices[index] = new Vertex(index, cycleNodes);
             index++;
         }
 
@@ -122,23 +127,26 @@ public class DefaultGraph
         int faces = 0;
 
         for(int v0 = 0; v0 < vertices.length; v0++) {
-            for(int v1: vertices[v0].getCandidates(null)) {
-                int minV = v0 < v1 ? v0 : v1;
-                int maxV = v0 < v1 ? v1 : v0;
-                if(!matrix[minV][maxV]) {
-                    if(labels[v0] == labels[v1]) {
-                        faces++;
-                    } else {
-                        int minLabel = labels[v0] < labels[v1] ?
-                                labels[v0] : labels[v1];
-                        int maxLabel = labels[v0] < labels[v1] ?
-                                labels[v1] : labels[v0];
-                        for(int i = 0; i < labels.length; i++)
-                            if(labels[i] == maxLabel)
-                                labels[i] = minLabel;
-                    }
+            for(Vertex vertex1: vertices[v0].getNeighbours()) {
+                if(vertices[v0].isCandidate(null, vertex1)) {
+                    int v1 = vertex1.getId();
+                    int minV = v0 < v1 ? v0 : v1;
+                    int maxV = v0 < v1 ? v1 : v0;
+                    if(!matrix[minV][maxV]) {
+                        if(labels[v0] == labels[v1]) {
+                            faces++;
+                        } else {
+                            int minLabel = labels[v0] < labels[v1] ?
+                                    labels[v0] : labels[v1];
+                            int maxLabel = labels[v0] < labels[v1] ?
+                                    labels[v1] : labels[v0];
+                            for(int i = 0; i < labels.length; i++)
+                                if(labels[i] == maxLabel)
+                                    labels[i] = minLabel;
+                        }
 
-                    matrix[minV][maxV] = true;
+                        matrix[minV][maxV] = true;
+                    }
                 }
             }
         }
