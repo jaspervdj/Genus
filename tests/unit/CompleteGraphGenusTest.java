@@ -4,6 +4,7 @@ import genus.Graph;
 import graph.CompleteGraph;
 import genus.FindGenus;
 import genus.DefaultFindGenus;
+import genus.BoundedFindGenus;
 
 /** Tests the genus of a complete graph.
  */
@@ -20,7 +21,7 @@ public class CompleteGraphGenusTest extends UnitTest
             Graph graph = new CompleteGraph(n);
             
             /* Find the genus. */
-            FindGenus finder = new DefaultFindGenus();
+            FindGenus finder = new BoundedFindGenus();
             int foundGenus = finder.findGenus(graph);
 
             /* Calculate the genus. */

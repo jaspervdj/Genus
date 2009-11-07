@@ -5,12 +5,10 @@ import java.util.Set;
  */
 public class DefaultFindGenus implements FindGenus
 {
-    /** The current max number of faces found. */
-    private int globalMax;
-
+    /** Constructor.
+     */
     public DefaultFindGenus()
     {
-        globalMax = 0;
     }
 
     @Override
@@ -45,7 +43,7 @@ public class DefaultFindGenus implements FindGenus
      */
     public int findFaces(DefaultGraph graph)
     {
-        globalMax = 0;
+        onRecursionStart();
         return findFaces(graph, -1, -1, -1, -1,
                 0, graph.getNumberOfEdges(), 0);
     }
@@ -63,26 +61,12 @@ public class DefaultFindGenus implements FindGenus
      *  @return the maximum number of faces in the graph.
      */
     public int findFaces(DefaultGraph graph, int cycleStart,
-            int cycleSecond, int lastVertex,
-            int current, int currentFaces,
+            int cycleSecond, int lastVertex, int current, int currentFaces,
             int edgesLeft, int edgesInCurrentCycle)
     {
-        /* Simple bounding based on edges left/current number of faces. */
-        int estimate = currentFaces + (edgesLeft +
-                (edgesInCurrentCycle > 2 ? 2 : edgesInCurrentCycle)) / 3;
-
-        if(estimate <= globalMax) {
-            /* Since we're not going to get any result larger than our maximum,
-             * it doesn't really matter what we return. */
+        if(!onRecurse(graph, cycleStart, cycleSecond, lastVertex, current,
+                currentFaces, edgesLeft, edgesInCurrentCycle)) {
             return 0;
-        }
-
-        float depth = (float) edgesLeft / (float) graph.getNumberOfEdges();
-        if(globalMax >= 0 && current < 0 &&
-                estimate * 0.9f <= globalMax && depth >= 0.8f) {
-            if(graph.estimate() <= globalMax) {
-                return 0;
-            }
         }
 
         /* We need to start a new cycle. */
@@ -93,10 +77,7 @@ public class DefaultFindGenus implements FindGenus
 
             /* End of recursion. */
             if(vertex < 0) {
-                /* Update our maximum. */
-                if(currentFaces + 1 > globalMax)
-                    globalMax = currentFaces + 1;
-
+                onRecursionEnd(currentFaces);
                 return currentFaces;
             }
 
@@ -145,8 +126,8 @@ public class DefaultFindGenus implements FindGenus
                             edgesLeft - 1, edgesInCurrentCycle + 1);
                 }
 
-                /* We're only interested in the maximum number of faces we can find
-                 * in the graph. */
+                /* We're only interested in the maximum number of faces we can
+                 * find in the graph. */
                 if(result > max)
                     max = result;
 
@@ -157,5 +138,37 @@ public class DefaultFindGenus implements FindGenus
 
         /* Return the solution with the most cycles. */
         return max;
+    }
+
+    /** Called before recursion starts.
+     */
+    public void onRecursionStart()
+    {
+    }
+
+    /** Called when a recursion starts.
+     *  @param graph Graph to find the number of faces for.
+     *  @param cycleStart Starting vertex of the current cycle.
+     *  @param cycleSecond Second vertex of the current cycle.
+     *  @param lastVertex Last vertex visited.
+     *  @param current Current location in the graph.
+     *  @param currentFaces Number of faces currently found.
+     *  @param edgesLeft Edges left in the graph.
+     *  @param edgesInCurrentCycle Number of edges used in the cumber cycle.
+     *  @return If the function should continue.
+     */
+    public boolean onRecurse(DefaultGraph graph, int cycleStart,
+            int cycleSecond, int lastVertex, int current, int currentFaces,
+            int edgesLeft, int edgesInCurrentCycle)
+    {
+        return true;
+    }
+
+    /** End of recursion hook. This gets called when the algorithm reaches
+     *  a leaf in the search tree.
+     *  @param faces Number of faces found.
+     */
+    public void onRecursionEnd(int faces)
+    {
     }
 }

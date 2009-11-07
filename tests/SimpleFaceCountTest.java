@@ -1,5 +1,6 @@
 import genus.Graph;
 import genus.DefaultFindGenus;
+import genus.BoundedFindGenus;
 import genus.DefaultGraph;
 import graph.ZGraph;
 import graph.RandomGraph;
@@ -11,7 +12,7 @@ public class SimpleFaceCountTest
 
     public static void main(String[] args)
     {
-        DefaultFindGenus finder = new DefaultFindGenus();
+        DefaultFindGenus finder = new BoundedFindGenus();
         Graph graph;
 
         if(args.length < 1) {

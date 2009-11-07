@@ -17,9 +17,6 @@ public class DefaultGraph
     /** Total number of edges. */
     private int numberOfEdges;
 
-    /** Number of edges not used. */
-    private int edgesLeft;
-
     /** Cyclenodes for the edges. */
     private CycleNode[][] cycleNodes;
 
@@ -76,8 +73,6 @@ public class DefaultGraph
             vertex.setNeighbours(neighbours);
         }
 
-        edgesLeft = numberOfEdges;
-
         labels = new int[vertices.length];
         matrix = new boolean[vertices.length][vertices.length];
     }
@@ -128,7 +123,11 @@ public class DefaultGraph
      */
     public boolean connect(int from, int through, int destination)
     {
-        return vertices[through].connect(from, destination);
+        if(vertices[through].connect(from, destination)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /** Split two edges (undo a connect).
