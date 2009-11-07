@@ -18,7 +18,7 @@ public class Vertex implements Comparable
     private int id;
 
     /** List of neighbours. */
-    private Vertex[] neighbours;
+    private int[] neighbours;
 
     /** Cyclenodes matrix. */
     private CycleNode[][] cycleNodes;
@@ -41,7 +41,7 @@ public class Vertex implements Comparable
     /** Get the neighbours of this Vertex.
      *  @return  The neighbours of this Vertex.
      */
-    public Vertex[] getNeighbours()
+    public int[] getNeighbours()
     {
         return neighbours;
     }
@@ -51,8 +51,9 @@ public class Vertex implements Comparable
      */
     public void setNeighbours(ArrayList<Vertex> neighbours)
     {
-        this.neighbours =
-                (Vertex[]) neighbours.toArray(new Vertex[neighbours.size()]);
+        this.neighbours = new int[neighbours.size()];
+        for(int i = 0; i < this.neighbours.length; i++)
+            this.neighbours[i] = neighbours.get(i).getId();
 
         for(Vertex neighbour: neighbours) {
             CycleNode cycle = new CycleNode(neighbour.getId());
@@ -82,25 +83,25 @@ public class Vertex implements Comparable
 
     /** Tell the vertex that we took a path from a to b with this vertex in the
      *  middle.
-     *  @param a Path start.
-     *  @param b Path end.
+     *  @param from Vertex we're coming from.
+     *  @param destination Vertex we're going to.
      */
-    public boolean connect(Vertex a, Vertex b)
+    public boolean connect(int from, int destination)
     {
-        if(a == null)
+        if(from < 0)
             return true;
 
         if(numberOfCycles > 1) {
-            CycleNode aCycle = cycleNodes[id][a.getId()],
-                    bCycle = cycleNodes[id][b.getId()];
+            CycleNode fromCycle = cycleNodes[id][from],
+                    destinationCycle = cycleNodes[id][destination];
 
-            if(aCycle.getFirst() == bCycle.getFirst()) {
+            if(fromCycle.getFirst() == destinationCycle.getFirst()) {
                 return false;
             } else {
                 numberOfCycles--;
 
                 /* Join the cycles. */
-                aCycle.append(bCycle);
+                fromCycle.append(destinationCycle);
             }
         } else {
             candidates = false;
@@ -109,36 +110,41 @@ public class Vertex implements Comparable
         return true;
     }
 
-    /** Split the cycle after a.
-     *  @param a Vertex a.
+    /** Split the cycle at this vertex (undo a connect).
+     *  @param from Vertex we're coming from.
+     *  @param destination Vertex we're going to.
      */
-    public void split(Vertex a, Vertex b)
+    public void split(int from, int destination)
     {
-        if(a == null)
+        if(from < 0)
             return;
 
         if(!candidates) {
             candidates = true;
         } else {
-            CycleNode aCycle = cycleNodes[id][a.getId()];
-            aCycle.split();
+            CycleNode fromCycle = cycleNodes[id][from];
+            fromCycle.split();
 
             numberOfCycles++;
         }
     }
 
-    public boolean isCandidate(Vertex from, Vertex candidate)
+    /** Check if two edges can be connected.
+     *  @param from Vertex we're coming from.
+     *  @param destination Vertex we're going to.
+     *  @return If the two edges can be connected.
+     */
+    public boolean isCandidate(int from, int destination)
     {
-        if(from == null || numberOfCycles == 1) {
+        if(from < 0 || numberOfCycles == 1) {
             /* First node in a cycle. */
-            return cycleNodes[id][candidate.getId()].getFirst().getValue() ==
-                    candidate.getId();
+            return cycleNodes[id][destination].getFirst().getValue() ==
+                    destination;
         } else {
             /* First node in a cycle, and not in the same cycle. */
-            return cycleNodes[id][candidate.getId()].getFirst().getValue() ==
-                    candidate.getId() &&
-                    candidate.getId() !=
-                    cycleNodes[id][from.getId()].getFirst().getValue();
+            return cycleNodes[id][destination].getFirst().getValue() ==
+                    destination &&
+                    destination != cycleNodes[id][from].getFirst().getValue();
         }
     }
 
@@ -149,7 +155,7 @@ public class Vertex implements Comparable
      */
     public int getCandidate()
     {
-        return cycleNodes[id][neighbours[0].getId()].getFirst().getValue();
+        return cycleNodes[id][neighbours[0]].getFirst().getValue();
     }
 
     @Override

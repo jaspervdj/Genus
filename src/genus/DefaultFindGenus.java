@@ -46,7 +46,7 @@ public class DefaultFindGenus implements FindGenus
     public int findFaces(DefaultGraph graph)
     {
         globalMax = 0;
-        return findFaces(graph, null, null, null, null,
+        return findFaces(graph, -1, -1, -1, -1,
                 0, graph.getNumberOfEdges(), 0);
     }
 
@@ -56,15 +56,15 @@ public class DefaultFindGenus implements FindGenus
      *  @param cycleStart Starting vertex of the current cycle.
      *  @param cycleSecond Second vertex of the current cycle.
      *  @param lastVertex Last vertex visited.
-     *  @param currentVertex Current location in the graph.
+     *  @param current Current location in the graph.
      *  @param currentFaces Number of faces currently found.
      *  @param edgesLeft Edges left in the graph.
      *  @param edgesInCurrentCycle Number of edges used in the cumber cycle.
      *  @return the maximum number of faces in the graph.
      */
-    public int findFaces(DefaultGraph graph, Vertex cycleStart,
-            Vertex cycleSecond, Vertex lastVertex,
-            Vertex currentVertex, int currentFaces,
+    public int findFaces(DefaultGraph graph, int cycleStart,
+            int cycleSecond, int lastVertex,
+            int current, int currentFaces,
             int edgesLeft, int edgesInCurrentCycle)
     {
         /* Simple bounding based on edges left/current number of faces. */
@@ -77,22 +77,22 @@ public class DefaultFindGenus implements FindGenus
             return 0;
         }
 
-        /* float depth = (float) edgesLeft / (float) graph.getNumberOfEdges();
-        if(globalMax >= 0 && currentVertex == null &&
-                estimate * 0.9f <= globalMax && depth >= 0.7f) {
+        float depth = (float) edgesLeft / (float) graph.getNumberOfEdges();
+        if(globalMax >= 0 && current < 0 &&
+                estimate * 0.9f <= globalMax && depth >= 0.8f) {
             if(graph.estimate() <= globalMax) {
                 return 0;
             }
-        } */
+        }
 
         /* We need to start a new cycle. */
-        if(currentVertex == null) {
+        if(current < 0) {
             /* Get a random vertex with outbound edges left, and a next
              * candidate. */
-            Vertex vertex = graph.getVertexWithCandidates();
+            int vertex = graph.getVertexWithCandidates();
 
             /* End of recursion. */
-            if(vertex == null) {
+            if(vertex < 0) {
                 /* Update our maximum. */
                 if(currentFaces + 1 > globalMax)
                     globalMax = currentFaces + 1;
@@ -101,43 +101,47 @@ public class DefaultFindGenus implements FindGenus
             }
 
             /* Continue with the random vertex. */
-            Vertex candidate = graph.getVertex(vertex.getCandidate());
+            int candidate = graph.getVertex(vertex).getCandidate();
             return findFaces(graph, vertex, candidate, vertex,
                     candidate, currentFaces, edgesLeft - 1, 1);
         }
 
+        Vertex currentVertex = graph.getVertex(current);
+
         /* Create a branch for every candidate. */
         int max = 0, result = 0;
-        for(Vertex candidate: currentVertex.getNeighbours()) {
+        for(int candidate: currentVertex.getNeighbours()) {
 
+            /* Check that the candidate is, well, a candidate. */
             if(currentVertex.isCandidate(lastVertex, candidate)) {
 
-                /* Connect the edge if this fails, we made an illegal move somewhere
-                 * in our algorithm, so we backtrack. To check: we can assume it
-                 * will always connect, so we can safely skip this check. */
-                if(!currentVertex.connect(lastVertex, candidate)) {
+                /* Connect the edge if this fails, we made an illegal move
+                 * somewhere * in our algorithm, so we backtrack. To check: we
+                 * can assume it * will always connect, so we can safely skip
+                 * this check. */
+                if(!graph.connect(lastVertex, current, candidate)) {
                     System.out.println("Illegal move.");
                     return 0;
                 }
 
-                /* Check if we created a circle, which is the case if we are back in
-                 * our starting point and we can legally connect the cycle without
-                 * breaking any previous permutations. */
+                /* Check if we created a circle, which is the case if we are
+                 * back in our starting point and we can legally connect the
+                 * cycle without breaking any previous permutations. */
                 if(candidate == cycleStart &&
-                        cycleStart.connect(currentVertex, cycleSecond)) {
+                        graph.connect(current, cycleStart, cycleSecond)) {
 
                     /* Recurse with one more face found. */
-                    result = findFaces(graph, null, null, null, null,
+                    result = findFaces(graph, -1, -1, -1, -1,
                             currentFaces + 1, edgesLeft - 1, 0);
 
                     /* Disconnect the cycle again. */
-                    cycleStart.split(currentVertex, cycleSecond);
+                    graph.split(current, cycleStart, cycleSecond);
 
                 /* We did not create a cycle, so we just continue. */
                 } else {
                     result = findFaces(graph, cycleStart,
-                            cycleSecond == null ? candidate : cycleSecond,
-                            currentVertex, candidate, currentFaces,
+                            cycleSecond < 0 ? candidate : cycleSecond,
+                            current, candidate, currentFaces,
                             edgesLeft - 1, edgesInCurrentCycle + 1);
                 }
 
@@ -147,7 +151,7 @@ public class DefaultFindGenus implements FindGenus
                     max = result;
 
                 /* Disconnect the cycle again. */
-                currentVertex.split(lastVertex, candidate);
+                graph.split(lastVertex, current, candidate);
             }
         }
 

@@ -17,6 +17,9 @@ public class DefaultGraph
     /** Total number of edges. */
     private int numberOfEdges;
 
+    /** Number of edges not used. */
+    private int edgesLeft;
+
     /** Cyclenodes for the edges. */
     private CycleNode[][] cycleNodes;
 
@@ -73,6 +76,8 @@ public class DefaultGraph
             vertex.setNeighbours(neighbours);
         }
 
+        edgesLeft = numberOfEdges;
+
         labels = new int[vertices.length];
         matrix = new boolean[vertices.length][vertices.length];
     }
@@ -88,14 +93,14 @@ public class DefaultGraph
     /** Get a random vertex with candidates left.
      *  @return A random vertex with candidates left.
      */
-    public Vertex getVertexWithCandidates()
+    public int getVertexWithCandidates()
     {
-        for(Vertex vertex: vertices) {
-            if(vertex.hasCandidates())
-                return vertex;
+        for(int i = 0; i < vertices.length; i++) {
+            if(vertices[i].hasCandidates())
+                return i;
         }
 
-        return null;
+        return -1;
     }
 
     /** Get a vertex by id.
@@ -115,6 +120,27 @@ public class DefaultGraph
         return numberOfEdges;
     }
 
+    /** Connect two edges.
+     *  @param from Vertex we're coming from.
+     *  @param through Vertex we're going through.
+     *  @param destination Vertex we're going to.
+     *  @return If the operation was succesful.
+     */
+    public boolean connect(int from, int through, int destination)
+    {
+        return vertices[through].connect(from, destination);
+    }
+
+    /** Split two edges (undo a connect).
+     *  @param from Vertex we're coming from.
+     *  @param through Vertex we're going through.
+     *  @param destination Vertex we're going to.
+     */
+    public void split(int from, int through, int destination)
+    {
+        vertices[through].split(from, destination);
+    }
+
     public int estimate()
     {
         for(int i = 0; i < labels.length; i++)
@@ -127,9 +153,8 @@ public class DefaultGraph
         int faces = 0;
 
         for(int v0 = 0; v0 < vertices.length; v0++) {
-            for(Vertex vertex1: vertices[v0].getNeighbours()) {
-                if(vertices[v0].isCandidate(null, vertex1)) {
-                    int v1 = vertex1.getId();
+            for(int v1: vertices[v0].getNeighbours()) {
+                if(vertices[v0].isCandidate(-1, v1)) {
                     int minV = v0 < v1 ? v0 : v1;
                     int maxV = v0 < v1 ? v1 : v0;
                     if(!matrix[minV][maxV]) {
