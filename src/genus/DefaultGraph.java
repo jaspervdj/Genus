@@ -149,6 +149,16 @@ public class DefaultGraph
         vertices[through].split(from, destination);
     }
 
+    /** See if there is an edge between two vertices.
+     *  @param v0 One end of the possible edge.
+     *  @param v1 The other end of the possible edge.
+     *  @return If an edge exists between those two vertices.
+     */
+    public boolean hasEdge(int v0, int v1)
+    {
+        return v0 >= 0 && v1 >= 0 && cycleNodes[v0][v1] != null;
+    }
+
     public int estimate()
     {
         for(int i = 0; i < labels.length; i++)

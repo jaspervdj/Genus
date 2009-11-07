@@ -28,23 +28,33 @@ public class BoundedFindGenus extends DefaultFindGenus
             int cycleSecond, int lastVertex, int current, int currentFaces,
             int edgesLeft, int edgesInCurrentCycle)
     {
-        /* Simple bounding based on edges left/current number of faces. */
         int girth = graph.getGirth();
-        int estimate = currentFaces + (edgesLeft +
-                (edgesInCurrentCycle >= girth ?
-                girth - 1 : edgesInCurrentCycle)) / girth;
 
+        /* Minimum number of edges needed to finnish current cycle. */
+        int neededInCurrent;
+        if(edgesInCurrentCycle >= girth) {
+            if(graph.hasEdge(current, cycleStart))
+                neededInCurrent = 1;
+            else
+                neededInCurrent = 2;
+        } else {
+            neededInCurrent = girth - edgesInCurrentCycle;
+        }
+
+        /* Simple bounding based on edges left/current number of faces. */
+        int estimate = currentFaces + 1 + (edgesLeft - neededInCurrent) / girth;
         if(estimate <= lowerBound) {
+            System.out.println(edgesLeft);
             return false;
         }
 
-        float depth = (float) edgesLeft / (float) graph.getNumberOfEdges();
+        /*float depth = (float) edgesLeft / (float) graph.getNumberOfEdges();
         if(lowerBound >= 0 && current < 0 &&
-                estimate * 0.8f <= lowerBound && depth >= 0.8f) {
+                estimate * 0.8f <= lowerBound && depth >= 0.3f) {
             if(graph.estimate() <= lowerBound) {
                 return false;
             }
-        }
+        }*/
 
         return true;
     }
