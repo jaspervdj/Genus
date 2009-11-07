@@ -33,6 +33,7 @@ public class SimpleFaceCountTest
             faces = finder.findFaces(defaultGraph);
             long stop = System.currentTimeMillis();
             System.out.println("Completeness: " + defaultGraph.completeness());
+            System.out.println("Girth: " + defaultGraph.getGirth());
             System.out.println("Estimate faces: " + defaultGraph.estimate());
             System.out.println("Faces: " + faces);
             System.out.println("Genus: " +

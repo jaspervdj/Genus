@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Arrays;
+import java.util.Queue;
+import java.util.LinkedList;
 
 /** A default graph, to be used with DefaultFindGenus.
  */
@@ -19,6 +21,9 @@ public class DefaultGraph
 
     /** Cyclenodes for the edges. */
     private CycleNode[][] cycleNodes;
+
+    /** Girth of this graph. */
+    public int girth;
 
     private int[] labels;
     private boolean[][] matrix;
@@ -72,6 +77,10 @@ public class DefaultGraph
 
             vertex.setNeighbours(neighbours);
         }
+
+        /* Compute the girth of this graph. */
+        FindGirth findGirth = new FindGirth();
+        girth = findGirth.findGirth(this);
 
         labels = new int[vertices.length];
         matrix = new boolean[vertices.length][vertices.length];
@@ -189,5 +198,13 @@ public class DefaultGraph
     {
         int completeEdges = (vertices.length - 1) * vertices.length / 2;
         return 0.5 * (double) numberOfEdges / (double) completeEdges;
+    }
+
+    /** Gets the girth of this graph.
+     *  @return The girth of this graph.
+     */
+    public int getGirth()
+    {
+        return girth;
     }
 }

@@ -29,8 +29,10 @@ public class BoundedFindGenus extends DefaultFindGenus
             int edgesLeft, int edgesInCurrentCycle)
     {
         /* Simple bounding based on edges left/current number of faces. */
+        int girth = graph.getGirth();
         int estimate = currentFaces + (edgesLeft +
-                (edgesInCurrentCycle > 2 ? 2 : edgesInCurrentCycle)) / 3;
+                (edgesInCurrentCycle >= girth ?
+                girth - 1 : edgesInCurrentCycle)) / girth;
 
         if(estimate <= lowerBound) {
             return false;
