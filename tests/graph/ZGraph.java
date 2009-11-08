@@ -20,16 +20,19 @@ public class ZGraph extends GraphImplementation
             try {
                 String line = reader.readLine();
                 while(line != null) {
-                    int split = line.indexOf("<->", 0);
+                    /* Ignore comments. */
+                    if(!line.startsWith("#")) {
+                        int split = line.indexOf("<->", 0);
 
-                    String[] from = line.substring(0, split).split("[, ]+");
-                    String[] to = line.substring(split + 3).split("[, ]+");
+                        String[] from = line.substring(0, split).split("[, ]+");
+                        String[] to = line.substring(split + 3).split("[, ]+");
 
-                    for(String fromVertex: from) {
-                        for(String toVertex: to) {
-                            if(!fromVertex.equals(toVertex)) {
-                                addEdge(Integer.parseInt(fromVertex),
-                                        Integer.parseInt(toVertex));
+                        for(String fromVertex: from) {
+                            for(String toVertex: to) {
+                                if(!fromVertex.equals(toVertex)) {
+                                    addEdge(Integer.parseInt(fromVertex),
+                                            Integer.parseInt(toVertex));
+                                }
                             }
                         }
                     }
