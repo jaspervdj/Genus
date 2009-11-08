@@ -12,13 +12,13 @@ public class BoundedFindGenus extends DefaultFindGenus
      */
     public BoundedFindGenus()
     {
-        previousResult = 0;
+        previousResult = -1;
     }
 
     @Override
     public void onRecursionStart()
     {
-        previousResult = 0;
+        previousResult = -1;
     }
 
     /** Check some bounding criteria.
