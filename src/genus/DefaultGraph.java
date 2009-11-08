@@ -45,16 +45,17 @@ public class DefaultGraph
 
         cycleNodes = new CycleNode[vertices.length][vertices.length];
 
-        /* Sort the vertices to have less top-level branches. */
+        /* Sort the vertices to have less top-level branches.
+         * TODO: throw away. */
         List<Integer> sortedVertices = graph.getVertices();
-        Collections.sort(sortedVertices,
+        /*Collections.sort(sortedVertices,
             new Comparator() {
                 public int compare(Object o0, Object o1) {
                     return graph.getNeighbours((Integer) o0).size() -
                             graph.getNeighbours((Integer) o1).size();
                 }
             }
-        );
+        );*/
 
         /* Build the translation map and store the vertices.. */
         int index = 0;
