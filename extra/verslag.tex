@@ -43,7 +43,7 @@ g_{min}(K_n) = \lceil \frac{(n - 3) (n - 4)}{12} \rceil
 \subsection{CompleteBipartiteGraph}
 Naast de complete grafen zijn ook de bipartite complete grafen makkelijk te
 genereren en te testen. De constructor van de klasse
-\verb#CompleteBipartiteGraph# neemt als argumenten $n$, $m$ en maakt de dan de
+\verb#CompleteBipartiteGraph# neemt als argumenten $n$, $m$ en maakt dan de
 graaf $K_{n,m}$ aan. Ook voor deze grafen kunnen we het genus op voorhand
 bepalen met de formule
 \begin{equation*}
@@ -76,6 +76,7 @@ willekeurige top $v_1$ en in $c_2$ een willekeurige top $v_2$. Verbind nu $v_1$
 met $v_2$. Er is nu \'e\'en component minder in de graaf. We gaan zo door tot
 we een opspannende boom verkregen hebben, bijvoorbeeld deze die te zien is in
 Figuur \ref{fig:randomgraph-02}.
+\newline
 
 We hebben nu $v - 1$ bogen toegevoegd. We moeten dus nog $e - v + 1$ bogen
 toevoegen. Stel $E_v$ alle bogen in de complete graaf met $v$ toppen, en $T$ de
@@ -242,7 +243,7 @@ f + x \leq m
 kunnen we dit nog verbeteren. Stel immers dat er een embedding kan gevonden met
 aantal vlakken $f_1$ zodat $f_1 > m$. Aangezien $m$ ook een aantal vlakken
 gevonden in een embedding voorstelt, zal wegens het feit dat $f_i$ en $m$
-dezelfde pariteit bezitten ook gelden dat $f_1 + 1 > m$. We kunnen dus nog iets
+dezelfde pariteit bezitten ook gelden dat $f_1 > m + 1$. We kunnen dus nog iets
 sneller bounden, namelijk zodra
 \begin{equation*}
 f + x \leq m + 1
@@ -280,10 +281,14 @@ Hoe moeten we het \emph{girth} van een graaf nu berekenen? We kiezen voor een
 eenvoudige manier. We starten vanuit elke top van de graaf een
 \emph{breadth-first search} en houden de diepte bij. Op het moment dat we een
 top terechtkomen waar we al geweest zijn, hebben we de kleinste cykel van de
-wortel van de \emph{breadth-first search} gevonden. Door een
-\emph{breadth-first search} te starten vanuit elke top, bepalen we zo het
-\emph{girth} van de graaf. Dit algoritme is ge\"implementeerd in de klasse
-\verb#FindGirth#.
+graaf gevonden waar de wortel van de BFS in ligt. Door een BFS te starten vanuit
+elke top, kunnen we de kleinste cykel van de gehele graaf bepalen.  Dit
+algoritme is ge\"implementeerd in de klasse \verb#FindGirth#.
+\newline
+
+In het slechtste geval moet de BFS voor elke top de gehele graaf doorzoeken. De
+tijdscomplexiteit voor dit algoritme wordt dus naar boven begrensd door $O(ve)$
+met $v$ het aantal vertices, en $e$ het aantal (ongerichte) bogen.
 
 \begin{figure}
 \begin{center}
