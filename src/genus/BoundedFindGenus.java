@@ -6,19 +6,19 @@ import java.util.Set;
 public class BoundedFindGenus extends DefaultFindGenus
 {
     /** A lower bound for the number of faces. */
-    private int lowerBound;
+    private int previousResult;
 
     /** Constructor.
      */
     public BoundedFindGenus()
     {
-        lowerBound = 0;
+        previousResult = 0;
     }
 
     @Override
     public void onRecursionStart()
     {
-        lowerBound = 0;
+        previousResult = 0;
     }
 
     /** Check some bounding criteria.
@@ -41,17 +41,21 @@ public class BoundedFindGenus extends DefaultFindGenus
             neededInCurrent = girth - edgesInCurrentCycle;
         }
 
-        /* Simple bounding based on edges left/current number of faces. */
+        /* Simple bounding based on edges left/current number of faces. The
+         * +1 is the cycle we're currently working on. */
         int estimate = currentFaces + 1 + (edgesLeft - neededInCurrent) / girth;
-        if(estimate <= lowerBound) {
-            System.out.println(edgesLeft);
+
+        /* If we are not going to get higher than our previous result, we can
+         * bound. Note that we add 1 to our previous result, this is because
+         * either all results will be even, or all results will be odd. */
+        if(estimate <= previousResult + 1) {
             return false;
         }
 
         /*float depth = (float) edgesLeft / (float) graph.getNumberOfEdges();
-        if(lowerBound >= 0 && current < 0 &&
-                estimate * 0.8f <= lowerBound && depth >= 0.3f) {
-            if(graph.estimate() <= lowerBound) {
+        if(previousResult >= 0 && current < 0 &&
+                estimate * 0.8f <= previousResult && depth >= 0.3f) {
+            if(graph.estimate() <= previousResult) {
                 return false;
             }
         }*/
@@ -64,7 +68,7 @@ public class BoundedFindGenus extends DefaultFindGenus
     @Override
     public void onRecursionEnd(int faces)
     {
-        if(faces > lowerBound)
-            lowerBound = faces;
+        if(faces > previousResult)
+            previousResult = faces;
     }
 }
