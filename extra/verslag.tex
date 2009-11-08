@@ -86,13 +86,13 @@ willeukeurige graaf met $e$ bogen en $v$ toppen (Voorbeeld: Figuur
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.6\textwidth]{images/randomgraph-01.png}
+\includegraphics[width=0.6\textwidth]{images/randomgraph-01.pdf}
 \caption{RandomGraph, stap 1}
 \label{fig:randomgraph-01}
-\includegraphics[width=0.3\textwidth]{images/randomgraph-02.png}
+\includegraphics[width=0.3\textwidth]{images/randomgraph-02.pdf}
 \caption{RandomGraph, stap 2}
 \label{fig:randomgraph-02}
-\includegraphics[width=0.3\textwidth]{images/randomgraph-03.png}
+\includegraphics[width=0.3\textwidth]{images/randomgraph-03.pdf}
 \caption{RandomGraph, stap 3}
 \label{fig:randomgraph-03}
 \end{center}
@@ -249,16 +249,50 @@ f + x \leq m + 1
 \end{equation*}
 
 \subsection{Een eerste poging}
-We weten dat we voor een vlak te maken tenminste $3$ bogen nodig hebben. We
+\label{een-eerste-poging}
+We weten dat we om een vlak te maken tenminste 3 bogen nodig hebben. We
 houden dus het aantal bogen dat we nog niet gebruikt hebben bij in $l$. We vinden
 dan dat
 \begin{equation*}
 x = \lfloor \frac{max(2, c) + l}{3} \rfloor
 \end{equation*}
 met $c$ het aantal bogen in de huidige cykel. We tellen $max(2, c)$ op bij $l$
-omdat we zo $x$ preciezer maken. Als we al meer dan $2$ bogen in de huidige
-cykel hebben, kunnen we met $1$ boog uit $l$ een extra cykel maken. Anders
+omdat we zo $x$ preciezer maken. Als we al meer dan 2 bogen in de huidige
+cykel hebben, kunnen we met 1 boog uit $l$ een extra cykel maken. Anders
 hebben we er $3 - c$ nodig. Dit zit op deze manier ook in onze berekening.
+
+\subsection{Girth van een graaf}
+In \ref{een-eerste-poging} gingen we ervan uit dat we tenminste 3 bogen nodig
+hebben om een vlak te maken. Dit is natuurlijk altijd waar, maar stel dat we
+een graaf hebben als in Figuur \ref{fig:cube}. Als we deze graaf bekijken, zien
+we dat we tenminste 4 bogen nodig hebben om een vlak te maken. Aan de hand van
+deze informatie kunnen we een betere $x$ opstellen voor deze graaf.
+\begin{equation*}
+x = \lfloor \frac{max(3, c) + l}{4} \rfloor
+\end{equation*}
+We vragen ons natuurlijk af hoe we dit algemeen kunnen toepassen. Het
+\emph{girth} van een graaf is de lengte van kleinste cykel. Dit is precies wat
+we nodig hebben! We kunnen dus voor elke graaf schrijven:
+\begin{equation*}
+x = \lfloor \frac{max(girth - 1, c) + l}{girth} \rfloor
+\end{equation*}
+Hoe moeten we het \emph{girth} van een graaf nu berekenen? We kiezen voor een
+eenvoudige manier. We starten vanuit elke top van de graaf een
+\emph{breadth-first search} en houden de diepte bij. Op het moment dat we een
+top terechtkomen waar we al geweest zijn, hebben we de kleinste cykel van de
+wortel van de \emph{breadth-first search} gevonden. Door een
+\emph{breadth-first search} te starten vanuit elke top, bepalen we zo het
+\emph{girth} van de graaf. Dit algoritme is ge\"implementeerd in de klasse
+\verb#FindGirth#.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.4\textwidth]{images/cube.pdf}
+\caption{Een graaf met \emph{girth} 4}
+\label{fig:cube}
+\end{center}
+\end{figure}
+
 
 \section{Heuristieken}
 
@@ -276,10 +310,10 @@ meestal grotere delen kunnen uitschakelen.
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.6\textwidth]{images/good-tree.png}
+\includegraphics[width=0.6\textwidth]{images/good-tree.pdf}
 \caption{Een boom met een smalle stam en een brede kruin}
 \label{fig:good-tree}
-\includegraphics[width=0.6\textwidth]{images/bad-tree.png}
+\includegraphics[width=0.6\textwidth]{images/bad-tree.pdf}
 \caption{Een boom met een brede stam en een smalle kruin}
 \label{fig:bad-tree}
 \end{center}
