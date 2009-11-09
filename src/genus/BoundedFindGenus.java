@@ -12,13 +12,13 @@ public class BoundedFindGenus extends ProcessedFindGenus
      */
     public BoundedFindGenus()
     {
-        previousResult = -1;
+        previousResult = Integer.MIN_VALUE;
     }
 
     @Override
     public void onRecursionStart()
     {
-        previousResult = -1;
+        previousResult = Integer.MIN_VALUE;
     }
 
     /** Check some bounding criteria.

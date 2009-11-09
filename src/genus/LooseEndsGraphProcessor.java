@@ -29,9 +29,13 @@ public class LooseEndsGraphProcessor implements GraphProcessor
                 }
             }
 
-            for(int vertex: garbage)
-                graph.removeVertex(vertex);
-            garbage.clear();
+            if(vertices.size() - garbage.size() >= 3) {
+                for(int vertex: garbage)
+                    graph.removeVertex(vertex);
+                garbage.clear();
+            } else {
+                shouldContinue = false;
+            }
 
             vertices = graph.getVertices();
         }

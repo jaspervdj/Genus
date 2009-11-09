@@ -21,10 +21,6 @@ public class SimpleFaceCountTest
             graph = new ZGraph(args[0]);
         }
 
-
-        GraphDotWriter writer = new GraphDotWriter(graph);
-        writer.write("out.dot");
-
         double averageTime = 0.0;
         int faces = 0;
         for(int i = 0; i < TESTS; i++) {

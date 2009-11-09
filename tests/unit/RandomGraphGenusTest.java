@@ -38,9 +38,6 @@ public class RandomGraphGenusTest extends UnitTest
             /* Create a random graph. */
             Graph graph = new RandomGraph(vertices, edges);
 
-            GraphDotWriter writer = new GraphDotWriter(graph);
-            writer.write("out.dot");
-            
             /* Find the genus two times. */
             int genus0 = new DefaultFindGenus().findGenus(graph);
             int genus1 = new BoundedFindGenus().findGenus(graph);
