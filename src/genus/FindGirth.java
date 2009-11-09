@@ -87,6 +87,7 @@ public class FindGirth
             root++;
         }
 
-        return best;
+        /* We don't want any division by zero errors. */
+        return best > 0 ? best : 1;
     }
 }

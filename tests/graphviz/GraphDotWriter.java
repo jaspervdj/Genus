@@ -1,3 +1,5 @@
+package graphviz;
+
 import genus.Graph;
 import graph.CompleteBipartiteGraph;
 import java.io.IOException;

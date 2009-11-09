@@ -3,7 +3,7 @@ import java.util.Set;
 
 /** A bounded implementation of FindGenus.
  */
-public class BoundedFindGenus extends DefaultFindGenus
+public class BoundedFindGenus extends ProcessedFindGenus
 {
     /** A lower bound for the number of faces. */
     private int previousResult;

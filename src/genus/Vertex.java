@@ -62,7 +62,7 @@ public class Vertex implements Comparable
 
         numberOfCycles = neighbours.size();
 
-        candidates = true;
+        candidates = this.neighbours.length >= 1;
     }
 
     /** Get the vertex id.

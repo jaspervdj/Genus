@@ -34,14 +34,11 @@ public class DefaultGraph
      */
     public DefaultGraph(final Graph graph)
     {
-        /* Process the graph first. */
-        GraphProcessor processor;
+        //processor = new SimplifyGraphProcessor();
+        //processor.process(graph);
 
-        processor = new SimplifyGraphProcessor();
-        processor.process(graph);
-
-        processor = new LooseEndsGraphProcessor();
-        processor.process(graph);
+        //processor = new LooseEndsGraphProcessor();
+        //processor.process(graph);
 
         /* A map to translate the labels given by the input to a 0..n numbering,
          * so we can use it in an array more easily. */
