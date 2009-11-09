@@ -19,9 +19,6 @@ public class ProcessedFindGenus extends DefaultFindGenus
         processor = new SimplifyGraphProcessor();
         processor.process(graph);
 
-        processor = new LooseEndsGraphProcessor();
-        processor.process(graph);
-
         return super.findGenus(graph);
     }
 }

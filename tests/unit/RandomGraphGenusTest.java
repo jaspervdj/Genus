@@ -13,7 +13,7 @@ import genus.BoundedFindGenus;
 public class RandomGraphGenusTest extends UnitTest
 {
     /** Number of graphs to test. */
-    private static int NUMBER_OF_TESTS = 100;
+    private static int NUMBER_OF_TESTS = 1000;
 
     /** Min number of vertices in the random graph. */
     private static int MIN_VERTICES = 3;

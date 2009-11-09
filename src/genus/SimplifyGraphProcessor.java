@@ -16,28 +16,38 @@ public class SimplifyGraphProcessor implements GraphProcessor
     @Override
     public void process(Graph graph)
     {
-        /* Vertices that can be thrown away safely. */
+        boolean shouldContinue = true;
+
+        List<Integer> vertices = graph.getVertices();
         List<Integer> garbage = new ArrayList<Integer>();
+        while(vertices.size() > 2 && shouldContinue) {
+            shouldContinue = false;
 
-        /* Loop through all vertices. */
-        for(int vertex: graph.getVertices()) {
-            List<Integer> neighbours = graph.getNeighbours(vertex);
-
-            /* Detect vertices with only 2 neighbours. Only add an edge when
-             * there is no edge present yet. */
-            if(neighbours.size() == 2 &&
-                    !neighbours.get(0).equals(neighbours.get(1)) &&
-                    graph.addEdge(neighbours.get(0), neighbours.get(1))) {
-                /* Remove the old edges. */
-                graph.removeEdge(vertex, neighbours.get(1));
-                graph.removeEdge(neighbours.get(0), vertex);
-                garbage.add(vertex);
+            for(int vertex: vertices) {
+                List<Integer> neighbours = graph.getNeighbours(vertex);
+                if(neighbours.size() == 1) {
+                    garbage.add(vertex);
+                    shouldContinue = true;
+                } else if(neighbours.size() == 2) {
+                    /* Next statement might fail. */
+                    graph.addEdge(neighbours.get(0), neighbours.get(1));
+                    garbage.add(vertex);
+                    shouldContinue = true;
+                }
             }
-        }
 
-        /* Remove the garbage. */
-        for(int vertex: garbage) {
-            graph.removeVertex(vertex);
+            /* Decide how many vertices we're going to remove. We can't leave
+             * an empty graph, of course. */
+            int toRemove = vertices.size() - garbage.size() < 2 ?
+                    garbage.size() - 2 : garbage.size();
+            
+            for(int i = 0; i < toRemove; i++) {
+                graph.removeVertex(garbage.get(i));
+            }
+
+            garbage.clear();
+
+            vertices = graph.getVertices();
         }
     }
 }
