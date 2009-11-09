@@ -35,7 +35,12 @@ public class DefaultGraph
     public DefaultGraph(final Graph graph)
     {
         /* Process the graph first. */
-        GraphProcessor processor = new SimplifyGraphProcessor();
+        GraphProcessor processor;
+
+        processor = new SimplifyGraphProcessor();
+        processor.process(graph);
+
+        processor = new LooseEndsGraphProcessor();
         processor.process(graph);
 
         /* A map to translate the labels given by the input to a 0..n numbering,
