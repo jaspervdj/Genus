@@ -99,6 +99,15 @@ willeukeurige graaf met $e$ bogen en $v$ toppen (Voorbeeld: Figuur
 \end{center}
 \end{figure}
 
+\section{Output: Graphviz}
+Het is handig als we grafen kunnen visualiseren, om de correctheid van bepaalde
+delen van ons algoritme te testen. Daarom besliste ik een klasse
+\verb#GraphDotWriter# te schrijven, deze bevindt zich in het package
+\verb#graphviz# (in de map \verb#tests#). Deze klasse bevat functionaliteit om
+grafen van de klasse \verb#Graph# uit te schrijven naar dot-bestanden. De
+specificatie van deze dot-bestanden is te vinden op \verb#www.graphviz.org#.
+Omdat we enkel simpele grafen willen outputten, is deze klasse niet zo complex.
+
 \section{Het na\"ieve algoritme}
 
 \subsection{Lazy genereren van embeddingen}
@@ -298,6 +307,34 @@ met $v$ het aantal vertices, en $e$ het aantal (ongerichte) bogen.
 \end{center}
 \end{figure}
 
+\subsection{Nog een beetje beter}
+Door de manier waarop \verb#DefaultGraph# ge\"implementeerd is, kunnen we
+in constante tijd kijken of er een boog bestaat tussen twee toppen. Dit kunnen
+we gebruiken om onze $x$ nog een beetje beter te maken.
+\begin{equation*}
+x = 1 + \lfloor \frac{l - n}{girth} \rfloor
+\end{equation*}
+met $l$ opnieuw het aantal bogen dat nog niet gebruikt is, en $n$ staat hier
+voor het aantal bogen voor dat we nog nodig hebben om het huidige vlak af te
+maken.
+\newline
+
+Het aantal vlakken dat we nog kunnen maken is dus 1 (namelijk, het vlak dat we
+momenteel aan het maken zijn) plus $\frac{l - n}{girth}$: het aantal bogen dat
+we nog over zullen hebben nadat het huidige vlak af is, gedeeld door het
+\emph{girth} van de graaf.
+\newline
+
+Nu moeten we dus nog vinden wat $n$ is, dus het minimaal aantal bogen dat we
+nog nodig hebben voor het huidige vlak af te maken. Stel $c$ het aantal bogen
+dat we al gebruikt hebben in het huidige vlak. Als $c < girth$, dan
+$n = girth - c$.
+\newline
+
+Anders, als $c \geq girth$, dan zijn er twee mogenlijkheden. Als de huidige top
+een buur is van de top waar we het vlak begonnen zijn, dan $n = 1$. Anders
+hebben we nog zeker 2 vlakken nodig, en dus $n = 2$.
+\newline
 
 \section{Heuristieken}
 
