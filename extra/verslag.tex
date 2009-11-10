@@ -264,7 +264,7 @@ We weten dat we om een vlak te maken tenminste 3 bogen nodig hebben. We
 houden dus het aantal bogen dat we nog niet gebruikt hebben bij in $l$. We vinden
 dan dat
 \begin{equation*}
-x = \lfloor \frac{max(2, c) + l}{3} \rfloor
+x = \lfloor\frac{max(2, c) + l}{3}\rfloor
 \end{equation*}
 met $c$ het aantal bogen in de huidige cykel. We tellen $max(2, c)$ op bij $l$
 omdat we zo $x$ preciezer maken. Als we al meer dan 2 bogen in de huidige
@@ -278,13 +278,13 @@ een graaf hebben als in Figuur \ref{fig:cube}. Als we deze graaf bekijken, zien
 we dat we tenminste 4 bogen nodig hebben om een vlak te maken. Aan de hand van
 deze informatie kunnen we een betere $x$ opstellen voor deze graaf.
 \begin{equation*}
-x = \lfloor \frac{max(3, c) + l}{4} \rfloor
+x = \lfloor\frac{max(3, c) + l}{4}\rfloor
 \end{equation*}
 We vragen ons natuurlijk af hoe we dit algemeen kunnen toepassen. Het
 \emph{girth} van een graaf is de lengte van kleinste cykel. Dit is precies wat
 we nodig hebben! We kunnen dus voor elke graaf schrijven:
 \begin{equation*}
-x = \lfloor \frac{max(girth - 1, c) + l}{girth} \rfloor
+x = \lfloor\frac{max(girth - 1, c) + l}{girth}\rfloor
 \end{equation*}
 Hoe moeten we het \emph{girth} van een graaf nu berekenen? We kiezen voor een
 eenvoudige manier. We starten vanuit elke top van de graaf een
@@ -312,7 +312,7 @@ Door de manier waarop \verb#DefaultGraph# ge\"implementeerd is, kunnen we
 in constante tijd kijken of er een boog bestaat tussen twee toppen. Dit kunnen
 we gebruiken om onze $x$ nog een beetje beter te maken.
 \begin{equation*}
-x = 1 + \lfloor \frac{l - n}{girth} \rfloor
+x = 1 + \lfloor\frac{l - n}{girth}\rfloor
 \end{equation*}
 met $l$ opnieuw het aantal bogen dat nog niet gebruikt is, en $n$ staat hier
 voor het aantal bogen voor dat we nog nodig hebben om het huidige vlak af te
@@ -320,9 +320,9 @@ maken.
 \newline
 
 Het aantal vlakken dat we nog kunnen maken is dus 1 (namelijk, het vlak dat we
-momenteel aan het maken zijn) plus $\frac{l - n}{girth}$: het aantal bogen dat
-we nog over zullen hebben nadat het huidige vlak af is, gedeeld door het
-\emph{girth} van de graaf.
+momenteel aan het maken zijn) plus $\lfloor\frac{l - n}{girth}\rfloor$:
+het aantal bogen dat we nog over zullen hebben nadat het huidige vlak af is,
+gedeeld door het \emph{girth} van de graaf.
 \newline
 
 Nu moeten we dus nog vinden wat $n$ is, dus het minimaal aantal bogen dat we
