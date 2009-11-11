@@ -21,12 +21,13 @@
 \subsection{Performantietests}
 Om de performantie van ons algoritme te testen zullen we de klasse
 \verb#TimeTest# gebruiken. Dit is een simpele klasse die op de commandolijn als
-argumenten een aantal toppen, een aantal vertices, en een aantal klasssenamen
-neemt. De klasses moeten instanties zijn van \verb#FindGenus#. \verb#TimeTest#
-zal een aantal keer een willekeurige graaf aanmaken, en dan telkens de
-verschillende \verb#FindGenus# klassen het genus laten bepalen. Belangrijk is
-dat elk algoritme de graaf kan veranderen door preprocessing. Daarom maken we
-ook telkens een clone van de graaf, met behulp van de klasse \verb#GraphCloner#.
+argumenten een interval voor het aantal toppen, een interval voor het aantal
+bogen, en een aantal klasssenamen neemt. De klasses moeten instanties zijn van
+\verb#FindGenus#. \verb#TimeTest# zal een aantal keer een willekeurige graaf
+aanmaken, en dan telkens de verschillende \verb#FindGenus# klassen het genus
+laten bepalen. Belangrijk is dat elk algoritme de graaf kan veranderen door
+preprocessing. Daarom maken we ook telkens een clone van de graaf, met behulp
+van de klasse \verb#GraphCloner#.
 \newline
 
 De resultaten worden uitgeschreven naar standaard-uitvoer. We kunnen deze dan
