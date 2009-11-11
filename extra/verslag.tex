@@ -16,6 +16,90 @@
 \maketitle
 \tableofcontents
 
+\section{Tests}
+
+\subsection{Performantietests}
+Om de performantie van ons algoritme te testen zullen we de klasse
+\verb#TimeTest# gebruiken. Dit is een simpele klasse die op de commandolijn als
+argumenten een aantal toppen, een aantal vertices, en een aantal klasssenamen
+neemt. De klasses moeten instanties zijn van \verb#FindGenus#. \verb#TimeTest#
+zal een aantal keer een willekeurige graaf aanmaken, en dan telkens de
+verschillende \verb#FindGenus# klassen het genus laten bepalen. Belangrijk is
+dat elk algoritme de graaf kan veranderen door preprocessing. Daarom maken we
+ook telkens een clone van de graaf, met behulp van de klasse \verb#GraphCloner#.
+\newline
+
+De resultaten worden uitgeschreven naar standaard-uitvoer. We kunnen deze dan
+later analyseren en plotten.
+
+\subsection{Correctheidstests}
+\label{correctheidstests}
+Alle correctheidstests bevinden zich in de map \verb#tests/unit# en zijn
+subklasses van \verb#UnitTest#. Op deze manier is het makkelijk om de testen na
+te gaan als er veranderingen in ons algoritme zijn. Specifieke tests worden
+in dit verslag besproken waar ze meest relevant zijn. De algemene tests zijn:
+\begin{itemize}
+\item \verb#CompleteGraphGenusTest#: Test het zoeken van het genus van een
+complete graaf. Dit kunnen we eenvoudig bepalen, zie \ref{complete-graph}.
+\item \verb#CompleteBipartiteGraphGenusTest#: Test het zoeken van het genus van
+een complete bipartiete graaf. Dit kunnen we ook eenvoudig bepalen, zie 
+\ref{complete-bipartite-graph}.
+\item \verb#RandomGraphGenusTest#: Test het zoeken van het genus van een
+willeukeurige graaf met twee algoritmes. Het resultaat moet natuurlijk
+hetzelfde zijn.
+\end{itemize}
+
+\section{Implementatie van Graph}
+Een deel van het practicum bestond uit het schrijven van een klasse die
+\verb#Graph# implementeerd. Deze implementatie bevindt zich in de klasse
+\verb#GraphImplementation#. We gebruiken deze klasse \emph{niet} in ons
+eigenlijk algoritme, omdat we dan zeer specifieke informatie willen opvragen
+op een effici\"ente manier. In ons algoritme gebruiken we de klasse
+\verb#DefaultGraph#. Het spreekt voor zich dat een \verb#Graph# kan worden
+omgezet in een \verb#DefaultGraph#. Omgekeerd is de omzetting niet nodig, en dit
+is dus ook niet ge\"implementeerd.
+
+\subsection{GraphImplementation}
+We willen hier per vertex de buren bijhouden. Vertices worden volledig
+voorgesteld door integers. Omdat we niet weten of de lijst integers die de
+vertices voorstellen een lijst van de vorm $0, 1, 2, \dots n$ zal zijn,
+kunnen we ze niet opslaan in een array. Daarom kiezen we voor een
+\verb#HashMap#. We zouden de buren van een bepaalde top kunnen opslaan als een
+\verb#Set#, maar aangezien in de interface \verb#Graph# staat dat we bij het
+opvragen van de buren (\verb#getNeighbours#) een \verb#List# moeten teruggeven,
+kiezen we voor een eenvoudige \verb#ArrayList#. De graaf wordt dus voorgesteld
+door een datastructuur van de vorm
+\begin{verbatim}
+HashMap<Integer, ArrayList<Integer>>
+\end{verbatim}
+
+Om deze implementatie te testen schreven we een simpele correctheidstest,
+\verb#SimpleGraphBuildTest#. Deze voegt enkele bogen toe en verwijdert enkele
+bogen, en kijkt het resultaat van deze operaties na.
+
+\subsection{DefaultGraph}
+Deze klasse implementeerd \verb#Graph# niet, maar wordt gebruikt bij het
+uitvoeren van het algoritme. We maken een \verb#DefaultGraph# altijd via een
+\verb#Graph#. We willen informatie over de toppen liefst zo effici\"ent mogelijk
+opslaan. Moest de lijst vertices van de vorm $0, 1, 2, \dots n$ zijn, zouden we
+een effici\"ente array kunnen gebruiken. Dit is niet het geval, maar we lossen
+dit op door elke vertex een ander nummer te geven, zodat we wel een array kunnen
+gebruiken.
+\newline
+
+Informatie over de bogen willen we ook zeer snel kunnen raadplegen. Daarom
+kiezen we ervoor iets meer geheugen te gebruiken, en gebruik te maken van een
+soort \emph{adjacentiematrix}.
+\newline
+
+De informatie over een top zit opgeslagen in de klasse \verb#Vertex#. Deze bevat
+in feite niet veel meer dan een array met de buren van deze top.
+\newline
+
+Informatie over de bogen zit opgeslaan in de klasse \verb#Order#. Deze klasse
+stelt een soort volgorde voor, die we zullen gebruiken in ons algoritme. We
+willen immers per top een zekere volgorde van bogen vastleggen.
+
 \section{Input: verschillende grafen}
 Als input neemt het algoritme telkens een graaf. Daar er enorm veel
 verschillende grafen bestaan, beschouwen we eerst verschillende manieren om een
@@ -31,17 +115,19 @@ is het bestandsformaat ge\"implementeerd in de klasse \verb#ZGraph#. De
 constructor van deze klasse neemt een bestandsnaam, en laad deze graaf.
 
 \subsection{CompleteGraph}
+\label{complete-graph}
 Een specifieke subklasse van de grafen zijn de complete grafen. Deze zijn zeer
 makkelijk te genereren. Dit is ge\"implementeerd in de klasse
 \verb#CompleteGraph#. De constructor van deze klasse neemt een getal $n$ en
 maakt vervolgens de graaf $K_n$ aan. Deze grafen kunnen we ook zeer goed
-gebruiken voor correctheidstesten, aangezien we weten dat
+gebruiken voor correctheidstests, aangezien we weten dat
 \begin{equation*}
 g_{min}(K_n) = \lceil \frac{(n - 3) (n - 4)}{12} \rceil
 \end{equation*}
 
 \subsection{CompleteBipartiteGraph}
-Naast de complete grafen zijn ook de bipartite complete grafen makkelijk te
+\label{complete-bipartite-graph}
+Naast de complete grafen zijn ook de bipartiete complete grafen makkelijk te
 genereren en te testen. De constructor van de klasse
 \verb#CompleteBipartiteGraph# neemt als argumenten $n$, $m$ en maakt dan de
 graaf $K_{n,m}$ aan. Ook voor deze grafen kunnen we het genus op voorhand

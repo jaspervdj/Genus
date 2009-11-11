@@ -3,24 +3,24 @@ package genus;
 /** A custom linked list class to represent partial permutation cycles.
  *  Note that every linked node is a list on itself, too.
  */
-public class CycleNode
+public class Order
 {
     /** Value of this node. */
     private int value;
 
     /** Next node in the cycle. */
-    private CycleNode next;
+    private Order next;
 
     /** First node of the cycle. */
-    private CycleNode first;
+    private Order first;
 
     /** Last node of the cycle. */
-    private CycleNode last;
+    private Order last;
 
     /** Constructor.
      *  @param value Initial value of the first element.
      */
-    public CycleNode(int value)
+    public Order(int value)
     {
         this.value = value;
         next = null;
@@ -38,7 +38,7 @@ public class CycleNode
     /** Get the first element of the cycle.
      *  @return The first element of the cycle.
      */
-    public CycleNode getFirst()
+    public Order getFirst()
     {
         return first;
     }
@@ -54,13 +54,13 @@ public class CycleNode
     /** Add a cycle to the end of this cycle.
      *  @param cycle Cycle to add.
      */
-    public void append(CycleNode cycle)
+    public void append(Order cycle)
     {
         /* Set last reference for this cycle. */
         first.last = cycle.last;
         next = cycle;
 
-        CycleNode tmp = cycle.first;
+        Order tmp = cycle.first;
         /* Set the first reference for the appended cycle. */
         while(tmp != null) {
             tmp.first = first;
@@ -76,7 +76,7 @@ public class CycleNode
         first.last = this;
 
         /* Set the first reference for the split cycle. */
-        CycleNode tmp = next;
+        Order tmp = next;
         while(tmp != null) {
             tmp.first = next;
             tmp = tmp.next;
@@ -90,7 +90,7 @@ public class CycleNode
     public String toString()
     {
         String str = "";
-        CycleNode tmp = first;
+        Order tmp = first;
         while(tmp != null) {
             str += " " + tmp.value;
             tmp = tmp.next;

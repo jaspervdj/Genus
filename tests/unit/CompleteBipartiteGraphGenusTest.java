@@ -3,14 +3,14 @@ package unit;
 import genus.Graph;
 import graph.CompleteBipartiteGraph;
 import genus.FindGenus;
-import genus.DefaultFindGenus;
+import genus.BoundedFindGenus;
 
 /** Tests the genus of a complete graph.
  */
 public class CompleteBipartiteGraphGenusTest extends UnitTest
 {
     /** Max number of vertices on one side of the bipartite graph. */
-    private static int MAX_N = 4;
+    private static int MAX_N = 8;
 
     @Override
     public void run(String[] args)
@@ -21,7 +21,7 @@ public class CompleteBipartiteGraphGenusTest extends UnitTest
                 Graph graph = new CompleteBipartiteGraph(n, m);
                 
                 /* Find the genus. */
-                FindGenus finder = new DefaultFindGenus();
+                FindGenus finder = new BoundedFindGenus();
                 int foundGenus = finder.findGenus(graph);
 
                 /* Calculate the genus. */

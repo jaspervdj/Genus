@@ -11,7 +11,7 @@ import genus.BoundedFindGenus;
 public class CompleteGraphGenusTest extends UnitTest
 {
     /** Max complete graph to test. */
-    private static int MAX_N = 7;
+    private static int MAX_N = 9;
 
     @Override
     public void run(String[] args)

@@ -20,11 +20,11 @@ public class Vertex implements Comparable
     /** List of neighbours. */
     private int[] neighbours;
 
-    /** Cyclenodes matrix. */
-    private CycleNode[][] cycleNodes;
+    /** Orders matrix. */
+    private Order[][] orders;
 
-    /** The number of unique cycles. */
-    private int numberOfCycles;
+    /** The number of orders. */
+    private int numberOfOrders;
 
     /** If this vertex has any candidates left. */
     private boolean candidates;
@@ -32,10 +32,10 @@ public class Vertex implements Comparable
     /** Constructor.
      *  @param id Id for this vertex.
      */
-    public Vertex(int id, CycleNode[][] cycleNodes)
+    public Vertex(int id, Order[][] orders)
     {
         this.id = id;
-        this.cycleNodes = cycleNodes;
+        this.orders = orders;
     }
 
     /** Get the neighbours of this Vertex.
@@ -56,11 +56,11 @@ public class Vertex implements Comparable
             this.neighbours[i] = neighbours.get(i).getId();
 
         for(Vertex neighbour: neighbours) {
-            CycleNode cycle = new CycleNode(neighbour.getId());
-            cycleNodes[id][neighbour.getId()] = cycle;
+            Order order = new Order(neighbour.getId());
+            orders[id][neighbour.getId()] = order;
         }
 
-        numberOfCycles = neighbours.size();
+        numberOfOrders = neighbours.size();
 
         candidates = this.neighbours.length >= 1;
     }
@@ -91,17 +91,17 @@ public class Vertex implements Comparable
         if(from < 0)
             return true;
 
-        if(numberOfCycles > 1) {
-            CycleNode fromCycle = cycleNodes[id][from],
-                    destinationCycle = cycleNodes[id][destination];
+        if(numberOfOrders > 1) {
+            Order fromOrder = orders[id][from],
+                    destinationOrder = orders[id][destination];
 
-            if(fromCycle.getFirst() == destinationCycle.getFirst()) {
+            if(fromOrder.getFirst() == destinationOrder.getFirst()) {
                 return false;
             } else {
-                numberOfCycles--;
+                numberOfOrders--;
 
-                /* Join the cycles. */
-                fromCycle.append(destinationCycle);
+                /* Join the orders. */
+                fromOrder.append(destinationOrder);
             }
         } else {
             candidates = false;
@@ -110,7 +110,7 @@ public class Vertex implements Comparable
         return true;
     }
 
-    /** Split the cycle at this vertex (undo a connect).
+    /** Split the order at this vertex (undo a connect).
      *  @param from Vertex we're coming from.
      *  @param destination Vertex we're going to.
      */
@@ -122,10 +122,10 @@ public class Vertex implements Comparable
         if(!candidates) {
             candidates = true;
         } else {
-            CycleNode fromCycle = cycleNodes[id][from];
-            fromCycle.split();
+            Order fromOrder = orders[id][from];
+            fromOrder.split();
 
-            numberOfCycles++;
+            numberOfOrders++;
         }
     }
 
@@ -136,15 +136,15 @@ public class Vertex implements Comparable
      */
     public boolean isCandidate(int from, int destination)
     {
-        if(from < 0 || numberOfCycles == 1) {
-            /* First node in a cycle. */
-            return cycleNodes[id][destination].getFirst().getValue() ==
+        if(from < 0 || numberOfOrders == 1) {
+            /* First node in an order. */
+            return orders[id][destination].getFirst().getValue() ==
                     destination;
         } else {
-            /* First node in a cycle, and not in the same cycle. */
-            return cycleNodes[id][destination].getFirst().getValue() ==
+            /* First node in an order, and not in the same order. */
+            return orders[id][destination].getFirst().getValue() ==
                     destination &&
-                    destination != cycleNodes[id][from].getFirst().getValue();
+                    destination != orders[id][from].getFirst().getValue();
         }
     }
 
@@ -155,7 +155,7 @@ public class Vertex implements Comparable
      */
     public int getCandidate()
     {
-        return cycleNodes[id][neighbours[0]].getFirst().getValue();
+        return orders[id][neighbours[0]].getFirst().getValue();
     }
 
     @Override

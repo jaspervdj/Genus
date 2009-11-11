@@ -19,8 +19,8 @@ public class DefaultGraph
     /** Total number of edges. */
     private int numberOfEdges;
 
-    /** Cyclenodes for the edges. */
-    private CycleNode[][] cycleNodes;
+    /** Orders for the edges. */
+    private Order[][] orders;
 
     /** Girth of this graph. */
     public int girth;
@@ -39,7 +39,7 @@ public class DefaultGraph
         Map<Integer, Integer> translation = new HashMap<Integer, Integer>();
         vertices = new Vertex[graph.getVertices().size()];
 
-        cycleNodes = new CycleNode[vertices.length][vertices.length];
+        orders = new Order[vertices.length][vertices.length];
 
         /* Sort the vertices to have less top-level branches.
          * TODO: throw away. */
@@ -57,7 +57,7 @@ public class DefaultGraph
         int index = 0;
         for(int id: sortedVertices) {
             translation.put(id, index);
-            vertices[index] = new Vertex(index, cycleNodes);
+            vertices[index] = new Vertex(index, orders);
             index++;
         }
 
@@ -153,7 +153,7 @@ public class DefaultGraph
      */
     public boolean hasEdge(int v0, int v1)
     {
-        return v0 >= 0 && v1 >= 0 && cycleNodes[v0][v1] != null;
+        return v0 >= 0 && v1 >= 0 && orders[v0][v1] != null;
     }
 
     public int estimate()
