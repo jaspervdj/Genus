@@ -1,7 +1,8 @@
 import genus.Graph;
+import genus.FindGenus;
 import genus.DefaultFindGenus;
-import genus.DefaultGraph;
 import graph.RandomGraph;
+import genus.GraphCloner;
 
 public class TimeTest
 {
@@ -10,23 +11,37 @@ public class TimeTest
 
     public static void main(String[] args)
     {
-        DefaultFindGenus finder = new DefaultFindGenus();
-        Graph graph;
-
-        int vertices = 10;
-        int edges = 30;
-        if(args.length >= 2) {
-            vertices = Integer.parseInt(args[0]);
-            edges = Integer.parseInt(args[1]);
+        if(args.length < 3) {
+            System.out.println(
+                    "Usage: <vertices> <edges> [<FindGenusClass> ...]");
         }
 
+        int vertices = Integer.parseInt(args[0]);
+        int edges = Integer.parseInt(args[1]);
+
+        FindGenus finders[] = new FindGenus[args.length - 2];
+        
+        for(int i = 0; i < finders.length; i++) {
+            try {
+                Class finderClass = Class.forName(args[2 + i]);
+                finders[i] = (FindGenus) finderClass.newInstance();
+            } catch(Exception exception) {
+                finders[i] = new DefaultFindGenus();
+            }
+        }
+
+        GraphCloner cloner = new GraphCloner();
+
         for(int i = 0; i < TESTS; i++) {
-            long start = System.currentTimeMillis();
-            graph = new RandomGraph(vertices, edges);
-            DefaultGraph defaultGraph = new DefaultGraph(graph);
-            int faces = finder.findFaces(defaultGraph);
-            long stop = System.currentTimeMillis();
-            System.out.println(i + " " + (stop - start));
+            System.out.println("Test " + (i + 1));
+            Graph graph = new RandomGraph(vertices, edges);
+            for(int j = 0; j < finders.length; j++) {
+                Graph clone = cloner.clone(graph);
+                long start = System.currentTimeMillis();
+                finders[j].findGenus(clone);
+                long stop = System.currentTimeMillis();
+                System.out.println(args[j + 2] + ": " + (stop - start));
+            }
         }
     }
 }

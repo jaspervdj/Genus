@@ -9,7 +9,7 @@ import graph.RandomGraph;
 public class SimpleFaceCountTest
 {
     /** Number of tests to run. */
-    private final static int TESTS = 10;
+    private final static int TESTS = 100;
 
     public static void main(String[] args)
     {
@@ -31,8 +31,8 @@ public class SimpleFaceCountTest
             faces = finder.findFaces(defaultGraph);
             long stop = System.currentTimeMillis();
 
-            System.out.println("Completeness: " + defaultGraph.completeness());
-            System.out.println("Girth: " + defaultGraph.getGirth());
+            //System.out.println("Completeness: " + defaultGraph.completeness());
+            //System.out.println("Girth: " + defaultGraph.getGirth());
             System.out.println("Estimate faces: " + defaultGraph.estimate());
             System.out.println("Faces: " + faces);
             System.out.println("Genus: " +
@@ -41,12 +41,6 @@ public class SimpleFaceCountTest
                     (stop - start) + "ms.");
 
             averageTime += ((double) (stop - start)) / (double) TESTS;
-
-            start = System.currentTimeMillis();
-            System.out.println("Bounding genus: " + finder.findGenus(graph));
-            stop = System.currentTimeMillis();
-            System.out.println("Time " + (i + 1) + ": " +
-                    (stop - start) + "ms.");
         }
 
         System.out.println();
