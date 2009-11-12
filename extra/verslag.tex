@@ -47,7 +47,7 @@ een complete bipartiete graaf. Dit kunnen we ook eenvoudig bepalen, zie
 \ref{complete-bipartite-graph}.
 \item \verb#RandomGraphGenusTest#: Test het zoeken van het genus van een
 willeukeurige graaf met twee algoritmes. Het resultaat moet natuurlijk
-hetzelfde zijn.
+hetzelfde zijn. Dit is waarschijnlijk onze sterkste test.
 \end{itemize}
 
 \section{Implementatie van Graph}
@@ -426,11 +426,11 @@ hebben we nog zeker 2 vlakken nodig, en dus $n = 2$.
 \section{Heuristieken}
 
 \subsection{Een smalle stam voor de zoekboom}
-We willen een zoekboom die een smalle stam heeft en een brede kruin (zoals in
-Figuur \ref{fig:good-tree}), in plaats van een zoekboom met een brede stam en
-een smalle kruin (zoals in Figuur \ref{fig:bad-tree}). Met andere woorden, we
-willen dat ons algoritme in het begin zo weinig mogelijk moet branchen, en
-naarmate we dieper in de zoekboom afdalen, mag het meer branchen.
+Intu\"itief willen we een zoekboom die een smalle stam heeft en een brede kruin
+(zoals in Figuur \ref{fig:good-tree}), in plaats van een zoekboom met een brede
+stam en een smalle kruin (zoals in Figuur \ref{fig:bad-tree}). Met andere
+woorden, we willen dat ons algoritme in het begin zo weinig mogelijk moet
+branchen, en naarmate we dieper in de zoekboom afdalen, mag het meer branchen.
 \newline
 
 Het voordeel hiervan is dat wanneer we delen van de zoekboom mogen uitschakelen,
@@ -455,17 +455,59 @@ natuurlijk bepaald door het aantal kandidaatbogen. Het aantal kandidaatbogen is
 dan weer grotendeels afhankelijk van het aantal bogen in die top.
 \newline
 
-We willen dus dat ons algoritme eerst de toppen bezoekt met veel bogen, en
-vervolgens de toppen met minder bogen. Dit implementeren we door de toppen van
+We willen dus dat ons algoritme eerst de toppen bezoekt met weinig bogen, en
+vervolgens de toppen met meer bogen. Dit implementeren we door de toppen van
 de graaf te sorteren op het aantal bogen.
 \newline
 
-Dit versneld ons algoritme voor bepaalde grafen. Het zal uiteraard niets
-uitmaken bij zeer regelmatige grafen zoals de complete grafen, aangezien er daar
-in elke top ongeveer evenveel bogen zijn. Maar aangezien het sorteren relatief
-snel kan gebeuren, is het toch de moeite waard om deze heuristiek te gebruiken.
+Verrassend genoeg vertraagd dit het algoritme enorm (zie Figuur 
+\ref{fig:bounded-vs-sorted}). Dit is zeer
+contra-intu\"itief en we willen natuurlijk een verklaring. We schrijven een
+klasse \verb#ShowTreeFindGenus# als subklasse van \verb#FindGenus# met als
+bedoeling de call tree van ons algoritme op een verstaanbare manier te
+visualiseren. Hiertoe gebruikt het ook de \emph{DOT-taal} van graphviz.
 \newline
 
-Voor willeukeurig gevormde grafen scheelt het immers wel.
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{images/bounded-vs-sorted.png}
+\caption{We zien dat de tijden van het algoritme met sorteren (groen) duidelijk
+boven de tijden zonder sorteren (rood) liggen.}
+\label{fig:bounded-vs-sorted}
+\end{center}
+\end{figure}
+
+Aan het sorteren zelf kan het niet liggen, dit is een zeer snelle operatie
+die slechts \'e\'enmaal gebeurt, namelijk bij het aanmaken van onze graaf.
+We aanschouwen de call tree met sorteren (Figuur \ref{fig:sorted-call-tree})
+en de call tree zonder sorteren (Figuur \ref{fig:default-call-tree}).
+\newline
+
+We zien onmiddelijk dat de call tree zonder sorteren veel eenvoudiger is!
+Ook het aantal bladeren in de boom is verschillend. Dit verschil kan enkel
+veroorzaakt worden door de eerste boog die we kiezen in een pad (immers, de
+eerste boog kiezen we telkens willekeurig, voor de andere bogen proberen we
+telkens alle mogenlijkheden). We zien ook dat de gesorteerde call tree
+helemaal geen smalle stam en brede kruin heeft. We concluderen dat elke zoekboom
+voor dit algoritme een relatief brede stam zal hebben, omdat er naar het einde
+van ons algoritme toe sowieso minder mogenlijkheden overblijven (veel bogen
+zijn al gekozen).
+\newline
+
+Het is dus soms beter om de eerste boog te kiezen in een top met relatief
+veel bogen, zodat al tenminste \'e\'en boog daar gefixeerd is. Dit is
+echter niet altijd geval, en hangt sterk af van de graaf in kwestie. We zullen
+er dus voor kiezen om onze call tree niet te veranderen.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{images/sorted-call-tree.pdf}
+\caption{De call tree met sorteren}
+\label{fig:sorted-call-tree}
+\includegraphics[width=\textwidth]{images/default-call-tree.pdf}
+\caption{De call tree zonder sorteren}
+\label{fig:default-call-tree}
+\end{center}
+\end{figure}
 
 \end{document}
