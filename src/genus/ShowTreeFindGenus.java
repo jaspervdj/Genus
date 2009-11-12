@@ -3,7 +3,7 @@ import java.util.Set;
 
 /** An implementation of FindGenus used to examine the search tree.
  */
-public class ShowTreeFindGenus extends DefaultFindGenus
+public class ShowTreeFindGenus extends SortedFindGenus
 {
     int id;
     int[] levels;
@@ -17,6 +17,7 @@ public class ShowTreeFindGenus extends DefaultFindGenus
     @Override
     public void onRecursionStart(DefaultGraph graph)
     {
+        super.onRecursionStart(graph);
         id = 0;
         levels = new int[graph.getNumberOfEdges() + 1];
     }
@@ -35,18 +36,16 @@ public class ShowTreeFindGenus extends DefaultFindGenus
 
         /* New branch. */
         if(level > 0 && levels[previousLevel] != id - 1) {
-            System.out.println(levels[previousLevel] + " -- " + id + ";");
+            System.out.println(levels[previousLevel] + " -- " + id +
+                    " [label=\"v" + current + "\"];");
         /* Same branch. */
         } else {
-            System.out.println((id - 1) + " -- " + id + ";");
+            System.out.println((id - 1) + " -- " + id +
+                    " [label=\"v" + current + "\"];");
         }
 
         levels[level] = id;
 
-        int indent = graph.getNumberOfEdges() - edgesLeft;
-        for(int i = 0; i < indent; i++)
-            System.out.print(" ");
-        System.out.println(current);
         return super.onRecurse(graph, cycleStart, cycleSecond, lastVertex,
                 current, currentFaces, edgesLeft, edgesInCurrentCycle);
     }
