@@ -1,6 +1,7 @@
 import genus.Graph;
 import genus.DefaultFindGenus;
 import genus.BoundedFindGenus;
+import genus.SortedFindGenus;
 import genus.DefaultGraph;
 import graphviz.GraphDotWriter;
 import graph.ZGraph;
@@ -9,11 +10,11 @@ import graph.RandomGraph;
 public class SimpleFaceCountTest
 {
     /** Number of tests to run. */
-    private final static int TESTS = 100;
+    private final static int TESTS = 1;
 
     public static void main(String[] args)
     {
-        DefaultFindGenus finder = new BoundedFindGenus();
+        DefaultFindGenus finder = new SortedFindGenus();
         Graph graph;
 
         double averageTime = 0.0;
@@ -27,16 +28,16 @@ public class SimpleFaceCountTest
             GraphDotWriter writer = new GraphDotWriter(graph);
 
             long start = System.currentTimeMillis();
-            DefaultGraph defaultGraph = new DefaultGraph(graph);
-            faces = finder.findFaces(defaultGraph);
+            //DefaultGraph defaultGraph = new DefaultGraph(graph);
+            //faces = finder.findFaces(defaultGraph);
+            finder.findGenus(graph);
             long stop = System.currentTimeMillis();
 
-            //System.out.println("Completeness: " + defaultGraph.completeness());
             //System.out.println("Girth: " + defaultGraph.getGirth());
-            System.out.println("Estimate faces: " + defaultGraph.estimate());
+            //System.out.println("Estimate faces: " + defaultGraph.estimate());
             System.out.println("Faces: " + faces);
-            System.out.println("Genus: " +
-                    finder.findGenus(defaultGraph, faces));
+            //System.out.println("Genus: " +
+                    //finder.findGenus(defaultGraph, faces));
             System.out.println("Time " + (i + 1) + ": " +
                     (stop - start) + "ms.");
 

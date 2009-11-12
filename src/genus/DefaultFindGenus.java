@@ -43,7 +43,7 @@ public class DefaultFindGenus implements FindGenus
      */
     public int findFaces(DefaultGraph graph)
     {
-        onRecursionStart();
+        onRecursionStart(graph);
         return findFaces(graph, -1, -1, -1, -1,
                 0, graph.getNumberOfEdges(), 0);
     }
@@ -141,8 +141,9 @@ public class DefaultFindGenus implements FindGenus
     }
 
     /** Called before recursion starts.
+     *  @param graph The graph.
      */
-    public void onRecursionStart()
+    public void onRecursionStart(DefaultGraph graph)
     {
     }
 

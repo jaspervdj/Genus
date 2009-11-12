@@ -7,7 +7,7 @@ import genus.GraphCloner;
 public class TimeTest
 {
     /** Number of tests to run. */
-    private final static int TESTS = 10;
+    private final static int TESTS = 20;
 
     public static void main(String[] args)
     {
@@ -45,10 +45,16 @@ public class TimeTest
                 System.out.println("Test " + (i + 1) +
                         " (" + vertices + " vertices, " + edges + " edges)");
                 Graph graph = new RandomGraph(vertices, edges);
+                int genus = -1;
                 for(int j = 0; j < finders.length; j++) {
                     Graph clone = cloner.clone(graph);
                     long start = System.currentTimeMillis();
-                    finders[j].findGenus(clone);
+                    if(genus < 0) {
+                        genus = finders[j].findGenus(clone);
+                    } else if(genus != finders[j].findGenus(clone)) {
+                        System.out.println("Genus is not correct!");
+                        System.exit(1);
+                    }
                     long stop = System.currentTimeMillis();
                     System.out.println(args[j + 6] + ": " + (stop - start));
                 }

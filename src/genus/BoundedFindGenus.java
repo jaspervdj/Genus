@@ -16,7 +16,7 @@ public class BoundedFindGenus extends ProcessedFindGenus
     }
 
     @Override
-    public void onRecursionStart()
+    public void onRecursionStart(DefaultGraph graph)
     {
         previousResult = Integer.MIN_VALUE;
     }
@@ -49,6 +49,7 @@ public class BoundedFindGenus extends ProcessedFindGenus
          * bound. Note that we add 1 to our previous result, this is because
          * either all results will be even, or all results will be odd. */
         if(estimate <= previousResult + 1) {
+            System.out.println(edgesLeft);
             return false;
         }
 

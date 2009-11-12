@@ -3,8 +3,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Arrays;
 import java.util.Queue;
 import java.util.LinkedList;
@@ -34,16 +32,6 @@ public class DefaultGraph
      */
     public DefaultGraph(final Graph graph)
     {
-        this(graph, false);
-    }
-
-    /** Constructor. Construct a graph from any class implementing the Graph
-     *  interface.
-     *  @param graph Graph to construct the DefaultGraph from.
-     *  @param sort If the vertices should be sorted to get a better tree.
-     */
-    public DefaultGraph(final Graph graph, boolean sort)
-    {
         /* A map to translate the labels given by the input to a 0..n numbering,
          * so we can use it in an array more easily. */
         Map<Integer, Integer> translation = new HashMap<Integer, Integer>();
@@ -53,16 +41,7 @@ public class DefaultGraph
 
         /* Sort the vertices to have less top-level branches. */
         List<Integer> sortedVertices = graph.getVertices();
-        if(sort) {
-            Collections.sort(sortedVertices,
-                new Comparator() {
-                    public int compare(Object o0, Object o1) {
-                        return graph.getNeighbours((Integer) o0).size() -
-                                graph.getNeighbours((Integer) o1).size();
-                    }
-                }
-            );
-        }
+        sort(sortedVertices, graph);
 
         /* Build the translation map and store the vertices.. */
         int index = 0;
@@ -224,5 +203,14 @@ public class DefaultGraph
     public int getGirth()
     {
         return girth;
+    }
+
+    /** Apply a sort to the vertices to get an optimal search tree. By default,
+     *  it does nothing, override it.
+     *  @param vertices List to be sorted.
+     *  @param graph Graph containing the vertices.
+     */
+    public void sort(List<Integer> vertices, final Graph graph)
+    {
     }
 }
