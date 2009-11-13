@@ -243,20 +243,26 @@ bevinden we ons in een blad van de zoekboom.
 \newline
 
 In de vorige paragraaf schreven we dat we als we op een gegeven moment een boog
-toevoegen die dezelfde is als de eerste boog in ons voorlopige cykel, dat we
-dan een vlak hebben. Maar we kunnen zelfs nog vroeger stoppen met een cykel,
-namelijk \emph{op het moment dat we in de eerste top van de cykel terugkomen,
-en we kunnen de cykel sluiten zonder dat dit de permutaties verstoord}.
+toevoegen die dezelfde is als de eerste boog in ons pad, dat we dan een cykel
+maken. Dit is natuurlijk waar, maar we kunnen zelfs nog vroeger stoppen met ons
+pas, namelijk \emph{op het moment dat we in de eerste top van het pad
+terugkomen, en we kunnen het pad sluiten zonder dat dit de permutaties
+verstoord}.
 \newline
 
-Stel immers dat we in onze begintop komen en we kunnen de cykel sluiten. Als
-we op dit moment branchen, zullen we na een bepaalde tijd weer terugkomen in
-deze begintop, immers, de cykel moet gesloten worden. We krijgen dan een
-cykel zoals in Figuur \ref{fig:octo} (met 1 onze begintop). We zien dat we
-deze cykel eigenlijk kunnen splitsen in twee cykels (tenminste twee in het
-algemene geval)! Aangezien we een embedding zoeken met zoveel mogelijk cykels,
-is het dus niet verstanding om nog te branchen als we onze cykel kunnen sluiten.
-Vandaar dat we dit niet doen.
+Stel immers dat we in onze begintop komen en we kunnen het pad sluiten. Als
+we op dit moment meerdere mogenlijkheden hebben en dus branchen, zullen we,
+voor elke branch die het pad nu nog niet sluit, na een bepaalde tijd weer
+terugkomen in deze begintop, immers, het pad moet gesloten worden. We krijgen
+dan een cykel zoals de cykel die achtereenvolgens door de toppen
+$\{1, 2, 3, 4, 1, 5, 6, 7, 1\}$ gaat (zie Figuur \ref{fig:octo}). Dus, in het
+algemene geval, een cykel die een even aantal keren door een bepaalde top gaat.
+We zien dat we deze cykel eigenlijk kunnen splitsen in twee cykels,
+in dit geval $\{1, 2, 3, 4\}$ en $\{1, 5, 6, 7\}$. In het algemene geval kunnen
+we een dergelijke cykel splitsen in tenminste twee cykels. Aangezien we een
+embedding zoeken met zoveel mogelijk cykels, is het dus niet nodig om nog te
+branchen als we onze cykel kunnen sluiten, dit zou immers toch een embedding
+geven met minder cykels. Vandaar dat we dit niet doen.
 
 \begin{figure}
 \begin{center}
@@ -447,6 +453,37 @@ een buur is van de top waar we het vlak begonnen zijn, dan $n = 1$. Anders
 hebben we nog zeker 2 vlakken nodig, en dus $n = 2$.
 \newline
 
+\section{Preprocessing}
+
+\subsection{Vereenvoudingen van de graaf}
+We vragen ons af of sommige ingewikkelde grafen niet kunnen gereduceerd worden
+tot eenvoudigere grafen met hetzelfde genus.
+
+\subsection{Toppen met slechts 1 buur}
+Stel dat een bepaalde graaf $G$ kan getekend worden op een bepaalde figuur
+zonder dat er bogen snijden. Voeg nu een bepaalde top $v$ toe en verbind deze
+met 1 top $w$ die al in de graaf zat. Noem de boog $e$. Positioneer eerst $e$
+zo dat $e$ niet samenvalt met een andere boog van $w$. Dit is mogenlijk,
+aangezien $w$ een eindig aantal bogen heeft. Stel dat $e$ nu een andere boog
+$f$ snijdt. Kies de lengte van $e$ kleiner zodat $e$ niet meer snijdt met $f$.
+Ga zo door tot $e$ geen enkele boog meer snijdt. Dit is mogenlijk aangezien
+$G$ een eindig aantal bogen heeft. We hebben nu aangetoond dat we aan een graaf
+1 top mogen toevoegen die slechts 1 buur heeft, en dat het genus niet zal
+veranderen. Dit impliceert dat we ook een top met 1 buur kunnen verwijderen
+(zolang het resultaat geen ledige graaf oplevert).
+\newline
+
+De klasse \verb#SimplifyGraphProcessor# zal dus toppen met slechts 1 buur
+verwijderen, op een manier dat het genus van de graaf hetzelfde blijft (zie
+bijvoorbeeld Figuur \ref{fig:one-neighbour}).
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.6\textwidth]{images/one-neighbour.pdf}
+\caption{Een graaf waaruit 1 top verwijdert kan worden}
+\label{fig:one-neighbour}
+\end{center}
+\end{figure}
 \section{Heuristieken}
 
 \subsection{Een smalle stam voor de zoekboom}
