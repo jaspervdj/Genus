@@ -44,8 +44,10 @@ public class DefaultFindGenus implements FindGenus
     public int findFaces(DefaultGraph graph)
     {
         onRecursionStart(graph);
-        return findFaces(graph, -1, -1, -1, -1,
+        int faces = findFaces(graph, -1, -1, -1, -1,
                 0, graph.getNumberOfEdges(), 0);
+        afterRecursion();
+        return faces;
     }
 
     /** The main recursing method used to find the number of faces in
@@ -170,6 +172,12 @@ public class DefaultFindGenus implements FindGenus
      *  @param faces Number of faces found.
      */
     public void onRecursionEnd(int faces)
+    {
+    }
+
+    /** After all recursions hook. Can be overriden.
+     */
+    public void afterRecursion()
     {
     }
 }

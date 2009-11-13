@@ -3,16 +3,10 @@ import java.util.Set;
 
 /** An implementation of FindGenus used to examine the search tree.
  */
-public class ShowTreeFindGenus extends SortedFindGenus
+public class ShowTreeFindGenus extends DefaultFindGenus
 {
     int id;
     int[] levels;
-
-    /** Constructor.
-     */
-    public ShowTreeFindGenus()
-    {
-    }
 
     @Override
     public void onRecursionStart(DefaultGraph graph)
@@ -20,6 +14,7 @@ public class ShowTreeFindGenus extends SortedFindGenus
         super.onRecursionStart(graph);
         id = 0;
         levels = new int[graph.getNumberOfEdges() + 1];
+        System.out.println("graph g{");
     }
 
     @Override
@@ -48,5 +43,11 @@ public class ShowTreeFindGenus extends SortedFindGenus
 
         return super.onRecurse(graph, cycleStart, cycleSecond, lastVertex,
                 current, currentFaces, edgesLeft, edgesInCurrentCycle);
+    }
+
+    @Override
+    public void afterRecursion()
+    {
+        System.out.println("}");
     }
 }
