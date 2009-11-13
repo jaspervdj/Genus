@@ -242,6 +242,30 @@ een willeukerige boog. Anders hebben we een volledige embedding gevonden, en
 bevinden we ons in een blad van de zoekboom.
 \newline
 
+In de vorige paragraaf schreven we dat we als we op een gegeven moment een boog
+toevoegen die dezelfde is als de eerste boog in ons voorlopige cykel, dat we
+dan een vlak hebben. Maar we kunnen zelfs nog vroeger stoppen met een cykel,
+namelijk \emph{op het moment dat we in de eerste top van de cykel terugkomen,
+en we kunnen de cykel sluiten zonder dat dit de permutaties verstoord}.
+\newline
+
+Stel immers dat we in onze begintop komen en we kunnen de cykel sluiten. Als
+we op dit moment branchen, zullen we na een bepaalde tijd weer terugkomen in
+deze begintop, immers, de cykel moet gesloten worden. We krijgen dan een
+cykel zoals in Figuur \ref{fig:octo} (met 1 onze begintop). We zien dat we
+deze cykel eigenlijk kunnen splitsen in twee cykels (tenminste twee in het
+algemene geval)! Aangezien we een embedding zoeken met zoveel mogelijk cykels,
+is het dus niet verstanding om nog te branchen als we onze cykel kunnen sluiten.
+Vandaar dat we dit niet doen.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.6\textwidth]{images/octo.pdf}
+\caption{Een cykel die gesplitst kan worden}
+\label{fig:octo}
+\end{center}
+\end{figure}
+
 \subsection{Het nemen van kadidaatbogen volgend op een boog}
 \label{kandidaatbogen}
 Onze embedding defini\"eert voor elke top een bepaalde volgorde van de bogen in
