@@ -146,7 +146,7 @@ aan met het volgende algoritme:
 \newline
 
 Neem $v$ toppen, zonder bogen. We hebben nu een onsamenhangende graaf die
-bestaat uit $v$ componenten (Zie figuur \ref{fig:randomgraph-01}).
+bestaat uit $v$ componenten (Zie Figuur \ref{fig:randomgraph-01}).
 \newline
 
 Nu gaan we in deze graaf een opspannende boom construeren. Hiervoor hebben
@@ -460,6 +460,7 @@ We vragen ons af of sommige ingewikkelde grafen niet kunnen gereduceerd worden
 tot eenvoudigere grafen met hetzelfde genus.
 
 \subsection{Toppen met slechts 1 buur}
+\label{one-neighbour}
 Stel dat een bepaalde graaf $G$ kan getekend worden op een bepaalde figuur
 zonder dat er bogen snijden. Voeg nu een bepaalde top $v$ toe en verbind deze
 met 1 top $w$ die al in de graaf zat. Noem de boog $e$. Positioneer eerst $e$
@@ -480,10 +481,61 @@ bijvoorbeeld Figuur \ref{fig:one-neighbour}).
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.6\textwidth]{images/one-neighbour.pdf}
-\caption{Een graaf waaruit 1 top verwijdert kan worden}
+\caption{Een graaf waaruit top 4 verwijdert kan worden}
 \label{fig:one-neighbour}
 \end{center}
 \end{figure}
+
+\subsection{Toppen met precies 2 buren, waarbij de buren onderling niet
+verbonden zijn}
+Stel dat er een top $v$ is in onze graaf, die precies twee buren heeft. Noem
+deze buren $u$ en $w$. Stel dat er geen boog is tussen $u$ en $w$. Nu kunnen
+deze twee opeenvolgende bogen vervangen worden door 1 boog. We kunnen dus
+$v$ verwijderen uit de graaf en een boog tussen $u$ en $w$ plaatsen.
+\newline
+
+Bijvoorbeeld, men kan eenvoudig zien dat in Figuur
+\ref{fig:two-neighbours-not-connected} de bogen $(1, 2)$ en $(2, 3)$ vervangen
+kunnen worden door de boog $(1, 3)$.
+\newline
+
+Ook dit is ge\"implementeerd in de klasse \verb#SimplifyGraphProcessor#.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.6\textwidth]{images/two-neighbours-not-connected.pdf}
+\caption{Een graaf waaruit top 2 kan verwijdert worden, mits we een boog
+toevoegen tussen top 1 en top 3}
+\label{fig:two-neighbours-not-connected}
+\end{center}
+\end{figure}
+
+\subsection{Toppen met precies 2 buren, waarbij de buren onderling wel
+verbonden zijn}
+Stel nu dat we een top $v$ hebben met precies twee buren. Noem deze buren
+$u$ en $w$. Stel dat er een boog ligt tussen $u$ en $w$. We kunnen in dat
+geval $v$ verwijderen, en het genus zal ongewijzigd blijven. Een voorbeeld is
+te zien in Figuur \ref{fig:two-neighbours-connected}.
+\newline
+
+Net zoals we in \ref{one-neighbour} argumenteerden dat we een top met \'e\'en
+buur konden toevoegen aan de graaf door hem zeer dicht bij zijn buur te leggen,
+kunnen we immers ook een boog toevoegen tussen twee toppen waar er al een boog
+is. Als we deze zeer dicht bij de originele boog leggen, zullen er geen
+snijpunten van bogen ontstaan. Als we dan onze nieuwe boog opsplitsen in twee
+bogen met 1 top ertussen, volgt het gestelde.
+\newline
+
+Ook dit is ge\"implementeerd in de klasse \verb#SimplifyGraphProcessor#.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.6\textwidth]{images/two-neighbours-connected.pdf}
+\caption{Een graaf waaruit top 2 verwijdert kan worden}
+\label{fig:two-neighbours-connected}
+\end{center}
+\end{figure}
+
 \section{Heuristieken}
 
 \subsection{Een smalle stam voor de zoekboom}
