@@ -146,7 +146,11 @@ public class DefaultGraph
         return v0 >= 0 && v1 >= 0 && orders[v0][v1] != null;
     }
 
-    public int estimate()
+    /** Make a guess about how many faces we can make with the edges still
+     *  left untouched.
+     *  @return An estimate of the number of faces remaining.
+     */
+    public int getEstimate()
     {
         for(int i = 0; i < labels.length; i++)
             labels[i] = i;
@@ -191,10 +195,13 @@ public class DefaultGraph
         return faces + components;
     }
 
-    public double completeness()
+    /** Check if this graph is a complete graph.
+     *  @return If this graph is a complete graph.
+     */
+    public boolean isCompleteGraph()
     {
-        int completeEdges = (vertices.length - 1) * vertices.length / 2;
-        return 0.5 * (double) numberOfEdges / (double) completeEdges;
+        int completeEdges = (vertices.length - 1) * vertices.length;
+        return numberOfEdges == completeEdges;
     }
 
     /** Gets the girth of this graph.

@@ -242,6 +242,7 @@ een willeukerige boog. Anders hebben we een volledige embedding gevonden, en
 bevinden we ons in een blad van de zoekboom.
 \newline
 
+\label{sluit-pad-vroeger}
 In de vorige paragraaf schreven we dat we als we op een gegeven moment een boog
 toevoegen die dezelfde is als de eerste boog in ons pad, dat we dan een cykel
 maken. Dit is natuurlijk waar, maar we kunnen zelfs nog vroeger stoppen met ons
@@ -597,20 +598,18 @@ en de call tree zonder sorteren (Figuur \ref{fig:default-call-tree}).
 \newline
 
 We zien onmiddelijk dat de call tree zonder sorteren veel eenvoudiger is!
-Ook het aantal bladeren in de boom is verschillend. Dit verschil kan enkel
-veroorzaakt worden door de eerste boog die we kiezen in een pad (immers, de
-eerste boog kiezen we telkens willekeurig, voor de andere bogen proberen we
-telkens alle mogenlijkheden). We zien ook dat de gesorteerde call tree
-helemaal geen smalle stam en brede kruin heeft. We concluderen dat elke zoekboom
-voor dit algoritme een relatief brede stam zal hebben, omdat er naar het einde
-van ons algoritme toe sowieso minder mogenlijkheden overblijven (veel bogen
-zijn al gekozen).
+Ook het aantal bladeren in de boom is verschillend. Dit wordt veroorzaakt
+door het feit dat we ons pad soms vroeger kunnen sluiten (zie
+\ref{sluit-pad-vroeger}, pagina \pageref{sluit-pad-vroeger}). Dan is het
+soms beter om te vertrekken vanuit een top met veel buren. Als we immers
+terug in deze top komen, kunnen we het pad sluiten waardoor er een aantal
+mogenlijkheden tot branchen zullen wegvallen in deze top. Als er relatief
+meer buren zijn, zullen er relatief meer mogenlijkheden wegvallen. Langs de
+andere kant zullen er zo soms meer branches in de zoekboom zijn.
 \newline
 
-Het is dus soms beter om de eerste boog te kiezen in een top met relatief
-veel bogen, zodat al tenminste \'e\'en boog daar gefixeerd is. Dit is
-echter niet altijd geval, en hangt sterk af van de graaf in kwestie. We zullen
-er dus voor kiezen om onze call tree niet te veranderen.
+We besluiten dus dat sorteren soms goed kan zijn voor specifieke grafen,
+maar dat het in het algemene geval meestal geen verbetering brengt.
 
 \begin{figure}
 \begin{center}

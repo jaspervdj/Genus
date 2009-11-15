@@ -12,7 +12,7 @@ import genus.GraphCloner;
 public class SimpleFaceCountTest
 {
     /** Number of tests to run. */
-    private final static int TESTS = 1;
+    private final static int TESTS = 10;
 
     public static void main(String[] args)
     {
