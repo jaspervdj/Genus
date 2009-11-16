@@ -146,55 +146,6 @@ public class DefaultGraph
         return v0 >= 0 && v1 >= 0 && orders[v0][v1] != null;
     }
 
-    /** Make a guess about how many faces we can make with the edges still
-     *  left untouched.
-     *  @return An estimate of the number of faces remaining.
-     */
-    public int getEstimate()
-    {
-        for(int i = 0; i < labels.length; i++)
-            labels[i] = i;
-
-        for(int i = 0; i + 1 < vertices.length; i++)
-            for(int j = i + 1; j < vertices.length; j++)
-                matrix[i][j] = false;
-
-        int faces = 0;
-
-        for(int v0 = 0; v0 < vertices.length; v0++) {
-            for(int v1: vertices[v0].getNeighbours()) {
-                if(vertices[v0].isCandidate(-1, v1)) {
-                    int minV = v0 < v1 ? v0 : v1;
-                    int maxV = v0 < v1 ? v1 : v0;
-                    if(!matrix[minV][maxV]) {
-                        if(labels[v0] == labels[v1]) {
-                            faces++;
-                        } else {
-                            int minLabel = labels[v0] < labels[v1] ?
-                                    labels[v0] : labels[v1];
-                            int maxLabel = labels[v0] < labels[v1] ?
-                                    labels[v1] : labels[v0];
-                            for(int i = 0; i < labels.length; i++)
-                                if(labels[i] == maxLabel)
-                                    labels[i] = minLabel;
-                        }
-
-                        matrix[minV][maxV] = true;
-                    }
-                }
-            }
-        }
-
-        int components = 1;
-        Arrays.sort(labels);
-        for(int i = 1; i < labels.length; i++) {
-            if(labels[i - 1] != labels[i])
-                components++;
-        }
-
-        return faces + components;
-    }
-
     /** Check if this graph is a complete graph.
      *  @return If this graph is a complete graph.
      */

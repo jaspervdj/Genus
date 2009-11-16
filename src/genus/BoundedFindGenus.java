@@ -53,14 +53,6 @@ public class BoundedFindGenus extends ProcessedFindGenus
             return false;
         }
 
-        /*float depth = (float) edgesLeft / (float) graph.getNumberOfEdges();
-        if(previousResult >= 0 && current < 0 &&
-                estimate * 0.8f <= previousResult && depth >= 0.3f) {
-            if(graph.estimate() <= previousResult) {
-                return false;
-            }
-        }*/
-
         return true;
     }
 

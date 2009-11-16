@@ -42,8 +42,8 @@ public class RandomGraphGenusTest extends UnitTest
             int genus0 = new DefaultFindGenus().findGenus(graph);
             int genus1 = new BoundedFindGenus().findGenus(graph);
 
-            test(genus0 == genus1, "random graph with " + vertices + " and " +
-                    edges + " edges");
+            test(genus0 == genus1, "random graph with " + vertices +
+                    " vertices and " + edges + " edges");
         }
     }
 
