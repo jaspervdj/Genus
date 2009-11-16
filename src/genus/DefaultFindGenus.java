@@ -23,7 +23,7 @@ public class DefaultFindGenus implements FindGenus
      */
     public int findGenus(DefaultGraph graph)
     {
-        if(graph.isCompleteGraph()) {
+        if(graph.isCompleteGraph() && graph.getNumberOfVertices() >= 3) {
             int tmp = (graph.getNumberOfVertices() - 3) *
                     (graph.getNumberOfVertices() - 4);
             return (tmp + 11) / 12;
