@@ -452,39 +452,6 @@ $n = girth - c$.
 Anders, als $c \geq girth$, dan zijn er twee mogenlijkheden. Als de huidige top
 een buur is van de top waar we het vlak begonnen zijn, dan $n = 1$. Anders
 hebben we nog zeker 2 vlakken nodig, en dus $n = 2$.
-\newline
-
-\subsection{Een duurder bounding criterium}
-Er zijn nog andere manieren om een bovengrens voor het aantal vlakken die nog
-gemaakt kunnen worden te vinden. In deze sectie leggen we een algoritme uit dat,
-in tegenstelling tot onze vorige criteria, niet in constante tijd kan uitgevoerd
-worden. Het is gebaseerd op het aantal cykels in een ongerichte graaf.
-\newline
-
-We beginnen met elke top een uniek label te geven. Dit label wordt voorgesteld
-door een nummer. Stel het aantal geschatte vlakken gelijk aan 0.
-\newline
-
-Nu overlopen we alle ongerichte bogen waarvan nog geen enkele gerichte boog
-gebruikt is.  Stel dat de huidige boog de toppen $v$ en $w$ verbindt. Als
-$label(v) = label(w)$, dan is er een mogenlijkheid dat we later hier een vlak
-zullen verbinden. Incrementeer dus het aantal geschatte vlakken.
-\newline
-
-Als $label(v) \neq label(w)$, stel dat $l = min(label(v), label(w))$. Geef nu
-alle toppen $v_i$ waarvoor geldt dat $label(v_i) = max(label(v), label(w))$ het
-label $l$.
-\newline
-
-Op het einde hebben we nu een schatting voor het aantal vlakken, behalve de
-buitenvlakken. Om deze ook nog te tellen, berekenen we het aantal componenten
-in de graaf die gevormd wordt door de ongebruikte ongerichte bogen. Het aantal
-componenten is gegeven door het aantal verschillende labels. De labels die maar
-1 keer voorkomen tellen uiteraard niet mee, dit zijn ge\"isoleerde toppen.
-\newline
-
-Als we het aantal geschatte vlakken optellen bij het aantal componenten, krijgen
-we dus een bovengrens voor het aantal vlakken dat we nog zullen maken.
 
 \section{Preprocessing}
 
