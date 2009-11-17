@@ -108,7 +108,8 @@ public class DefaultFindGenus implements FindGenus
                  * somewhere * in our algorithm, so we backtrack. To check: we
                  * can assume it * will always connect, so we can safely skip
                  * this check. */
-                if(!graph.connect(lastVertex, current, candidate)) {
+                if(!graph.connect(lastVertex, current,
+                        candidate, currentFaces)) {
                     System.out.println("Illegal move.");
                     return 0;
                 }
@@ -117,7 +118,8 @@ public class DefaultFindGenus implements FindGenus
                  * back in our starting point and we can legally connect the
                  * cycle without breaking any previous permutations. */
                 if(candidate == cycleStart &&
-                        graph.connect(current, cycleStart, cycleSecond)) {
+                        graph.connect(current, cycleStart, cycleSecond,
+                                currentFaces)) {
 
                     /* Recurse with one more face found. */
                     result = findFaces(graph, -1, -1, -1, -1,

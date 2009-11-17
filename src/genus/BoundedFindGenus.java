@@ -53,6 +53,12 @@ public class BoundedFindGenus extends ProcessedFindGenus
             return false;
         }
 
+        if(current > 0 &&
+                graph.hasOutboundEdgeWithLabel(current, currentFaces) &&
+                graph.getVertex(current).getNeighbours().length > 2) {
+            return false;
+        }
+
         return true;
     }
 

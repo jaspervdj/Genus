@@ -23,8 +23,8 @@ public class DefaultGraph
     /** Girth of this graph. */
     public int girth;
 
-    private int[] labels;
-    private boolean[][] matrix;
+    /** Edge labels. */
+    public int[][] labels;
 
     /** Constructor. Construct a graph from any class implementing the Graph
      *  interface.
@@ -69,8 +69,10 @@ public class DefaultGraph
         FindGirth findGirth = new FindGirth();
         girth = findGirth.findGirth(this);
 
-        labels = new int[vertices.length];
-        matrix = new boolean[vertices.length][vertices.length];
+        labels = new int[vertices.length][vertices.length];
+        for(int i = 0; i < labels.length; i++)
+            for(int j = 0; j < labels[i].length; j++)
+                labels[i][j] = -1;
     }
 
     /** Get the number of vertices in the graph.
@@ -115,11 +117,14 @@ public class DefaultGraph
      *  @param from Vertex we're coming from.
      *  @param through Vertex we're going through.
      *  @param destination Vertex we're going to.
+     *  @param label Label for the connection.
      *  @return If the operation was succesful.
      */
-    public boolean connect(int from, int through, int destination)
+    public boolean connect(int from, int through, int destination, int label)
     {
         if(vertices[through].connect(from, destination)) {
+            labels[from][through] = label;
+            labels[through][destination] = label;
             return true;
         } else {
             return false;
@@ -134,6 +139,8 @@ public class DefaultGraph
     public void split(int from, int through, int destination)
     {
         vertices[through].split(from, destination);
+        labels[from][through] = -1;
+        labels[through][destination] = -1;
     }
 
     /** See if there is an edge between two vertices.
@@ -144,6 +151,30 @@ public class DefaultGraph
     public boolean hasEdge(int v0, int v1)
     {
         return v0 >= 0 && v1 >= 0 && orders[v0][v1] != null;
+    }
+
+    /** Get the label of a certain directed edge.
+     *  @param from Start of the edge.
+     *  @param to End of the edge.
+     */
+    public int getLabel(int from, int to)
+    {
+        return labels[from][to];
+    }
+
+    /** Check if a given vertex has an outgoing edge with a given label.
+     *  @param vertex Vertex to check for labels.
+     *  @param label Label to check for.
+     */
+    public boolean hasOutboundEdgeWithLabel(int vertex, int label)
+    {
+        for(int neighbour: vertices[vertex].getNeighbours()) {
+            if(labels[vertex][neighbour] == label) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /** Check if this graph is a complete graph.
