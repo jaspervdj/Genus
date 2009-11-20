@@ -23,9 +23,6 @@ public class DefaultGraph
     /** Girth of this graph. */
     public int girth;
 
-    private int[] labels;
-    private boolean[][] matrix;
-
     /** Constructor. Construct a graph from any class implementing the Graph
      *  interface.
      *  @param graph Graph to construct the DefaultGraph from.
@@ -68,9 +65,6 @@ public class DefaultGraph
         /* Compute the girth of this graph. */
         FindGirth findGirth = new FindGirth();
         girth = findGirth.findGirth(this);
-
-        labels = new int[vertices.length];
-        matrix = new boolean[vertices.length][vertices.length];
     }
 
     /** Get the number of vertices in the graph.
