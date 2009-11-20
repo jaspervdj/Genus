@@ -240,8 +240,8 @@ we van ons pad een cykel gemaakt. Op dat moment kijken we of er nog bogen zijn
 die niet in een pad liggen. Als dit het geval is, beginnen we een nieuw pad met
 een willeukerige boog. Anders hebben we een volledige embedding gevonden, en
 bevinden we ons in een blad van de zoekboom.
-\newline
 
+\subsection{Cykels sneller sluiten}
 \label{sluit-pad-vroeger}
 In de vorige paragraaf schreven we dat we als we op een gegeven moment een boog
 toevoegen die dezelfde is als de eerste boog in ons pad, dat we dan een cykel
@@ -452,6 +452,18 @@ $n = girth - c$.
 Anders, als $c \geq girth$, dan zijn er twee mogenlijkheden. Als de huidige top
 een buur is van de top waar we het vlak begonnen zijn, dan $n = 1$. Anders
 hebben we nog zeker 2 vlakken nodig, en dus $n = 2$.
+
+\section{Cykels die we kunnen splitsen}
+Het feit dat we soms cykels kunnen splitsen (zie \ref{sluit-pad-vroeger}) kunnen
+we ook gebruiken als bounding criterium. Met andere woorden, als ons pad langs
+een top gaat waar we al eerder doorgingen, zal de uiteindelijke cykel gesplitst
+kunnen worden in twee cykels. Onze embedding zal dus geen optimaal aantal
+vlakken hebben, en we mogen dus bounden.
+\newline
+
+Hoe detecteren we nu dat we ergens al gepasseerd zijn? De beste manier is om
+elke boog een label te geven, en zo bij te houden in welk pad een bepaalde boog
+ligt.
 
 \section{Preprocessing}
 

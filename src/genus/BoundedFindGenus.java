@@ -53,11 +53,9 @@ public class BoundedFindGenus extends ProcessedFindGenus
             return false;
         }
 
-        if(current > 0 &&
-                graph.hasOutboundEdgeWithLabel(current, currentFaces) &&
-                graph.getVertex(current).getNeighbours().length > 2) {
-            return false;
-        }
+        //if(current >= 0 && lastVertex >= 0 &&
+                //graph.isSplitable(lastVertex, current, currentFaces))
+            //return false;
 
         return true;
     }

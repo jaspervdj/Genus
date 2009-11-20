@@ -202,4 +202,50 @@ public class DefaultGraph
     public void sort(List<Integer> vertices, final Graph graph)
     {
     }
+
+    public boolean isSplitable(int inbound, int vertex, int label)
+    {
+        /* Neighbours of the vertex. */
+        int[] neighbours = vertices[vertex].getNeighbours();
+
+        /* Search for first inbound with similar label. */
+        int firstInboundIndex = -1;
+        int i = 0;
+        while(i < neighbours.length && firstInboundIndex < 0) {
+            if(labels[neighbours[i]][vertex] == label &&
+                    neighbours[i] != inbound)
+                firstInboundIndex = i;
+            i++;
+        }
+
+        /* No inbound with similar label, return. */
+        if(firstInboundIndex < 0)
+            return false;
+        int firstInbound = neighbours[firstInboundIndex];
+
+        /* The first outbound is logically the follower of the first inbound. */
+        int firstOutbound =
+                orders[vertex][firstInbound].getNext().getValue();
+
+        /* Incoming should be connectable to first outbound. */
+        if(orders[vertex][firstOutbound].getFirst().getValue() ==
+                orders[vertex][firstInbound].getFirst().getValue())
+            return false;
+
+        /* There should be a free outbound so that the first inbound can be
+         * connected to this outbound. */
+        i = 0;
+        boolean found = false;
+        while(i < neighbours.length && !found) {
+            if(neighbours[i] != firstInbound &&
+                    neighbours[i] != firstOutbound &&
+                    neighbours[i] != inbound &&
+                    orders[vertex][i].getFirst().getValue() !=
+                    orders[vertex][inbound].getFirst().getValue())
+                found = true;
+            i++;
+        }
+         
+        return found;
+    }
 }

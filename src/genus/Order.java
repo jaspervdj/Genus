@@ -51,6 +51,14 @@ public class Order
         return this == first;
     }
 
+    /** Get the next order.
+     *  @return The next order.
+     */
+    public Order getNext()
+    {
+        return next;
+    }
+
     /** Add a cycle to the end of this cycle.
      *  @param cycle Cycle to add.
      */
