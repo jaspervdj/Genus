@@ -240,8 +240,8 @@ we van ons pad een cykel gemaakt. Op dat moment kijken we of er nog bogen zijn
 die niet in een pad liggen. Als dit het geval is, beginnen we een nieuw pad met
 een willeukerige boog. Anders hebben we een volledige embedding gevonden, en
 bevinden we ons in een blad van de zoekboom.
-\newline
 
+\subsection{Het pad vroeger sluiten}
 \label{sluit-pad-vroeger}
 In de vorige paragraaf schreven we dat we als we op een gegeven moment een boog
 toevoegen die dezelfde is als de eerste boog in ons pad, dat we dan een cykel
@@ -317,6 +317,26 @@ Een uitzondering bestaat wanneer we slechts \'e\'en deelvolgorde
 $(e_1 e_2 \dots e_i)$ ($e_i$ is dan het laatste element, aangezien het als
 enige $e$ nog geen opvolger heeft) meer hebben. Dit geval is echter triviaal,
 dan is de enige kandidaat $e_1$.
+
+\subsection{Tijdscomplexiteit}
+In het slechtste geval zal ons algoritme alle mogelijke embeddingen overlopen.
+Een embedding geeft elke top een bepaalde permutatie. Deze permutaties worden
+gekozen uit de verzameling van alle niet-cyclische permutaties van de buren
+van de top. Het aantal niet-cyclische permutaties voor een top met $n$ buren
+wordt gegeven door $(n-1)!$.
+\newline
+
+Stel dat de top met het maximaal aantal buren $n$ buren heeft, en dat er in
+totaal $m$ toppen zijn. Een bovengrens voor het aantal embeddingen $E$ wordt dus
+gegeven door
+\begin{equation*}
+E(m, n) = m \cdot n !
+\end{equation*}
+aangezien het aantal embeddingen recht evenredig is de tijdscomplexiteit, geldt
+dus ook dat
+\begin{equation*}
+T(m, n) = m \cdot n !
+\end{equation*}
 
 \section{Bounding Criteria}
 
