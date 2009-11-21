@@ -105,31 +105,6 @@ public class DefaultGraph
         return numberOfEdges;
     }
 
-    /** Connect two edges.
-     *  @param from Vertex we're coming from.
-     *  @param through Vertex we're going through.
-     *  @param destination Vertex we're going to.
-     *  @return If the operation was succesful.
-     */
-    public boolean connect(int from, int through, int destination)
-    {
-        if(vertices[through].connect(from, destination)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /** Split two edges (undo a connect).
-     *  @param from Vertex we're coming from.
-     *  @param through Vertex we're going through.
-     *  @param destination Vertex we're going to.
-     */
-    public void split(int from, int through, int destination)
-    {
-        vertices[through].split(from, destination);
-    }
-
     /** See if there is an edge between two vertices.
      *  @param v0 One end of the possible edge.
      *  @param v1 The other end of the possible edge.
