@@ -16,6 +16,65 @@
 \maketitle
 \tableofcontents
 
+\section{De klassestructuur}
+
+\subsection{Verschillende versies van het algoritme}
+Om tijdsmetingen te kunnen doen, is het leuk als we verschillende versies van
+ons algoritme kunnen vergelijken. Natuurlijk is het ook niet de bedoeling dat
+we telkens voor een nieuwe versie onze volledige code kopi\"eren, want dan
+zullen we snel een zeer moeilijk te onderhouden programma hebben. Daarom kiezen
+we ervoor om met overerving te werken.
+\newline
+
+De overervingsstructuur voor de verschillende versies van het algoritme is te
+zien in Figuur \ref{fig:inheritance}. Elk algoritme dat een eerder algoritme
+uitbreidt, erft natuurlijk ook alle eigenschappen van het eerdere algoritme.
+Zo zullen alle klassen die subklasses zijn van \verb#ProcessedFindGenus# de
+graaf eerst preprocessen.
+\newline
+
+\begin{itemize}
+\item \verb#FindGenus# is de te implementeren interface.
+\item \verb#DefaultFindGenus# implementeerd de na\"ieve versie van ons algoritme
+zoals beschreven in \ref{het-naieve-algoritme}. Het gebruikt de klasse
+\verb#DefaultGraph#. Let wel dat de verbetering uit \ref{sluit-pad-vroeger} ook
+al is ge\"implementeerd. Ook maakt het gebruik van heuristiek
+\ref{heuristiek-complete-grafen}.
+\item \verb#ProcessedFindGenus# gaat de graaf eerst preprocessen. Daartoe
+gebruikt het de \verb#GraphProcessor# interface en de
+\verb#SimplifyGraphProcessor# implementatie ervan. Welke preprocessing allemaal
+wordt toegepast, is verder beschreven in \ref{preprocessing}.
+\item \verb#BoundedFindGenus# implementeert alle bounding criteria beschreven
+in \ref{bounding-criteria}. Dit is onze snelste implementatie van het algoritme.
+\item \verb#SortedFindGenus# implementeert heuristiek \ref{heuristiek-sorteren}.
+\item \verb#CountBranchesFindGenus# is een klasse die na afloop van het
+algoritme het aantal afgewerkte branches afdrukt.
+\item \verb#ShowTreeFindGenus# is een klasse die de call tree van het algoritme
+afdrukt in \emph{DOT}-formaat.
+\end{itemize}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.6\textwidth]{images/inheritance.pdf}
+\caption{Een overervingsdiagram die de verschillende versies van het algoritme
+toont}
+\label{fig:inheritance}
+\end{center}
+\end{figure}
+
+\subsection{Overige klassen}
+\begin{itemize}
+\item \verb#FindGirth# is een klasse die het \emph{girth} van een graaf kan
+bepalen. Dit wordt gebruikt in \ref{girth-bounding}.
+\item \verb#GraphCloner# is een klasse die een perfecte kopie kan maken van
+een graaf. Dit wordt gebruikt om een backup te nemen van een graaf die we
+zullen veranderen door preprocessing.
+\item \verb#DefaultGraph#, \verb#Vertex# en \verb#Order# zijn klasses die
+gebruikt worden om de graaf effici\"ent voor te stellen tijdens het algoritme.
+\item \verb#SortedGraph# is een uitbreiding van \verb#DefaultGraph#, gebruikt
+door de klasse \verb#SortedFindGenus#.
+\end{itemize}
+
 \section{Tests}
 
 \subsection{Performantietests}
@@ -99,7 +158,11 @@ in feite niet veel meer dan een array met de buren van deze top.
 
 Informatie over de bogen zit opgeslaan in de klasse \verb#Order#. Deze klasse
 stelt een soort volgorde voor, die we zullen gebruiken in ons algoritme. We
-willen immers per top een zekere volgorde van bogen vastleggen.
+willen immers per top een zekere volgorde van bogen vastleggen. Een volgorde
+wordt klassiek voorgesteld door een lijst. We kiezen ervoor om een soort linked
+list te gebruiken. Elk object van de klasse \verb#Order# stelt een element uit
+de lijst voor, maar kan tegelijk ook gebruikt worden als lijst. Hierdoor kunnen
+we soms sneller informatie opvragen.
 
 \section{Input: verschillende grafen}
 Als input neemt het algoritme telkens een graaf. Daar er enorm veel
@@ -196,6 +259,7 @@ specificatie van deze dot-bestanden is te vinden op \verb#www.graphviz.org#.
 Omdat we enkel simpele grafen willen outputten, is deze klasse niet zo complex.
 
 \section{Het na\"ieve algoritme}
+\label{het-naieve-algoritme}
 
 \subsection{Lazy genereren van embeddingen}
 Ons na\"ieve algoritme overloopt alle embeddingen. Het is echter belangrijk dat
@@ -339,6 +403,7 @@ T(m, n) = m \cdot n !
 \end{equation*}
 
 \section{Bounding Criteria}
+\label{bounding-criteria}
 
 \subsection{Een ondergrens voor het maximaal aantal vlakken}
 \label{ondergrens-maximaal-aantal-vlakken}
@@ -410,6 +475,7 @@ cykel hebben, kunnen we met 1 boog uit $l$ een extra cykel maken. Anders
 hebben we er $3 - c$ nodig. Dit zit op deze manier ook in onze berekening.
 
 \subsection{Girth van een graaf}
+\label{girth-bounding}
 In \ref{een-eerste-poging} gingen we ervan uit dat we tenminste 3 bogen nodig
 hebben om een vlak te maken. Dit is natuurlijk altijd waar, maar stel dat we
 een graaf hebben als in Figuur \ref{fig:cube}. Als we deze graaf bekijken, zien
@@ -474,6 +540,7 @@ een buur is van de top waar we het vlak begonnen zijn, dan $n = 1$. Anders
 hebben we nog zeker 2 vlakken nodig, en dus $n = 2$.
 
 \section{Preprocessing}
+\label{preprocessing}
 
 \subsection{Vereenvoudingen van de graaf}
 We vragen ons af of sommige ingewikkelde grafen niet kunnen gereduceerd worden
@@ -559,6 +626,7 @@ Ook dit is ge\"implementeerd in de klasse \verb#SimplifyGraphProcessor#.
 \section{Heuristieken}
 
 \subsection{Een smalle stam voor de zoekboom}
+\label{heuristiek-sorteren}
 Intu\"itief willen we een zoekboom die een smalle stam heeft en een brede kruin
 (zoals in Figuur \ref{fig:good-tree}), in plaats van een zoekboom met een brede
 stam en een smalle kruin (zoals in Figuur \ref{fig:bad-tree}). Met andere
@@ -642,6 +710,7 @@ maar dat het in het algemene geval meestal geen verbetering brengt.
 \end{figure}
 
 \subsection{Complete grafen}
+\label{heuristiek-complete-grafen}
 Het is zeer makkelijk om na te gaan of een gegeven graaf een complete graaf is.
 Aangezien we het genus van een complete graaf zeer snel kunnen bepalen met de
 formule die we zagen in \ref{complete-graph}, zullen we dit ook gebruiken om
