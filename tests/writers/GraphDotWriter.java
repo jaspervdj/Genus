@@ -1,7 +1,6 @@
-package graphviz;
+package writers;
 
 import genus.Graph;
-import graph.CompleteBipartiteGraph;
 import java.io.IOException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;

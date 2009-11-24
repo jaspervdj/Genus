@@ -4,7 +4,7 @@ import genus.BoundedFindGenus;
 import genus.SortedFindGenus;
 import genus.DefaultGraph;
 import genus.ShowTreeFindGenus;
-import graphviz.GraphDotWriter;
+import writers.GraphDotWriter;
 import graph.ZGraph;
 import graph.RandomGraph;
 import genus.GraphCloner;

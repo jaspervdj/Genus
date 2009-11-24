@@ -1,7 +1,6 @@
 package unit;
 
 import java.util.Random;
-import graphviz.GraphDotWriter;
 import genus.Graph;
 import graph.RandomGraph;
 import genus.FindGenus;

@@ -41,9 +41,9 @@ public class TimeTest
 
         int vertices = verticesStart, edges = edgesStart;
         while(vertices < verticesStop && edges < edgesStop) {
+
+            double[] averageTimes = new double[finders.length];
             for(int i = 0; i < TESTS; i++) {
-                System.out.println("Test " + (i + 1) +
-                        " (" + vertices + " vertices, " + edges + " edges)");
                 Graph graph = new RandomGraph(vertices, edges);
                 int genus = -1;
                 for(int j = 0; j < finders.length; j++) {
@@ -56,8 +56,16 @@ public class TimeTest
                         System.exit(1);
                     }
                     long stop = System.currentTimeMillis();
-                    System.out.println(args[j + 6] + ": " + (stop - start));
+                    averageTimes[j] += (double) (stop - start);
                 }
+            }
+
+            System.out.println("(" + vertices + " vertices, " + edges +
+                    " edges)");
+
+            for(int j = 0; j < finders.length; j++) {
+                averageTimes[j] /= (double) TESTS;
+                System.out.println(args[6 + j] + ": " + averageTimes[j]);
             }
 
             vertices += verticesStep;

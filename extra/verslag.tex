@@ -37,7 +37,7 @@ graaf eerst preprocessen.
 \item \verb#FindGenus# is de te implementeren interface.
 \item \verb#DefaultFindGenus# implementeerd de na\"ieve versie van ons algoritme
 zoals beschreven in \ref{het-naieve-algoritme}. Het gebruikt de klasse
-\verb#DefaultGraph#. Let wel dat de verbetering uit \ref{sluit-pad-vroeger} ook
+\verb#DefaultGraph#. Let wel dat de verbetering uit \ref{sluit-pad-sneller} ook
 al is ge\"implementeerd. Ook maakt het gebruik van heuristiek
 \ref{heuristiek-complete-grafen}.
 \item \verb#ProcessedFindGenus# gaat de graaf eerst preprocessen. Daartoe
@@ -253,7 +253,7 @@ willeukeurige graaf met $e$ bogen en $v$ toppen (Voorbeeld: Figuur
 Het is handig als we grafen kunnen visualiseren, om de correctheid van bepaalde
 delen van ons algoritme te testen. Daarom besliste ik een klasse
 \verb#GraphDotWriter# te schrijven, deze bevindt zich in het package
-\verb#graphviz# (in de map \verb#tests#). Deze klasse bevat functionaliteit om
+\verb#writers# (in de map \verb#tests#). Deze klasse bevat functionaliteit om
 grafen van de klasse \verb#Graph# uit te schrijven naar dot-bestanden. De
 specificatie van deze dot-bestanden is te vinden op \verb#www.graphviz.org#.
 Omdat we enkel simpele grafen willen outputten, is deze klasse niet zo complex.
@@ -279,7 +279,7 @@ for e in getEmbeddings(graph):
 Hierbij is het probleem dat we pas informatie over het genus krijgen op het
 moment dat e gegenereerd is. Als we hierop bounding criteria willen toepassen,
 zouden we enkel de bladeren in onze zoekboom kunnen schrappen. Omdat we meer
-willen schrappen, zoeken we dus naar een beter algoritme, waarin we vroeger
+willen schrappen, zoeken we dus naar een beter algoritme, waarin we sneller
 informatie over het genus verkrijgen.
 \newline
 
@@ -305,11 +305,11 @@ die niet in een pad liggen. Als dit het geval is, beginnen we een nieuw pad met
 een willeukerige boog. Anders hebben we een volledige embedding gevonden, en
 bevinden we ons in een blad van de zoekboom.
 
-\subsection{Het pad vroeger sluiten}
-\label{sluit-pad-vroeger}
+\subsection{Het pad sneller sluiten}
+\label{sluit-pad-sneller}
 In de vorige paragraaf schreven we dat we als we op een gegeven moment een boog
 toevoegen die dezelfde is als de eerste boog in ons pad, dat we dan een cykel
-maken. Dit is natuurlijk waar, maar we kunnen zelfs nog vroeger stoppen met ons
+maken. Dit is natuurlijk waar, maar we kunnen zelfs nog sneller stoppen met ons
 pas, namelijk \emph{op het moment dat we in de eerste top van het pad
 terugkomen, en we kunnen het pad sluiten zonder dat dit de permutaties
 verstoord}.
@@ -686,8 +686,8 @@ en de call tree zonder sorteren (Figuur \ref{fig:default-call-tree}).
 
 We zien onmiddelijk dat de call tree zonder sorteren veel eenvoudiger is!
 Ook het aantal bladeren in de boom is verschillend. Dit wordt veroorzaakt
-door het feit dat we ons pad soms vroeger kunnen sluiten (zie
-\ref{sluit-pad-vroeger}, pagina \pageref{sluit-pad-vroeger}). Dan is het
+door het feit dat we ons pad soms sneller kunnen sluiten (zie
+\ref{sluit-pad-sneller}, pagina \pageref{sluit-pad-sneller}). Dan is het
 soms beter om te vertrekken vanuit een top met veel buren. Als we immers
 terug in deze top komen, kunnen we het pad sluiten waardoor er een aantal
 mogenlijkheden tot branchen zullen wegvallen in deze top. Als er relatief
