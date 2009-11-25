@@ -468,7 +468,7 @@ Figuur \ref{fig:processed-vs-bounded}.
 \includegraphics[width=0.8\textwidth]{images/processed-vs-bounded.pdf}
 \caption{De groene tijden zijn van het algoritme waar het bounden gebaseerd op
 3-bogen-per-vlak wordt toegepast. Deze zijn duidelijk veel sneller dan de tijden
-van het algoritme wanneer dit criterium niet wordt toegepst (rood).}
+van het algoritme wanneer dit criterium niet wordt toegepast (rood).}
 \label{fig:processed-vs-bounded}
 \end{center}
 \end{figure}
@@ -531,6 +531,7 @@ dat er nauwelijks verschil is.}
 \end{figure}
 
 \subsection{Nog een beetje beter}
+\label{beetje-beter}
 Door de manier waarop \verb#DefaultGraph# ge\"implementeerd is, kunnen we
 in constante tijd kijken of er een boog bestaat tussen twee toppen. Dit kunnen
 we gebruiken om onze $x$ nog een beetje beter te maken.
@@ -557,8 +558,23 @@ $n = girth - c$.
 Anders, als $c \geq girth$, dan zijn er twee mogenlijkheden. Als de huidige top
 een buur is van de top waar we het vlak begonnen zijn, dan $n = 1$. Anders
 hebben we nog zeker 2 vlakken nodig, en dus $n = 2$.
+\newline
+
+Dit versnelt ons algoritme een klein beetje, zoals we kunnen zien in Figuur
+\ref{fig:bounded-vs-beetje-beter}.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{images/bounded-vs-beetje-beter.pdf}
+\caption{De rode tijden van het algoritme zijn de tijden waarin de optimalisatie
+uit \ref{beetje-beter} is toegepast. We zien dat het algoritme een beetje
+sneller wordt.}
+\label{fig:bounded-vs-beetje-beter}
+\end{center}
+\end{figure}
 
 \subsection{Pariteit van het aantal vlakken}
+\label{pariteit}
 Als we de formule
 \begin{equation*}
 g = 1 - \frac{v + f - e}{2}
@@ -583,6 +599,19 @@ sneller bounden, namelijk zodra
 \begin{equation*}
 f + x \leq m + 1
 \end{equation*}
+
+Dit gegeven versneld het algoritme zeer sterk. Dit is te zien in Figuur
+\ref{fig:bounded-vs-parity}.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{images/bounded-vs-parity.pdf}
+\caption{De groene tijden zijn van het algoritme waar we de
+pariteitseigenschap uit \ref{pariteit} toepassen. We zien dat het algoritme
+veel sneller wordt.}
+\label{fig:bounded-vs-parity}
+\end{center}
+\end{figure}
 
 \section{Preprocessing}
 \label{preprocessing}
