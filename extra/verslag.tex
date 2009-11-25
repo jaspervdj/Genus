@@ -22,7 +22,7 @@
 Om tijdsmetingen te kunnen doen, is het leuk als we verschillende versies van
 ons algoritme kunnen vergelijken. Natuurlijk is het ook niet de bedoeling dat
 we telkens voor een nieuwe versie onze volledige code kopi\"eren, want dan
-zullen we snel een zeer moeilijk te onderhouden programma hebben. Daarom kiezen
+zouden we snel een zeer moeilijk te onderhouden programma hebben. Daarom kiezen
 we ervoor om met overerving te werken.
 \newline
 
@@ -35,11 +35,11 @@ graaf eerst preprocessen.
 
 \begin{itemize}
 \item \verb#FindGenus# is de te implementeren interface.
-\item \verb#DefaultFindGenus# implementeerd de na\"ieve versie van ons algoritme
+\item \verb#DefaultFindGenus# implementeert de na\"ieve versie van ons algoritme
 zoals beschreven in \ref{het-naieve-algoritme}. Het gebruikt de klasse
 \verb#DefaultGraph#. Let wel dat de verbetering uit \ref{sluit-pad-sneller} ook
-al is ge\"implementeerd. Ook maakt het gebruik van heuristiek
-\ref{heuristiek-complete-grafen}.
+al is ge\"implementeerd. Ook maakt het gebruik van de heuristiek
+uit \ref{heuristiek-complete-grafen}.
 \item \verb#ProcessedFindGenus# gaat de graaf eerst preprocessen. Daartoe
 gebruikt het de \verb#GraphProcessor# interface en de
 \verb#SimplifyGraphProcessor# implementatie ervan. Welke preprocessing allemaal
@@ -55,7 +55,7 @@ afdrukt in \emph{DOT}-formaat.
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.6\textwidth]{images/inheritance.pdf}
+\includegraphics[width=0.8\textwidth]{images/inheritance.pdf}
 \caption{Een overervingsdiagram die de verschillende versies van het algoritme
 toont}
 \label{fig:inheritance}
@@ -95,8 +95,8 @@ later analyseren en plotten.
 \subsection{Correctheidstests}
 \label{correctheidstests}
 Alle correctheidstests bevinden zich in de map \verb#tests/unit# en zijn
-subklasses van \verb#UnitTest#. Op deze manier is het makkelijk om de testen na
-te gaan als er veranderingen in ons algoritme zijn. Specifieke tests worden
+subklasses van \verb#UnitTest#. Op deze manier is het makkelijk om de testen te
+controleren als er veranderingen in ons algoritme zijn. Specifieke tests worden
 in dit verslag besproken waar ze meest relevant zijn. De algemene tests zijn:
 \begin{itemize}
 \item \verb#CompleteGraphGenusTest#: Test het zoeken van het genus van een
@@ -254,7 +254,7 @@ Het is handig als we grafen kunnen visualiseren, om de correctheid van bepaalde
 delen van ons algoritme te testen. Daarom besliste ik een klasse
 \verb#GraphDotWriter# te schrijven, deze bevindt zich in het package
 \verb#writers# (in de map \verb#tests#). Deze klasse bevat functionaliteit om
-grafen van de klasse \verb#Graph# uit te schrijven naar dot-bestanden. De
+grafen van de klasse \verb#Graph# uit te schrijven naar \emph{DOT}-bestanden. De
 specificatie van deze dot-bestanden is te vinden op \verb#www.graphviz.org#.
 Omdat we enkel simpele grafen willen outputten, is deze klasse niet zo complex.
 
