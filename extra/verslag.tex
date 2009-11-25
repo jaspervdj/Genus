@@ -402,6 +402,17 @@ dus ook dat
 T(m, n) = m \cdot n !
 \end{equation*}
 
+Experimentele tijdmetingen ondersteunen het feit dat de tijdscomplexiteit
+exponenti\"eel is (zie figuur \ref{fig:default}).
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{images/default.pdf}
+\caption{Tijdsmetingen van het na\"ieve algoritme}
+\label{fig:default}
+\end{center}
+\end{figure}
+
 \section{Bounding Criteria}
 \label{bounding-criteria}
 
@@ -435,32 +446,6 @@ correct, omdat we niet te vroeg willen bounden. We willen natuurlijk ook niet
 te veel tijd besteden aan $x$ te berekenen, omdat zo het voordeel dat we krijgen
 door bounding weer zal wegvallen.
 
-\subsection{Pariteit van het aantal vlakken}
-Als we de formule
-\begin{equation*}
-g = 1 - \frac{v + f - e}{2}
-\end{equation*}
-bekijken, en we weten dat $g$ altijd een geheel getal is, kunnen we hieruit
-afleiden dat $v + f - e$ altijd even is. Dit betekend dat, aangezien $v$ en $e$
-vastliggen voor de graaf, $f$ dezelfde pariteit zal behouden. Met andere
-woorden, vinden we een embedding $E_1$ met $f_1$ vlakken, en een embedding $E_2$
-met $f_2$ vlakken, dan weten we dat ofwel $f_1$ en $f_2$ beide even zijn, ofwel
-beide oneven.
-
-Als we ons boundingcriteria uit \ref{ondergrens-maximaal-aantal-vlakken}
-bekijken,
-\begin{equation*}
-f + x \leq m
-\end{equation*}
-kunnen we dit nog verbeteren. Stel immers dat er een embedding kan gevonden met
-aantal vlakken $f_1$ zodat $f_1 > m$. Aangezien $m$ ook een aantal vlakken
-gevonden in een embedding voorstelt, zal wegens het feit dat $f_i$ en $m$
-dezelfde pariteit bezitten ook gelden dat $f_1 > m + 1$. We kunnen dus nog iets
-sneller bounden, namelijk zodra
-\begin{equation*}
-f + x \leq m + 1
-\end{equation*}
-
 \subsection{Een eerste poging}
 \label{een-eerste-poging}
 We weten dat we om een vlak te maken tenminste 3 bogen nodig hebben. We
@@ -473,6 +458,20 @@ met $c$ het aantal bogen in de huidige cykel. We tellen $max(2, c)$ op bij $l$
 omdat we zo $x$ preciezer maken. Als we al meer dan 2 bogen in de huidige
 cykel hebben, kunnen we met 1 boog uit $l$ een extra cykel maken. Anders
 hebben we er $3 - c$ nodig. Dit zit op deze manier ook in onze berekening.
+\newline
+
+Dit bounding algoritme is al een zeer sterke verbetering. Dit is te zien in
+Figuur \ref{fig:processed-vs-bounded}.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{images/processed-vs-bounded.pdf}
+\caption{De groene tijden zijn van het algoritme waar het bounden gebaseerd op
+3-bogen-per-vlak wordt toegepast. Deze zijn duidelijk veel sneller dan de tijden
+van het algoritme wanneer dit criterium niet wordt toegepst (rood).}
+\label{fig:processed-vs-bounded}
+\end{center}
+\end{figure}
 
 \subsection{Girth van een graaf}
 \label{girth-bounding}
@@ -502,12 +501,32 @@ algoritme is ge\"implementeerd in de klasse \verb#FindGirth#.
 In het slechtste geval moet de BFS voor elke top de gehele graaf doorzoeken. De
 tijdscomplexiteit voor dit algoritme wordt dus naar boven begrensd door $O(ve)$
 met $v$ het aantal vertices, en $e$ het aantal (ongerichte) bogen.
+\newline
+
+Na experimentele tijdsmetingen zien we dat het algoritme niet veel sneller gaat
+(zie Figuur \ref{fig:girth-vs-no-girth}). We kunnen dit eenvoudig verklaren: de
+meeste grafen die we random genereren zullen \emph{girth} 3 hebben.
+\newline
+
+Echter, voor grafen die $girth > 3$ hebben zal het algoritme wel veel sneller
+gaan. Een voorbeeld is de \emph{4-cube} graaf, die van gemiddeld 13242ms naar
+34ms gaat.
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.4\textwidth]{images/cube.pdf}
 \caption{Een graaf met \emph{girth} 4}
 \label{fig:cube}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{images/girth-vs-no-girth.pdf}
+\caption{De groene tijden zijn van het algoritme waar we gebruik maken van het
+\emph{girth} van een graaf. De rode tijden maken hier geen gebruik van. We zien
+dat er nauwelijks verschil is.}
+\label{fig:girth-vs-no-girth}
 \end{center}
 \end{figure}
 
@@ -538,6 +557,32 @@ $n = girth - c$.
 Anders, als $c \geq girth$, dan zijn er twee mogenlijkheden. Als de huidige top
 een buur is van de top waar we het vlak begonnen zijn, dan $n = 1$. Anders
 hebben we nog zeker 2 vlakken nodig, en dus $n = 2$.
+
+\subsection{Pariteit van het aantal vlakken}
+Als we de formule
+\begin{equation*}
+g = 1 - \frac{v + f - e}{2}
+\end{equation*}
+bekijken, en we weten dat $g$ altijd een geheel getal is, kunnen we hieruit
+afleiden dat $v + f - e$ altijd even is. Dit betekend dat, aangezien $v$ en $e$
+vastliggen voor de graaf, $f$ dezelfde pariteit zal behouden. Met andere
+woorden, vinden we een embedding $E_1$ met $f_1$ vlakken, en een embedding $E_2$
+met $f_2$ vlakken, dan weten we dat ofwel $f_1$ en $f_2$ beide even zijn, ofwel
+beide oneven.
+
+Als we ons boundingcriteria uit \ref{ondergrens-maximaal-aantal-vlakken}
+bekijken,
+\begin{equation*}
+f + x \leq m
+\end{equation*}
+kunnen we dit nog verbeteren. Stel immers dat er een embedding kan gevonden met
+aantal vlakken $f_1$ zodat $f_1 > m$. Aangezien $m$ ook een aantal vlakken
+gevonden in een embedding voorstelt, zal wegens het feit dat $f_i$ en $m$
+dezelfde pariteit bezitten ook gelden dat $f_1 > m + 1$. We kunnen dus nog iets
+sneller bounden, namelijk zodra
+\begin{equation*}
+f + x \leq m + 1
+\end{equation*}
 
 \section{Preprocessing}
 \label{preprocessing}
@@ -671,7 +716,7 @@ visualiseren. Hiertoe gebruikt het ook de \emph{DOT-taal} van graphviz.
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{images/bounded-vs-sorted.pdf}
+\includegraphics[width=0.8\textwidth]{images/bounded-vs-sorted.pdf}
 \caption{We zien dat de tijden van het algoritme met sorteren (rood) duidelijk
 boven de tijden zonder sorteren (groen) liggen.}
 \label{fig:bounded-vs-sorted}
