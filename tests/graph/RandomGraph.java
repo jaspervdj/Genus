@@ -26,7 +26,7 @@ public class RandomGraph extends GraphImplementation
         super();
 
         /* Ensure we have enough edges. */
-        if(e < v - 1)
+        if(e < v - 1 || e > (v - 1) * v / 2)
             throw new IllegalArgumentException("Cannot construct a graph with "
                     + e + " edges and " + v + " vertices.");
 

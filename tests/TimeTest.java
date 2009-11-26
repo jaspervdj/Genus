@@ -3,18 +3,21 @@ import genus.FindGenus;
 import genus.DefaultFindGenus;
 import graph.RandomGraph;
 import genus.GraphCloner;
+import java.util.Random;
 
 public class TimeTest
 {
     /** Number of tests to run. */
-    private final static int TESTS = 20;
+    private final static int TESTS = 100;
+
+    /** Random generator instance. */
+    private final static Random RANDOM = new Random();
 
     public static void main(String[] args)
     {
-        if(args.length < 7) {
+        if(args.length < 4) {
             System.out.println(
                     "Usage: <vertices start> <vertices step> <vertices stop> " +
-                    "<edges start> <edges step> <edges stop> " +
                     "[<FindGenusClass> ...]");
             return;
         }
@@ -22,15 +25,12 @@ public class TimeTest
         int verticesStart = Integer.parseInt(args[0]);
         int verticesStep = Integer.parseInt(args[1]);
         int verticesStop = Integer.parseInt(args[2]);
-        int edgesStart = Integer.parseInt(args[3]);
-        int edgesStep = Integer.parseInt(args[4]);
-        int edgesStop = Integer.parseInt(args[5]);
 
-        FindGenus finders[] = new FindGenus[args.length - 6];
+        FindGenus finders[] = new FindGenus[args.length - 3];
         
         for(int i = 0; i < finders.length; i++) {
             try {
-                Class finderClass = Class.forName(args[6 + i]);
+                Class finderClass = Class.forName(args[3 + i]);
                 finders[i] = (FindGenus) finderClass.newInstance();
             } catch(Exception exception) {
                 finders[i] = new DefaultFindGenus();
@@ -39,11 +39,15 @@ public class TimeTest
 
         GraphCloner cloner = new GraphCloner();
 
-        int vertices = verticesStart, edges = edgesStart;
-        while(vertices < verticesStop && edges < edgesStop) {
+        int vertices = verticesStart;
+        while(vertices < verticesStop) {
 
             double[] averageTimes = new double[finders.length];
             for(int i = 0; i < TESTS; i++) {
+
+                int edges = (vertices - 1) + RANDOM.nextInt(
+                        (vertices - 1) * vertices / 2 - vertices + 2);
+
                 Graph graph = new RandomGraph(vertices, edges);
                 int genus = -1;
                 for(int j = 0; j < finders.length; j++) {
@@ -60,16 +64,14 @@ public class TimeTest
                 }
             }
 
-            System.out.println("(" + vertices + " vertices, " + edges +
-                    " edges)");
+            System.out.println("(" + vertices + " vertices)");
 
             for(int j = 0; j < finders.length; j++) {
                 averageTimes[j] /= (double) TESTS;
-                System.out.println(args[6 + j] + ": " + averageTimes[j]);
+                System.out.println(args[3 + j] + ": " + averageTimes[j]);
             }
 
             vertices += verticesStep;
-            edges += edgesStep;
         }
     }
 }
