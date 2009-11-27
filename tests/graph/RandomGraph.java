@@ -1,7 +1,7 @@
 package graph;
 
 import genus.Graph;
-import genus.GraphImplementation;
+import genus.BasicGraph;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +12,7 @@ import java.util.Random;
 
 /** A random graph.
  */
-public class RandomGraph extends GraphImplementation
+public class RandomGraph extends BasicGraph
 {
     /** Random number generator. */
     private static final Random RANDOM = new Random();

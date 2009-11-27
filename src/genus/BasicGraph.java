@@ -7,14 +7,14 @@ import java.util.ArrayList;
 /** An implementation of the Graph interface. This is used as a bridge between
  * the Graph interface and the graph implementation for the findGenus algorithm.
  */
-public class GraphImplementation implements Graph
+public class BasicGraph implements Graph
 {
     /** A map that, for every vertex, contains it's neighbours. */
     private Map<Integer, ArrayList<Integer>> neighbours;
 
     /** Constructor.
      */
-    public GraphImplementation()
+    public BasicGraph()
     {
         neighbours = new HashMap<Integer, ArrayList<Integer>>();
     }

@@ -112,14 +112,14 @@ hetzelfde zijn. Dit is waarschijnlijk onze sterkste test.
 \section{Implementatie van Graph}
 Een deel van het practicum bestond uit het schrijven van een klasse die
 \verb#Graph# implementeerd. Deze implementatie bevindt zich in de klasse
-\verb#GraphImplementation#. We gebruiken deze klasse \emph{niet} in ons
+\verb#BasicGraph#. We gebruiken deze klasse \emph{niet} in ons
 eigenlijk algoritme, omdat we dan zeer specifieke informatie willen opvragen
 op een effici\"ente manier. In ons algoritme gebruiken we de klasse
 \verb#DefaultGraph#. Het spreekt voor zich dat een \verb#Graph# kan worden
 omgezet in een \verb#DefaultGraph#. Omgekeerd is de omzetting niet nodig, en dit
 is dus ook niet ge\"implementeerd.
 
-\subsection{GraphImplementation}
+\subsection{BasicGraph}
 We willen hier per vertex de buren bijhouden. Vertices worden volledig
 voorgesteld door integers. Omdat we niet weten of de lijst integers die de
 vertices voorstellen een lijst van de vorm $0, 1, 2, \dots n$ zal zijn,
@@ -170,7 +170,7 @@ verschillende grafen bestaan, beschouwen we eerst verschillende manieren om een
 graaf aan te maken, die we dan in de tests kunnen gebruiken. De verschillende
 klasses die hierbij horen zitten in \verb#tests/graph#, in het java package
 \verb#graph#. Ze zijn allemaal subklasses van de klasse
-\verb#GraphImplementation#, die elk een specifieke constructor hebben.
+\verb#BasicGraph#, die elk een specifieke constructor hebben.
 
 \subsection{ZGraph}
 Op \verb#http://zeus.ugent.be/zgraph#, een project gestart door enkele studenten

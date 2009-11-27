@@ -1,11 +1,11 @@
 package graph;
 
 import genus.Graph;
-import genus.GraphImplementation;
+import genus.BasicGraph;
 
 /** A complete bipartite graph.
  */
-public class CompleteBipartiteGraph extends GraphImplementation
+public class CompleteBipartiteGraph extends BasicGraph
 {
     /** Constructor.
      *  @param n Vertices on one side of the complete bipartite graph.

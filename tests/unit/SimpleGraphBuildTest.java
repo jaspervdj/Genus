@@ -1,6 +1,6 @@
 package unit;
 import genus.Graph;
-import genus.GraphImplementation;
+import genus.BasicGraph;
 
 /** A test class that tests our graph implementation by adding/removing some
  *  vertices and edges.
@@ -10,7 +10,7 @@ public class SimpleGraphBuildTest extends UnitTest
     @Override
     public void run(String[] args)
     {
-        Graph graph = new GraphImplementation();
+        Graph graph = new BasicGraph();
         test(graph.addEdge(1, 2), "add edge 1<->2");
         test(graph.addEdge(2, 3), "add edge 2<->3");
         test(graph.removeEdge(1, 2), "remove edge 1<->2");

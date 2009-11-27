@@ -1,11 +1,11 @@
 package graph;
 
 import genus.Graph;
-import genus.GraphImplementation;
+import genus.BasicGraph;
 
 /** A complete graph.
  */
-public class CompleteGraph extends GraphImplementation
+public class CompleteGraph extends BasicGraph
 {
     /** Constructor.
      *  @param n Vertices in the complete graph.

@@ -3,11 +3,11 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import genus.Graph;
-import genus.GraphImplementation;
+import genus.BasicGraph;
 
 /** Graph loaded from the zgraph format.
  */
-public class ZGraph extends GraphImplementation
+public class ZGraph extends BasicGraph
 {
     /** Constructor. Load the graph from a given file.
      *  @param fileName File name of the file to load.

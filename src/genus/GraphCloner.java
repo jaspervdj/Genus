@@ -10,7 +10,7 @@ public class GraphCloner
      */
     public Graph clone(Graph original)
     {
-        Graph graph = new GraphImplementation();
+        Graph graph = new BasicGraph();
 
         for(int vertex: original.getVertices()) {
             for(int neighbour: original.getNeighbours(vertex)) {
