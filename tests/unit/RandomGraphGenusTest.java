@@ -4,8 +4,8 @@ import java.util.Random;
 import genus.Graph;
 import graph.RandomGraph;
 import genus.FindGenus;
-import genus.DefaultFindGenus;
-import genus.BoundedFindGenus;
+import genus.FindGenus1;
+import genus.FindGenus6;
 
 /** Tests the genus of a complete graph.
  */
@@ -26,6 +26,16 @@ public class RandomGraphGenusTest extends UnitTest
     @Override
     public void run(String[] args)
     {
+        FindGenus defaultFinder = new FindGenus1();
+        FindGenus finderToTest;
+
+        try {
+            Class finderClass = Class.forName(args[0]);
+            finderToTest = (FindGenus) finderClass.newInstance();
+        } catch(Exception exception) {
+            finderToTest = new FindGenus6();
+        }
+
         for(int i = 0; i < NUMBER_OF_TESTS; i++) {
             /* Determine number of vertices/edges. */
             int vertices = MIN_VERTICES +
@@ -38,8 +48,8 @@ public class RandomGraphGenusTest extends UnitTest
             Graph graph = new RandomGraph(vertices, edges);
 
             /* Find the genus two times. */
-            int genus0 = new DefaultFindGenus().findGenus(graph);
-            int genus1 = new BoundedFindGenus().findGenus(graph);
+            int genus0 = defaultFinder.findGenus(graph);
+            int genus1 = finderToTest.findGenus(graph);
 
             test(genus0 == genus1, "random graph with " + vertices +
                     " vertices and " + edges + " edges");

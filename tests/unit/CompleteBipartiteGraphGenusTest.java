@@ -3,7 +3,7 @@ package unit;
 import genus.Graph;
 import graph.CompleteBipartiteGraph;
 import genus.FindGenus;
-import genus.BoundedFindGenus;
+import genus.FindGenus6;
 
 /** Tests the genus of a complete graph.
  */
@@ -21,7 +21,7 @@ public class CompleteBipartiteGraphGenusTest extends UnitTest
                 Graph graph = new CompleteBipartiteGraph(n, m);
                 
                 /* Find the genus. */
-                FindGenus finder = new BoundedFindGenus();
+                FindGenus finder = new FindGenus6();
                 int foundGenus = finder.findGenus(graph);
 
                 /* Calculate the genus. */

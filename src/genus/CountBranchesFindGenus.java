@@ -3,7 +3,7 @@ import java.util.Set;
 
 /** An implementation of FindGenus used to examine the search tree.
  */
-public class CountBranchesFindGenus extends BoundedFindGenus
+public class CountBranchesFindGenus extends FindGenus6
 {
     int branches;
 

@@ -1,6 +1,6 @@
 import genus.Graph;
 import genus.FindGenus;
-import genus.DefaultFindGenus;
+import genus.FindGenus1;
 import graph.RandomGraph;
 import genus.GraphCloner;
 import java.util.Random;
@@ -8,7 +8,7 @@ import java.util.Random;
 public class TimeTest
 {
     /** Number of tests to run. */
-    private final static int TESTS = 100;
+    private final static int TESTS = 10;
 
     /** Random generator instance. */
     private final static Random RANDOM = new Random();
@@ -33,7 +33,7 @@ public class TimeTest
                 Class finderClass = Class.forName(args[3 + i]);
                 finders[i] = (FindGenus) finderClass.newInstance();
             } catch(Exception exception) {
-                finders[i] = new DefaultFindGenus();
+                finders[i] = new FindGenus1();
             }
         }
 

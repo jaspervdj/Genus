@@ -29,24 +29,27 @@ we ervoor om met overerving te werken.
 De overervingsstructuur voor de verschillende versies van het algoritme is te
 zien in Figuur \ref{fig:inheritance}. Elk algoritme dat een eerder algoritme
 uitbreidt, erft natuurlijk ook alle eigenschappen van het eerdere algoritme.
-Zo zullen alle klassen die subklasses zijn van \verb#ProcessedFindGenus# de
+Zo zullen alle klassen die subklasses zijn van \verb#FindGenus2# de
 graaf eerst preprocessen.
 \newline
 
 \begin{itemize}
 \item \verb#FindGenus# is de te implementeren interface.
-\item \verb#DefaultFindGenus# implementeert de na\"ieve versie van ons algoritme
+\item \verb#FindGenus1# implementeert de na\"ieve versie van ons algoritme
 zoals beschreven in \ref{het-naieve-algoritme}. Het gebruikt de klasse
 \verb#DefaultGraph#. Let wel dat de verbetering uit \ref{sluit-pad-sneller} ook
 al is ge\"implementeerd. Ook maakt het gebruik van de heuristiek
 uit \ref{heuristiek-complete-grafen}.
-\item \verb#ProcessedFindGenus# gaat de graaf eerst preprocessen. Daartoe
+\item \verb#FindGenus2# gaat de graaf eerst preprocessen. Daartoe
 gebruikt het de \verb#GraphProcessor# interface en de
 \verb#SimplifyGraphProcessor# implementatie ervan. Welke preprocessing allemaal
 wordt toegepast, is verder beschreven in \ref{preprocessing}.
-\item \verb#BoundedFindGenus# implementeert alle bounding criteria beschreven
-in \ref{bounding-criteria}. Dit is onze snelste implementatie van het algoritme.
-\item \verb#SortedFindGenus# implementeert heuristiek \ref{heuristiek-sorteren}.
+\item \verb#FindGenus3#, \verb#FindGenus4#, \verb#FindGenus5# en
+\verb#FindGenus6# voegen telkens de bounding criteria toe uit respecievelijk
+\ref{een-eerste-poging}, \ref{girth-bounding}, \ref{beetje-beter} en
+\ref{pariteit}, waarbij elke versie ook de eigenschappen van zijn voorganger
+gebruikt. \verb#FindGenus6# is tevens onze beste versie.
+\item \verb#FindGenus7# implementeert ook heuristiek \ref{heuristiek-sorteren}.
 \item \verb#CountBranchesFindGenus# is een klasse die na afloop van het
 algoritme het aantal afgewerkte branches afdrukt.
 \item \verb#ShowTreeFindGenus# is een klasse die de call tree van het algoritme
@@ -80,13 +83,14 @@ door de klasse \verb#SortedFindGenus#.
 \subsection{Performantietests}
 Om de performantie van ons algoritme te testen zullen we de klasse
 \verb#TimeTest# gebruiken. Dit is een simpele klasse die op de commandolijn als
-argumenten een interval voor het aantal toppen, een interval voor het aantal
-bogen, en een aantal klasssenamen neemt. De klasses moeten instanties zijn van
-\verb#FindGenus#. \verb#TimeTest# zal een aantal keer een willekeurige graaf
-aanmaken, en dan telkens de verschillende \verb#FindGenus# klassen het genus
-laten bepalen. Belangrijk is dat elk algoritme de graaf kan veranderen door
-preprocessing. Daarom maken we ook telkens een clone van de graaf, met behulp
-van de klasse \verb#GraphCloner#.
+argumenten een interval voor het aantal toppen, en een aantal klasssenamen
+neemt. De klasses moeten instanties zijn van \verb#FindGenus#. \verb#TimeTest#
+zal een aantal keer een willekeurige graaf aanmaken, en dan telkens de
+verschillende \verb#FindGenus# klassen het genus laten bepalen. Belangrijk is
+dat elk algoritme de graaf kan veranderen door preprocessing. Daarom maken we
+ook telkens een clone van de graaf, met behulp van de klasse
+\verb#GraphCloner#. Het aantal bogen wordt willeukerig bepaald en ligt in het
+interval $[v - 1, \frac{(v - 1) \cdot v}{2}]$.
 \newline
 
 De resultaten worden uitgeschreven naar standaard-uitvoer. We kunnen deze dan
@@ -106,7 +110,7 @@ een complete bipartiete graaf. Dit kunnen we ook eenvoudig bepalen, zie
 \ref{complete-bipartite-graph}.
 \item \verb#RandomGraphGenusTest#: Test het zoeken van het genus van een
 willeukeurige graaf met twee algoritmes. Het resultaat moet natuurlijk
-hetzelfde zijn. Dit is waarschijnlijk onze sterkste test.
+hetzelfde zijn. Dit is uiteraard een zeer sterke test.
 \end{itemize}
 
 \section{Implementatie van Graph}
@@ -466,9 +470,9 @@ Figuur \ref{fig:processed-vs-bounded}.
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.8\textwidth]{images/processed-vs-bounded.pdf}
-\caption{De groene tijden zijn van het algoritme waar het bounden gebaseerd op
+\caption{De rode tijden zijn van het algoritme waar het bounden gebaseerd op
 3-bogen-per-vlak wordt toegepast. Deze zijn duidelijk veel sneller dan de tijden
-van het algoritme wanneer dit criterium niet wordt toegepast (rood).}
+van het algoritme wanneer dit criterium niet wordt toegepast (groen).}
 \label{fig:processed-vs-bounded}
 \end{center}
 \end{figure}
@@ -523,9 +527,9 @@ gaan. Een voorbeeld is de \emph{4-cube} graaf, die van gemiddeld 13242ms naar
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.8\textwidth]{images/girth-vs-no-girth.pdf}
-\caption{De groene tijden zijn van het algoritme waar we gebruik maken van het
-\emph{girth} van een graaf. De rode tijden maken hier geen gebruik van. We zien
-dat er nauwelijks verschil is.}
+\caption{De rode tijden zijn van het algoritme waar we gebruik maken van het
+\emph{girth} van een graaf. De groene tijden maken hier geen gebruik van. We
+zien dat er nauwelijks verschil is.}
 \label{fig:girth-vs-no-girth}
 \end{center}
 \end{figure}
@@ -687,13 +691,24 @@ snijpunten van bogen ontstaan. Als we dan onze nieuwe boog opsplitsen in twee
 bogen met 1 top ertussen, volgt het gestelde.
 \newline
 
-Ook dit is ge\"implementeerd in de klasse \verb#SimplifyGraphProcessor#.
+Ook dit is ge\"implementeerd in de klasse \verb#SimplifyGraphProcessor#. Na deze
+drie gevallen bekeken te hebben, vragen we ons af wat de snelheidswinst is. Dit
+is te zien in Figuur \ref{fig:default-vs-preprocessed}.
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.6\textwidth]{images/two-neighbours-connected.pdf}
 \caption{Een graaf waaruit top 2 verwijdert kan worden}
 \label{fig:two-neighbours-connected}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{images/default-vs-preprocessed.pdf}
+\caption{We zien dat de tijden van het algoritme met preprocessing (rood)
+duidelijk onder de tijden zonder preprocessing (groen) liggen.}
+\label{fig:default-vs-preprocessed}
 \end{center}
 \end{figure}
 
@@ -746,8 +761,8 @@ visualiseren. Hiertoe gebruikt het ook de \emph{DOT-taal} van graphviz.
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.8\textwidth]{images/bounded-vs-sorted.pdf}
-\caption{We zien dat de tijden van het algoritme met sorteren (rood) duidelijk
-boven de tijden zonder sorteren (groen) liggen.}
+\caption{We zien dat de tijden van het algoritme met sorteren (groen) duidelijk
+boven de tijden zonder sorteren (rood) liggen.}
 \label{fig:bounded-vs-sorted}
 \end{center}
 \end{figure}

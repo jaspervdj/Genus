@@ -3,7 +3,7 @@ import java.util.Set;
 
 /** A sorted implementation of FindGenus.
  */
-public class SortedFindGenus extends BoundedFindGenus
+public class FindGenus7 extends FindGenus6
 {
     @Override
     public int findGenus(Graph graph)

@@ -3,8 +3,8 @@ package unit;
 import genus.Graph;
 import graph.CompleteGraph;
 import genus.FindGenus;
-import genus.DefaultFindGenus;
-import genus.BoundedFindGenus;
+import genus.FindGenus1;
+import genus.FindGenus6;
 
 /** Tests the genus of a complete graph.
  */
@@ -21,7 +21,7 @@ public class CompleteGraphGenusTest extends UnitTest
             Graph graph = new CompleteGraph(n);
             
             /* Find the genus. */
-            FindGenus finder = new BoundedFindGenus();
+            FindGenus finder = new FindGenus6();
             int foundGenus = finder.findGenus(graph);
 
             /* Calculate the genus. */

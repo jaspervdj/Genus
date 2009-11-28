@@ -3,11 +3,11 @@ import java.util.Set;
 
 /** The default implementation of the FindGenus interface.
  */
-public class DefaultFindGenus implements FindGenus
+public class FindGenus1 implements FindGenus
 {
     /** Constructor.
      */
-    public DefaultFindGenus()
+    public FindGenus1()
     {
     }
 

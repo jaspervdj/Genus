@@ -3,7 +3,7 @@ import java.util.Set;
 
 /** An implementation of FindGenus used to examine the search tree.
  */
-public class ShowTreeFindGenus extends DefaultFindGenus
+public class ShowTreeFindGenus extends FindGenus1
 {
     int id;
     int[] levels;

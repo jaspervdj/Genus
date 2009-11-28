@@ -1,7 +1,8 @@
 import genus.Graph;
-import genus.DefaultFindGenus;
-import genus.BoundedFindGenus;
-import genus.SortedFindGenus;
+import genus.FindGenus;
+import genus.FindGenus1;
+import genus.FindGenus6;
+import genus.FindGenus7;
 import genus.DefaultGraph;
 import genus.ShowTreeFindGenus;
 import writers.GraphDotWriter;
@@ -16,12 +17,12 @@ public class SimpleFaceCountTest
 
     public static void main(String[] args)
     {
-        DefaultFindGenus finder;
+        FindGenus finder;
         try {
             Class finderClass = Class.forName(args[0]);
-            finder = (DefaultFindGenus) finderClass.newInstance();
+            finder = (FindGenus) finderClass.newInstance();
         } catch(Exception exception) {
-            finder = new DefaultFindGenus();
+            finder = new FindGenus1();
         }
 
         double averageTime = 0.0;

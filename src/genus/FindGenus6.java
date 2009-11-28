@@ -3,14 +3,14 @@ import java.util.Set;
 
 /** A bounded implementation of FindGenus.
  */
-public class BoundedFindGenus extends ProcessedFindGenus
+public class FindGenus6 extends FindGenus2
 {
     /** A lower bound for the number of faces. */
     private int previousResult;
 
     /** Constructor.
      */
-    public BoundedFindGenus()
+    public FindGenus6()
     {
         previousResult = Integer.MIN_VALUE;
     }

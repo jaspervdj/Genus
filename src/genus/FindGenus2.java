@@ -3,11 +3,11 @@ import java.util.Set;
 
 /** A implementation of FindGenus that does some preprocessing.
  */
-public class ProcessedFindGenus extends DefaultFindGenus
+public class FindGenus2 extends FindGenus1
 {
     /** Constructor.
      */
-    public ProcessedFindGenus()
+    public FindGenus2()
     {
     }
 
