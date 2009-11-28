@@ -95,6 +95,10 @@ interval $[v - 1, \frac{(v - 1) \cdot v}{2}]$.
 
 De resultaten worden uitgeschreven naar standaard-uitvoer. We kunnen deze dan
 later analyseren en plotten.
+\newline
+
+Er is ook een klasse \verb#GirthTimeTest#. Dit is een zeer analoge klasse, die
+de performantie van \verb#FindGirth# kan testen.
 
 \subsection{Correctheidstests}
 \label{correctheidstests}
@@ -504,7 +508,10 @@ algoritme is ge\"implementeerd in de klasse \verb#FindGirth#.
 
 In het slechtste geval moet de BFS voor elke top de gehele graaf doorzoeken. De
 tijdscomplexiteit voor dit algoritme wordt dus naar boven begrensd door $O(ve)$
-met $v$ het aantal vertices, en $e$ het aantal (ongerichte) bogen.
+met $v$ het aantal vertices, en $e$ het aantal (ongerichte) bogen. In Figuur
+\ref{fig:find-girth} zien we dat de tijd die we gespenderen aan het zoeken van
+het \emph{girth} verwaarloosbaar is tegenover de tijd die we spenderen aan het
+zoeken van het genus.
 \newline
 
 Na experimentele tijdsmetingen zien we dat het algoritme niet veel sneller gaat
@@ -521,6 +528,15 @@ gaan. Een voorbeeld is de \emph{4-cube} graaf, die van gemiddeld 13242ms naar
 \includegraphics[width=0.4\textwidth]{images/cube.pdf}
 \caption{Een graaf met \emph{girth} 4}
 \label{fig:cube}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{images/find-girth.pdf}
+\caption{We zien dat het zoeken van het \emph{girth} van een graaf zeer snel kan
+gebeuren.}
+\label{fig:find-girth}
 \end{center}
 \end{figure}
 
