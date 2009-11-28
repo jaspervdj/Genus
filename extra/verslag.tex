@@ -1,9 +1,10 @@
-\documentclass{article}
+\documentclass[a4paper,11pt]{article}
 
 \usepackage[dutch]{babel}
 \usepackage{amsmath}
 \usepackage{listings}
 \usepackage{graphicx}
+\usepackage{a4wide}
 
 \setlength{\parindent}{0cm}
 
@@ -58,7 +59,7 @@ afdrukt in \emph{DOT}-formaat.
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.8\textwidth]{images/inheritance.pdf}
+\includegraphics[width=\textwidth]{images/inheritance.pdf}
 \caption{Een overervingsdiagram die de verschillende versies van het algoritme
 toont}
 \label{fig:inheritance}
@@ -89,8 +90,8 @@ zal een aantal keer een willekeurige graaf aanmaken, en dan telkens de
 verschillende \verb#FindGenus# klassen het genus laten bepalen. Belangrijk is
 dat elk algoritme de graaf kan veranderen door preprocessing. Daarom maken we
 ook telkens een clone van de graaf, met behulp van de klasse
-\verb#GraphCloner#. Het aantal bogen wordt willeukerig bepaald en ligt in het
-interval $[v - 1, \frac{(v - 1) \cdot v}{2}]$.
+\verb#GraphCloner#. Het aantal bogen wordt telkens willeukerig bepaald en ligt
+in het interval $[v - 1, \frac{(v - 1) \cdot v}{2}]$.
 \newline
 
 De resultaten worden uitgeschreven naar standaard-uitvoer. We kunnen deze dan
@@ -402,12 +403,12 @@ Stel dat de top met het maximaal aantal buren $n$ buren heeft, en dat er in
 totaal $m$ toppen zijn. Een bovengrens voor het aantal embeddingen $E$ wordt dus
 gegeven door
 \begin{equation*}
-E(m, n) = m \cdot n !
+E(m, n) = O(m \cdot n !)
 \end{equation*}
-aangezien het aantal embeddingen recht evenredig is de tijdscomplexiteit, geldt
-dus ook dat
+elke embedding is een blad in onze zoekboom. Per top in onze zoekboom bezoeken
+we een top. De tijd die we over een top doen wordt gegeven door $O(n)$. En dus
 \begin{equation*}
-T(m, n) = m \cdot n !
+T(m, n) = O(m \cdot n \cdot n !)
 \end{equation*}
 
 Experimentele tijdmetingen ondersteunen het feit dat de tijdscomplexiteit
@@ -507,11 +508,11 @@ algoritme is ge\"implementeerd in de klasse \verb#FindGirth#.
 \newline
 
 In het slechtste geval moet de BFS voor elke top de gehele graaf doorzoeken. De
-tijdscomplexiteit voor dit algoritme wordt dus naar boven begrensd door $O(ve)$
-met $v$ het aantal vertices, en $e$ het aantal (ongerichte) bogen. In Figuur
-\ref{fig:find-girth} zien we dat de tijd die we gespenderen aan het zoeken van
-het \emph{girth} verwaarloosbaar is tegenover de tijd die we spenderen aan het
-zoeken van het genus.
+tijdscomplexiteit voor dit algoritme wordt dus naar boven begrensd door
+$O(v \cdot e)$ met $v$ het aantal vertices, en $e$ het aantal (ongerichte)
+bogen. In Figuur \ref{fig:find-girth} zien we dat de tijd die we spenderen aan
+het zoeken van het \emph{girth} verwaarloosbaar is tegenover de tijd die we
+spenderen aan het zoeken van het genus.
 \newline
 
 Na experimentele tijdsmetingen zien we dat het algoritme niet veel sneller gaat
