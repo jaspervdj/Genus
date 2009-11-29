@@ -5,7 +5,10 @@ import java.util.Set;
  */
 public class ShowTreeFindGenus extends FindGenus1
 {
+    /** Current serach tree vertex id. */
     int id;
+
+    /** Reached levels for the ids. */
     int[] levels;
 
     @Override

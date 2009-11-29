@@ -5,6 +5,7 @@ import java.util.Set;
  */
 public class CountBranchesFindGenus extends FindGenus6
 {
+    /** Number of branches finished. */
     int branches;
 
     @Override
